@@ -1,0 +1,48 @@
+@layout({ title: 'Tous les véhicules' })
+  @include('partials/header')
+
+  <section>
+    <h1 class="font-bold tracking-wide text-5xl text-gray-900 text-center my-24">
+      Tous nos véhicules
+    </h1>
+
+    <div
+      class="container mx-auto px-4 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-rows-0 gap-4 justify-center mt-4"
+    >
+      @each(vehicle in vehicles)
+        <div class="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md">
+          <a href="{{ urlFor('vehicles.show', [vehicle.id]) }}">
+            <img
+              class="rounded-t-lg w-full max-h-56 object-cover object-center"
+              src="{{ vehicle.pictures[0].path }}"
+              alt=""
+            />
+          </a>
+          <div class="p-5">
+            <a href="#">
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+                {{ vehicle.type.name }}
+                {{ vehicle.model }}
+              </h5>
+            </a>
+            <p class="mb-3 font-normal text-gray-700">
+              {{ vehicle.type.name }}
+              de
+              {{ vehicle.user.firstName }}
+              {{ vehicle.user.lastName[0] }}.
+            </p>
+            <p class="mb-3 font-normal text-gray-700">
+              Cette annonce a été ajoutée
+              {{ vehicle.createdAt.toRelative() }}
+            </p>
+            <span
+              class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >
+              {{ vehicle.city }}
+            </span>
+          </div>
+        </div>
+      @end
+    </div>
+  </section>
+@end

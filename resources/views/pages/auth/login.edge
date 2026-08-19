@@ -1,0 +1,46 @@
+@layout()
+  <div class="h-screen flex">
+    <img class="hidden lg:block md:w-6/12 object-cover" src="images/login-background.webp" alt="" />
+    <div class="flex justify-center items-center w-full lg:w-6/12">
+      @form({ route: 'session.store', method: 'POST' })
+        <h1 class="text-3xl uppercase text-amber-600 drop-shadow-lg">
+          <a href="{{ urlFor('home.index') }}">
+            <span class="text-black border-y-2 border-y-amber-600">Loca</span>van
+          </a>
+        </h1>
+        <h3 class="my-3 text-gray-800">Connexion à votre compte</h3>
+        <div class="mb-3">
+          @field.root({ name: 'email' })
+            @!field.label({ text: 'E-mail', class: 'block mb-3 text-gray-500 text-sm' })
+            @!input.control({
+              type: 'email',
+              class:
+                'border border-gray-300 p-2 w-full text-gray-900 focus:outline-none rounded shadow',
+            })
+            @!field.error()
+          @end
+        </div>
+        <div class="mb-3">
+          @field.root({ name: 'password' })
+            @!field.label({
+              text: 'Mot de passe',
+              class: 'block mb-3 text-gray-500 text-sm',
+            })
+            @!input.control({
+              type: 'password',
+              class:
+                'border border-gray-300 p-2 w-full text-gray-900 focus:outline-none rounded shadow',
+            })
+            @!field.error()
+          @end
+        </div>
+        @!button({
+          text: 'Connexion',
+          type: 'submit',
+          class:
+            'bg-amber-600 text-white font-medium p-4 tracking-tight rounded hover:bg-amber-700 transition duration-150 cursor-pointer',
+        })
+      @end
+    </div>
+  </div>
+@end

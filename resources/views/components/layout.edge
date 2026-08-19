@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title ? 'Locavan | ' + title : 'Locavan' }}</title>
+    <script src="https://kit.fontawesome.com/78c72d8c86.js" crossorigin="anonymous"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('dumper')
+  </head>
+  <body>
+    <main>
+      @include('partials/flash_alerts')
+      {{{ await $slots.main() }}}
+    </main>
+  </body>
+</html>

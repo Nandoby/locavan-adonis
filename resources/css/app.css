@@ -1,0 +1,121 @@
+@import "tailwindcss";
+@source "../views";
+
+
+:root {
+  --gray-1: oklch(98.5% 0 0);
+  --gray-2: oklch(97% 0 0);
+  --gray-3: oklch(92.2% 0 0);
+  --gray-4: oklch(87% 0 0);
+  --gray-6: oklch(55.6% 0 0);
+  --gray-7: oklch(43.9% 0 0);
+  --gray-8: oklch(37.1% 0 0);
+  --gray-10: oklch(26.9% 0 0);
+  --gray-12: oklch(14.5% 0 0);
+}
+
+
+[x-cloak] {
+  display: none;
+}
+
+
+/* Alerts */
+.alert {
+  background: #fff;
+  position: relative;
+  padding: 12px 16px;
+  font-size: 14px;
+  min-width: 380px;
+  font-weight: 500;
+  border: 1px solid var(--gray-3);
+  border-radius: 10px;
+  animation: scale-up 0.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+.alert-destructive {
+  color: #fb2c36;
+  background: #fb2c361a;
+  border-color: #fb2c36;
+}
+.alert-success {
+  color: #00a63e;
+  background: #00a63e1a;
+  border-color: #00a63e;
+}
+.flash-container {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes scale-up {
+  from {
+    transform: scale(0.7);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@layer components {
+  .header {
+    @apply min-h-screen p-px bg-blend-overlay bg-black/75 bg-[url(https://images.unsplash.com/photo-1613547566635-8adfcd6f23cf?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1662)] bg-cover bg-center
+  }
+
+  .linkanimate {
+    width: 0;
+    position: relative;
+  }
+
+  .linkanimate::after {
+    content: "";
+    transition: width 0.5s ease-in-out;
+    position: absolute;
+    width: 0;
+    right: 0;
+    height: 2px;
+    bottom: -8px;
+    background-color: #F59E0B
+  }
+
+  .linkanimate:hover::after {
+    width: 100%;
+    left: 0;
+  }
+
+  #locavan:hover::after {
+    width: 100%;
+    left: 0;
+  }
+
+  #locavan svg {
+    stroke-width: 0.26;
+    fill: none;
+    width: 100%;
+    min-height: 200px;
+    max-height: 400px;
+    height: 100%;
+  }
+
+  #locavan svg path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    animation: anim 2s ease-in-out forwards;
+  }
+
+  @keyframes anim {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .dropdown-item {
+    @apply px-4 py-2 hover:bg-gray-100 gap-4 flex items-center;
+  }
+}
