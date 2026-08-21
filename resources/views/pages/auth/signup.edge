@@ -1,48 +1,107 @@
-@layout()
-  <div class="form-container">
-    <div>
-      <h1>Signup</h1>
-      <p>Enter your details below to create your account</p>
-    </div>
-
-    <div>
-      @form({ route: 'new_account.store', method: 'POST' })
-        <div>
-          @field.root({ name: 'fullName' })
-            @!field.label({ text: 'Full name' })
-            @!input.control()
-            @!field.error()
+@layout({ title: "S'enregistrer" })
+  <section class="h-screen flex">
+    <img
+      class="hidden lg:block md:w-6/12 object-cover"
+      src="/images/register-background.webp"
+      alt=""
+    />
+    <div class="flex justify-center items-center w-full lg:w-6/12">
+      @form({
+        route: 'new_account.store',
+        method: 'POST',
+        enctype: 'multipart/form-data',
+        class: 'md:w-8/12 bg-white p-4 m-4 shadow-lg',
+      })
+        <h1 class="text-3xl uppercase text-amber-600 drop-shadow-lg">
+          <a href="{{ urlFor('home.index') }}">
+            <span class="text-black border-y-2 border-y-amber-600">Loca</span>van
+          </a>
+        </h1>
+        <h3 class="my-3 text-gray-800">Inscription</h3>
+        <div class="mb-3">
+          @field.root({ name: 'firstName' })
+            @!field.label({ text: 'Prénom', class: 'block mb-3 text-gray-500 text-sm' })
+            @!input.control({
+              type: 'text',
+              class:
+                'border border-gray-300 p-2 w-full text-gray-900 focus:outline-none rounded shadow',
+            })
+            @!field.error({ class: 'text-sm text-red-500 mt-3' })
           @end
         </div>
-
-        <div>
+        <div class="mb-3">
+          @field.root({ name: 'lastName' })
+            @!field.label({ text: 'Nom', class: 'block mb-3 text-gray-500 text-sm' })
+            @!input.control({
+              type: 'text',
+              class:
+                'border border-gray-300 p-2 w-full text-gray-900 focus:outline-none rounded shadow',
+            })
+            @!field.error({ class: 'text-sm text-red-500 mt-3' })
+          @end
+        </div>
+        <div class="mb-3">
           @field.root({ name: 'email' })
-            @!field.label({ text: 'Email' })
-            @!input.control({ type: 'email', autocomplete: 'email' })
-            @!field.error()
+            @!field.label({ text: 'E-mail', class: 'block mb-3 text-gray-500 text-sm' })
+            @!input.control({
+              type: 'email',
+              class:
+                'border border-gray-300 p-2 w-full text-gray-900 focus:outline-none rounded shadow',
+            })
+            @!field.error({ class: 'text-sm text-red-500 mt-3' })
           @end
         </div>
-
-        <div>
+        <div class="mb-3">
           @field.root({ name: 'password' })
-            @!field.label({ text: 'Password' })
-            @!input.control({ type: 'password', autocomplete: 'new-password' })
-            @!field.error()
+            @!field.label({
+              text: 'Mot de passe',
+              class: 'block mb-3 text-gray-500 text-sm',
+            })
+            @!input.control({
+              type: 'password',
+              class:
+                'border border-gray-300 p-2 w-full text-gray-900 focus:outline-none rounded shadow',
+            })
+            @!field.error({ class: 'text-sm text-red-500 mt-3' })
           @end
         </div>
-
-        <div>
-          @field.root({ name: 'passwordConfirmation' })
-            @!field.label({ text: 'Confirm password' })
-            @!input.control({ type: 'password', autocomplete: 'new-password' })
-            @!field.error()
+        <div class="mb-3">
+          @field.root({
+            name: 'passwordConfirmation',
+          })
+            @!field.label({
+              text: 'Confirmation de mot de passe',
+              class: 'block mb-3 text-gray-500 text-sm',
+            })
+            @!input.control({
+              type: 'password',
+              class:
+                'border border-gray-300 p-2 w-full text-gray-900 focus:outline-none rounded shadow',
+            })
+            @!field.error({ class: 'text-sm text-red-500 mt-3' })
           @end
         </div>
-
-        <div>
-          @!button({ text: 'Sign up', type: 'submit' })
+        <div class="mb-3">
+          @field.root({ name: 'avatar' })
+            @!field.label({
+              text: 'Avatar',
+              class: 'block mb-3 text-gray-500 text-sm',
+            })
+            @!input.control({
+              type: 'file',
+              class:
+                'block mb-5 w-full text-xs text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none',
+            })
+            @!field.error({ class: 'text-sm text-red-500 mt-3' })
+          @end
         </div>
+        @!button({
+          text: "S'enregistrer",
+          class:
+            'bg-amber-600 text-white font-medium p-4 tracking-tight rounded hover:bg-amber-700 transition duration-150',
+          type: 'submit',
+        })
       @end
     </div>
-  </div>
+  </section>
 @end

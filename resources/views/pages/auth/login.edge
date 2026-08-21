@@ -1,4 +1,4 @@
-@layout()
+@layout({ title: 'Login' })
   <div class="h-screen flex">
     <img class="hidden lg:block md:w-6/12 object-cover" src="images/login-background.webp" alt="" />
     <div class="flex justify-center items-center w-full lg:w-6/12">
@@ -40,6 +40,15 @@
           class:
             'bg-amber-600 text-white font-medium p-4 tracking-tight rounded hover:bg-amber-700 transition duration-150 cursor-pointer',
         })
+        <p class="text-sm mt-4">
+          Vous n'avez pas encore de compte ?
+          <a
+            href="{{ urlFor('new_account.create') }}"
+            class="underline text-yellow-600 hover:text-yellow-800"
+          >
+            Inscrivez-vous
+          </a>
+        </p>
       @end
     </div>
   </div>
