@@ -14,7 +14,15 @@ export default class VehiclesController {
       .preload('pictures')
       .preload('user')
       .preload('type')
-      .preload('comments')
+      .preload('comments', (query) =>
+        query
+          .preload('user')
+          .preload('memories', (memory) =>
+            memory.preload('comment', (c) =>
+              c.preload('user').preload('vehicle', (v) => v.preload('type'))
+            )
+          )
+      )
       .where({ id: id })
       .firstOrFail()
 

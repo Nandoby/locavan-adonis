@@ -118,4 +118,13 @@
   .dropdown-item {
     @apply px-4 py-2 hover:bg-gray-100 gap-4 flex items-center;
   }
+
+  .icones {
+    @apply grid gap-4 items-center mt-4;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+
+  .splide__arrow, .splide__pagination__page {
+    background: rgb(254 154 0 / 0.82) !important;
+  }
 }

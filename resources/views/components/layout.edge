@@ -4,7 +4,32 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{ title ? 'Locavan | ' + title : 'Locavan' }}</title>
-    <script src="https://kit.fontawesome.com/78c72d8c86.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightbox3@1/dist/lightbox3.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.3.0/css/fontawesome.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.3.0/css/brands.css"
+    />
+    <!--Classic-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.3.0/css/solid.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.3.0/css/regular.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.3.0/css/light.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.3.0/css/thin.css"
+    />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('dumper')
   </head>
@@ -13,5 +38,6 @@
       @include('partials/flash_alerts')
       {{{ await $slots.main() }}}
     </main>
+    @stack('javascript')
   </body>
 </html>

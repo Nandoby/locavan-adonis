@@ -1,5 +1,8 @@
 import Alpine from 'alpinejs'
 import Splide from '@splidejs/splide'
+import { Lightbox } from 'lightbox3'
+import { initBookingDatepickers } from './datepicker.js'
+
 import '@splidejs/splide/css'
 
 Alpine.data('alert', function () {
@@ -47,5 +50,10 @@ document.querySelectorAll('.splide').forEach((el) => {
     perPage: 1,
     pagination: true,
     arrows: true,
+    autoplay: true,
   }).mount()
 })
+
+Lightbox.init()
+
+initBookingDatepickers()
