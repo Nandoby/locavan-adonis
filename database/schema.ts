@@ -7,6 +7,25 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class BookingSchema extends BaseModel {
+  static $columns = ['createdAt', 'endDate', 'id', 'startDate', 'updatedAt', 'userId', 'vehicleId'] as const
+  $columns = BookingSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column.dateTime()
+  declare endDate: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column.dateTime()
+  declare startDate: DateTime | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number | null
+  @column()
+  declare vehicleId: number | null
+}
+
 export class CommentSchema extends BaseModel {
   static $columns = ['content', 'createdAt', 'id', 'rating', 'updatedAt', 'userId', 'vehicleId'] as const
   $columns = CommentSchema.$columns

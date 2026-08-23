@@ -9,5 +9,6 @@ export default class extends BaseSeeder {
     // Write your database queries inside the run method
     await this.seed(await import('#database/seeders/type_seeder'))
     await this.seed(await import('#database/seeders/user_seeder'))
+    await this.seed(await import('#database/seeders/booking_seeder'))
   }
 }
