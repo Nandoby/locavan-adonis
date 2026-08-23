@@ -14,18 +14,15 @@ export default class VehiclesController {
       .preload('pictures')
       .preload('user')
       .preload('type')
-      .preload('comments', (query) =>
-        query
-          .preload('user')
-          .preload('memories', (memory) =>
-            memory.preload('comment', (c) =>
-              c.preload('user').preload('vehicle', (v) => v.preload('type'))
-            )
-          )
-      )
+      .preload('comments', (query) => query.preload('user').preload('memories'))
       .where({ id: id })
       .firstOrFail()
 
-    return view.render('pages/vehicles/show', { vehicle })
+    const notAvailableDays = await vehicle.getNotAvailableDays()
+    const notAvailableDaysJson = notAvailableDays
+      .map((date) => date.toFormat('dd/MM/yyyy'))
+      .join(',')
+
+    return view.render('pages/vehicles/show', { vehicle, notAvailableDaysJson })
   }
 }

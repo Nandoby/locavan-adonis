@@ -107,6 +107,7 @@
                       type: 'text',
                       class:
                         'border border-neutral-300 rounded w-full p-2 focus:outline outline-amber-500',
+                      dataDatesDisabled: notAvailableDaysJson,
                     })
                     @!field.error()
                   @end
@@ -166,7 +167,7 @@
                         <a
                           href="{{ memory.path }}"
                           data-lightbox="image-{{ comment.id }}"
-                          data-caption="{{ memory.comment.user.fullName }} - {{ memory.createdAt.toLocaleString() }} - {{ memory.comment.vehicle.type.name }} - {{ memory.comment.vehicle.model }}"
+                          data-caption="{{ comment.user.fullName }} - {{ memory.createdAt.toLocaleString() }} - {{ vehicle.type.name }} - {{ vehicle.model }}"
                         >
                           <img class="w-24 h-24 rounded-lg" src="{{ memory.path }}" alt="" />
                         </a>
