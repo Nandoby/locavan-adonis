@@ -95,7 +95,12 @@
             <h2 class="p-4 text-center text-xl bg-black text-white font-bold rounded-t-lg">
               Réservation
             </h2>
-            @form({ route: '', class: 'p-4', method: 'POST' })
+            @form({
+              route: 'bookings.store',
+              class: 'p-4',
+              method: 'POST',
+              routeParams: vehicle,
+            })
               <div class="flex gap-2 mb-4">
                 <div class="flex-1">
                   @field.root({ name: 'booking_startDate' })

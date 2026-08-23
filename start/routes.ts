@@ -16,6 +16,8 @@ router.get('/', [controllers.Home, 'index'])
 router.get('/vehicles', [controllers.Vehicles, 'index'])
 router.get('/vehicles/:id', [controllers.Vehicles, 'show'])
 
+router.post('/vehicles/:id/bookings', [controllers.Bookings, 'store']).use(middleware.auth())
+
 router
   .group(() => {
     router.get('signup', [controllers.NewAccount, 'create'])
