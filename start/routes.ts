@@ -15,8 +15,18 @@ router.get('/', [controllers.Home, 'index'])
 
 router.get('/vehicles', [controllers.Vehicles, 'index'])
 router.get('/vehicles/:id', [controllers.Vehicles, 'show'])
-
 router.post('/vehicles/:id/bookings', [controllers.Bookings, 'store']).use(middleware.auth())
+
+/**
+ * Gestion des réservations
+ */
+router
+  .group(() => {
+    router.get('/bookings', [controllers.Bookings, 'bookings'])
+    router.get('/bookings/:id', [controllers.Bookings, 'show'])
+    router.post('/bookings/:id/comment', [controllers.Bookings, 'storeComment'])
+  })
+  .use(middleware.auth())
 
 router
   .group(() => {

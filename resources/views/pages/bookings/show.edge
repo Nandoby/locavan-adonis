@@ -1,0 +1,119 @@
+@layout({ title: 'Réservation' })
+  @include('partials/header')
+
+  <div class="container mx-auto p-4 min-h-screen">
+    <h1 class="font-bold text-2xl my-4">Détails de votre réservation</h1>
+    <div class="shadow border border-gray-300 rounded overflow-hidden">
+      <div class="bg-white p-4 border border-b-gray-300">
+        <p>
+          <b>Status :</b>
+          @if(bookingCompleted)
+            <span
+              class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >
+              terminé
+            </span>
+          @else
+            <span
+              class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >
+              en cours
+            </span>
+          @end
+        </p>
+      </div>
+      <div class="bg-gray-50 p-4">
+        <p class="my-4">
+          Votre séjour
+          {{ bookingCompleted ? "s'est terminé" : 'se terminera' }}
+          le
+          <span class="font-medium font-bold">{{ booking.endDate.toFormat('dd/MM/yyyy') }}</span>
+        </p>
+        <p><b>Modèle :</b> {{ booking.vehicle.model }}</p>
+        <p><b>Type :</b> {{ booking.vehicle.type.name }}</p>
+        <p><b>Année :</b> {{ booking.vehicle.year }}</p>
+        <p><b>Km avant réservation :</b> {{ booking.vehicle.km }} km</p>
+        <p><b>Description :</b> {{ booking.vehicle.description }}</p>
+        @if(bookingCompleted)
+          @if(hasComment.length > 0)
+            @each(comment in hasComment)
+              <p class="text-sm font-bold mb-3 mt-4">
+                Commentaire du
+                {{ comment.createdAt.toFormat('dd/MM/yyyy') }}
+              </p>
+
+              <div class="w-full bg-white mt-4 border border-gray-300 p-4">
+                {{ comment.content }}
+              </div>
+            @end
+          @else
+            <h3 class="mt-4 font-medium text-xl">
+              Ajouter un commentaire pour décrire votre séjour
+            </h3>
+            @form({
+              route: 'bookings.store_comment',
+              routeParams: booking,
+              method: 'POST',
+              enctype: 'multipart/form-data',
+            })
+              @field.root({ name: 'content' })
+                @!field.label({
+                  text: 'Commentaire',
+                  class: 'block text-sm font-medium my-2 text-gray-900',
+                })
+                @!textarea.control({
+                  rows: 4,
+                  class:
+                    'block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-amber-500 focus:border-amber-500',
+                })
+                @!field.error({ class: 'text-sm text-red-500' })
+              @end
+              @field.root({ name: 'rating' })
+                @!field.label({
+                  text: 'Note',
+                  class: 'block text-sm font-medium my-2 text-gray-900',
+                })
+                @!select.control({
+                  class:
+                    'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5',
+                  options: [1, 2, 3, 4, 5].map((rate) => ({
+                    name: rate,
+                    value: rate,
+                  })),
+                })
+                @!field.error()
+              @end
+
+              <h3 class="my-4 font-medium text-xl">Photos de votre séjour</h3>
+              <div x-data="preview">
+                @field.root({ name: 'memories[]' })
+                  @!field.label({ text: 'Uploader un ou plusieurs fichiers' })
+                  @!input.control({
+                    class:
+                      'block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none',
+                    type: 'file',
+                    multiple: true,
+                    '@change': 'handleFiles($event)',
+                  })
+                  @!field.error()
+                @end
+
+                <div class="flex gap-2 flex-wrap mt-3">
+                  <template x-for="file in previews" :key="file">
+                    <img :src="file" class="w-24 h-24 object-cover rounded" />
+                  </template>
+                </div>
+                @!button({
+                  type: 'submit',
+                  class:
+                    'block py-2 px-2 text-sm bg-green-500 rounded text-white mt-3 hover:bg-green-600',
+                  text: 'Envoyer',
+                })
+              </div>
+            @end
+          @end
+        @end
+      </div>
+    </div>
+  </div>
+@end

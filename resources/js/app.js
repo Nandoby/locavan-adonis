@@ -42,6 +42,21 @@ Alpine.data('dropdown', function () {
   }
 })
 
+Alpine.data('preview', function () {
+  return {
+    previews: [],
+
+    handleFiles(event) {
+      const { files } = event.target
+      // Révoquer les anciennes URLs
+      this.previews.forEach((url) => URL.revokeObjectURL(url))
+
+      // Construire le nouveau tableau à partir d'event.target.files
+      this.previews = [...files].map((file) => URL.createObjectURL(file))
+    },
+  }
+})
+
 Alpine.start()
 
 document.querySelectorAll('.splide').forEach((el) => {

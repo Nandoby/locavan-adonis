@@ -11,6 +11,9 @@ Object.assign(Datepicker.locales, fr)
  */
 export function initBookingDatepickers() {
   const startDate = document.querySelector('#booking_startDate')
+
+  if (!startDate) return
+
   const datesDisabled = (startDate.dataset.datesDisabled || '').split(',').filter(Boolean)
 
   const disabledDatesSorted = datesDisabled

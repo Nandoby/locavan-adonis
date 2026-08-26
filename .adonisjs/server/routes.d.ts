@@ -8,6 +8,9 @@ export type ScannedRoutes = {
     'vehicles.index': { paramsTuple?: []; params?: {} }
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookings.bookings': { paramsTuple?: []; params?: {} }
+    'bookings.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookings.store_comment': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
@@ -18,6 +21,8 @@ export type ScannedRoutes = {
     'home.index': { paramsTuple?: []; params?: {} }
     'vehicles.index': { paramsTuple?: []; params?: {} }
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookings.bookings': { paramsTuple?: []; params?: {} }
+    'bookings.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
   }
@@ -25,11 +30,14 @@ export type ScannedRoutes = {
     'home.index': { paramsTuple?: []; params?: {} }
     'vehicles.index': { paramsTuple?: []; params?: {} }
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookings.bookings': { paramsTuple?: []; params?: {} }
+    'bookings.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'bookings.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookings.store_comment': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
