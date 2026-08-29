@@ -43,3 +43,11 @@ router
     router.post('logout', [controllers.Session, 'destroy'])
   })
   .use(middleware.auth())
+
+/** Gestion du profil **/
+router
+  .group(() => {
+    router.get('/profile', [controllers.Users, 'edit']).as('profile')
+    router.post('/profile', [controllers.Users, 'update']).as('profile.update')
+  })
+  .use(middleware.auth())

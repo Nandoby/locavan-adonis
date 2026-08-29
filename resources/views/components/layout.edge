@@ -5,32 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{ title ? 'Locavan | ' + title : 'Locavan' }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightbox3@1/dist/lightbox3.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.3.0/css/fontawesome.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.3.0/css/brands.css"
-    />
-    <!--Classic-->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.3.0/css/solid.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.3.0/css/regular.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.3.0/css/light.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/rizmyabdulla/fontawesome-pro@main/releases/v7.3.0/css/thin.css"
-    />
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite([
+      'resources/css/app.css',
+      'resources/css/fontawesome.css',
+      'resources/css/regular.css',
+      'resources/css/solid.css',
+      'resources/css/light.css',
+      'resources/js/app.js',
+    ])
     @stack('dumper')
   </head>
   <body>
