@@ -18,6 +18,7 @@ export type ScannedRoutes = {
     'session.destroy': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
     'profile.update': { paramsTuple?: []; params?: {} }
+    'vehicles.search': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'home.index': { paramsTuple?: []; params?: {} }
@@ -28,6 +29,7 @@ export type ScannedRoutes = {
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
+    'vehicles.search': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'home.index': { paramsTuple?: []; params?: {} }
@@ -38,6 +40,7 @@ export type ScannedRoutes = {
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
+    'vehicles.search': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'bookings.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

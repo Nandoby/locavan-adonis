@@ -80,12 +80,13 @@
         @end
       </ul>
     </nav>
-    @form({ route: '', class: 'ml-6' })
+    @form({ route: 'vehicles.search', class: 'ml-6' })
       <div class="relative">
         @field.root({ name: 'city' })
           @!input.control({
             type: 'search',
             placeholder: 'Mons',
+            value: inputSearch ? inputSearch : '',
             class:
               'p-2 border border-neutral-400 rounded pl-8 placeholder:text-sm focus:outline-amber-500 w-full',
           })

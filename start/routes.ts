@@ -51,3 +51,6 @@ router
     router.post('/profile', [controllers.Users, 'update']).as('profile.update')
   })
   .use(middleware.auth())
+
+// Recherche
+router.get('/search', [controllers.Vehicles, 'search'])

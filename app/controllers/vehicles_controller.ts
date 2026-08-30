@@ -25,4 +25,16 @@ export default class VehiclesController {
 
     return view.render('pages/vehicles/show', { vehicle, notAvailableDaysJson })
   }
+
+  async search({ view, request }: HttpContext) {
+    const inputSearch = request.input('city', '').trim()
+
+    const vehicles = await Vehicle.query()
+      .where('city', 'LIKE', `%${inputSearch}%`)
+      .preload('pictures')
+      .preload('type')
+      .preload('user')
+
+    return view.render('pages/vehicles/index', { vehicles, inputSearch })
+  }
 }
