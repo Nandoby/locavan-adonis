@@ -5,5 +5,5 @@ import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
 export default class Picture extends PictureSchema {
   @belongsTo(() => Vehicle)
-  declare vehicles: BelongsTo<typeof Vehicle>
+  declare vehicle: BelongsTo<typeof Vehicle>
 }
