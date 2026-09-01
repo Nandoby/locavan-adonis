@@ -1,4 +1,5 @@
 import vine from '@vinejs/vine'
+import { imageFile } from '#validators/rules'
 
 /**
  * Shared rules for email and password.
@@ -16,5 +17,5 @@ export const signupValidator = vine.create({
   password: password().confirmed({
     confirmationField: 'passwordConfirmation',
   }),
-  avatar: vine.file({ extnames: ['jpg', 'jpeg', 'png'] }).optional(),
+  avatar: imageFile().optional(),
 })

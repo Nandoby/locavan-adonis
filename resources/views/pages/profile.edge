@@ -88,7 +88,7 @@
 
       <div class="mb-3">
         <p class="text-sm font-bold mb-2"><span class="text-red-500 font-bold">*</span> Avatar</p>
-        <img src="{{ auth.user.avatarPath }}" alt="profile" class="w-24 h-24" />
+        <img src="{{ await driveUrl(auth.user.avatarPath) }}" alt="profile" class="w-24 h-24" />
         @field.root({ name: 'avatar' })
           @!input.control({
             type: 'file',

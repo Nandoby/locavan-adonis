@@ -11,14 +11,22 @@
               <ul class="splide__list">
                 @each(picture in vehicle.pictures)
                   <li class="splide__slide">
-                    <img class="aspect-video object-cover w-full" src="{{ picture.path }}" alt="" />
+                    <img
+                      class="aspect-video object-cover w-full"
+                      src="{{ await driveUrl(picture.path) }}"
+                      alt=""
+                    />
                   </li>
                 @end
               </ul>
             </div>
           </div>
           <div class="flex space-x-4">
-            <img class="w-24 h-24" src="{{ vehicle.user.avatarPath }}" alt="avatar" />
+            <img
+              class="w-24 h-24"
+              src="{{ await driveUrl(vehicle.user.avatarPath) }}"
+              alt="avatar"
+            />
             <div class="space-y-2">
               <h3 class="text-2xl font-semibold">
                 {{ vehicle.type.name }}
@@ -156,7 +164,11 @@
           <div class="divide-y divide-slate-300 w-12/12 lg:w-6/12 mx-auto">
             @each(comment in vehicle.comments)
               <div class="my-8 flex gap-4 p-6 items-start">
-                <img class="rounded-lg w-16 h-16" src="{{ comment.user.avatarPath }}" alt="" />
+                <img
+                  class="rounded-lg w-16 h-16"
+                  src="{{ await driveUrl(comment.user.avatarPath) }}"
+                  alt=""
+                />
                 <div class="w-full">
                   <h5 class="font-medium">
                     {{ comment.user.firstName }}
@@ -170,11 +182,15 @@
                     <div class="memories flex flex-wrap gap-4 mt-4">
                       @each(memory in comment.memories)
                         <a
-                          href="{{ memory.path }}"
+                          href="{{ await driveUrl(memory.path) }}"
                           data-lightbox="image-{{ comment.id }}"
                           data-caption="{{ comment.user.fullName }} - {{ memory.createdAt.toLocaleString() }} - {{ vehicle.type.name }} - {{ vehicle.model }}"
                         >
-                          <img class="w-24 h-24 rounded-lg" src="{{ memory.path }}" alt="" />
+                          <img
+                            class="w-24 h-24 rounded-lg"
+                            src="{{ await driveUrl(memory.path) }}"
+                            alt=""
+                          />
                         </a>
                       @end
                     </div>

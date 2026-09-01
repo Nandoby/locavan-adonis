@@ -17,7 +17,7 @@
           <a href="{{ urlFor('vehicles.show', [vehicle.id]) }}">
             <img
               class="rounded-t-lg w-full max-h-56 object-cover object-center"
-              src="{{ vehicle.pictures[0].path }}"
+              src="{{ await driveUrl(vehicle.pictures[0].path) }}"
               alt=""
             />
           </a>

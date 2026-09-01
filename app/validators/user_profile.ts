@@ -1,4 +1,5 @@
 import vine from '@vinejs/vine'
+import { imageFile } from '#validators/rules'
 
 const password = () => vine.string().minLength(8).maxLength(32)
 
@@ -10,5 +11,5 @@ export const UserProfileValidator = vine.create({
       as: 'passwordConfirm',
     })
     .nullable(),
-  avatar: vine.file({ extnames: ['jpeg', 'jpg', 'png', 'svg'] }).optional(),
+  avatar: imageFile().optional(),
 })

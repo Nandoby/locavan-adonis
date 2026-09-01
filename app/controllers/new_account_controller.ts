@@ -1,7 +1,7 @@
 import User from '#models/user'
 import { signupValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
-import app from '@adonisjs/core/services/app'
+import { storeUpload } from '#services/upload_service'
 
 /**
  * NewAccountController handles user registration.
@@ -25,14 +25,9 @@ export default class NewAccountController {
     const user = await User.create(data)
 
     if (avatar) {
-      const name = `${Date.now()}.${avatar.extname}`
-      await avatar.move(app.publicPath('uploads'), {
-        name,
-      })
-      user.avatarPath = '/uploads/' + name
+      user.avatarPath = await storeUpload(avatar, 'avatars')
+      await user.save()
     }
-
-    await user.save()
 
     await auth.use('web').login(user)
     response.redirect().toRoute('home.index')

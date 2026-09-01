@@ -5,7 +5,7 @@ import Booking from '#models/booking'
 import { DateTime } from 'luxon'
 import Comment from '#models/comment'
 import { commentValidator } from '#validators/comment'
-import app from '@adonisjs/core/services/app'
+import { storeUpload } from '#services/upload_service'
 import Memory from '#models/memory'
 import BookingPolicy from '#policies/booking_policy'
 
@@ -81,10 +81,9 @@ export default class BookingsController {
     })
 
     if (memories.length > 0) {
-      for (const [index, memory] of memories.entries()) {
-        const name = `${Date.now()}-${index}.${memory.extname}`
-        await memory.move(app.publicPath('uploads'), { name })
-        await Memory.create({ commentId: comment.id, path: '/uploads/' + name })
+      for (const memory of memories) {
+        const path = await storeUpload(memory, 'memories')
+        await Memory.create({ commentId: comment.id, path })
       }
     }
 

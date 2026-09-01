@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { urlFor } from '@adonisjs/core/services/url_builder'
 import { UserProfileValidator } from '#validators/user_profile'
 import User from '#models/user'
-import app from '@adonisjs/core/services/app'
+import { storeUpload, deleteUpload } from '#services/upload_service'
 
 export default class UsersController {
   async edit({ view, request }: HttpContext) {
@@ -24,11 +24,8 @@ export default class UsersController {
     }
 
     if (avatar) {
-      const name = `${Date.now()}.${avatar.extname}`
-      await avatar.move(app.publicPath('uploads'), {
-        name,
-      })
-      user.avatarPath = '/uploads/' + name
+      await deleteUpload(user.avatarPath)
+      user.avatarPath = await storeUpload(avatar, 'avatars')
     }
 
     await user.save()

@@ -4,6 +4,7 @@ type ParamValue = string | number | bigint | boolean
 
 export type ScannedRoutes = {
   ALL: {
+    'drive.fs.serve': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
     'home.index': { paramsTuple?: []; params?: {} }
     'vehicles.index': { paramsTuple?: []; params?: {} }
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -21,6 +22,7 @@ export type ScannedRoutes = {
     'vehicles.search': { paramsTuple?: []; params?: {} }
   }
   GET: {
+    'drive.fs.serve': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
     'home.index': { paramsTuple?: []; params?: {} }
     'vehicles.index': { paramsTuple?: []; params?: {} }
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -32,6 +34,7 @@ export type ScannedRoutes = {
     'vehicles.search': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
+    'drive.fs.serve': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
     'home.index': { paramsTuple?: []; params?: {} }
     'vehicles.index': { paramsTuple?: []; params?: {} }
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

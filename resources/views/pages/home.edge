@@ -23,7 +23,7 @@
               {{ auth.user.lastName }}
               <img
                 class="w-10 h-10 rounded-full"
-                src="{{ auth.user.avatarPath }}"
+                src="{{ await driveUrl(auth.user.avatarPath) }}"
                 alt="avatar image"
               />
               <i class="fa-solid" :class="dropped ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
@@ -157,7 +157,7 @@
             <div class="md:w-4/12 sm:w-6/12 px-4 my-4">
               <div class="border border-neutral-300 bg-white rounded-lg">
                 <img
-                  src="{{ vehicle.pictures[0].path }}"
+                  src="{{ await driveUrl(vehicle.pictures[0].path) }}"
                   alt="vehicle picture"
                   class="block object-cover w-full rounded-t-lg aspect-video"
                 />
