@@ -127,4 +127,22 @@
   .splide__arrow, .splide__pagination__page {
     background: rgb(254 154 0 / 0.82) !important;
   }
+
+  .input-field {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-amber-500 block w-full p-2.5
+  }
+
+  .label {
+    @apply block mb-2 text-sm font-medium text-gray-900
+  }
+
+  .select {
+      @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-amber-500 w-full p-2.5
+  }
+  .textarea {
+    @apply block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-amber-500
+  }
+  .input-file {
+    @apply block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none
+  }
 }

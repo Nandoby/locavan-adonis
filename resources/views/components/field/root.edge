@@ -18,12 +18,18 @@
     and control.
   --}}
   @let(fieldKey = $props.get('name'))
+  @let(isArrayField = fieldKey.endsWith('[]'))
+  @let(baseKey = isArrayField ? fieldKey.slice(0, -2) : fieldKey)
+  @let(inputErrorsBag = flashMessages.get('inputErrorsBag', {}))
+  @let(errors = isArrayField
+    ? [...(inputErrorsBag[baseKey] ?? []), ...(inputErrorsBag[`${baseKey}.*`] ?? [])]
+    : inputErrorsBag[fieldKey])
   @inject({
     name: fieldKey,
     id: $props.get('id') ?? fieldKey,
     oldValue: old(fieldKey) || '',
-    errors: flashMessages.get('inputErrorsBag', {})[fieldKey],
-    hasErrors: fieldKey in flashMessages.get('inputErrorsBag', {}),
+    errors,
+    hasErrors: isArrayField ? errors.length > 0 : fieldKey in inputErrorsBag,
   })
 @end
 {{{ await $slots.main() }}}

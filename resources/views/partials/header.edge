@@ -20,10 +20,18 @@
           </li>
         @else
           <li class="hidden sm:block">
+            @link({
+              route: 'vehicles.create',
+              class: 'tracking-wide linkanimate',
+            })
+              Déposer une annonce
+            @end
+          </li>
+          <li class="hidden sm:block">
             <div x-data="dropdown" class="relative">
               <button
                 id="dropdownDefault"
-                class="group text-amber-600 hover:text-amber-900 font-medium rounded-lg text-sm px-4 py-2.5 text-center flex items-center gap-3 cursor-pointer"
+                class="group text-amber-600 hover:text-amber-900 font-medium rounded-lg text-sm  text-center flex items-center gap-3 cursor-pointer"
                 type="button"
                 @click="toggle()"
               >

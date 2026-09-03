@@ -14,6 +14,12 @@ import router from '@adonisjs/core/services/router'
 router.get('/', [controllers.Home, 'index'])
 
 router.get('/vehicles', [controllers.Vehicles, 'index'])
+router
+  .group(() => {
+    router.get('/vehicles/create', [controllers.Vehicles, 'create'])
+    router.post('/vehicles', [controllers.Vehicles, 'store'])
+  })
+  .use(middleware.auth())
 router.get('/vehicles/:id', [controllers.Vehicles, 'show'])
 router.post('/vehicles/:id/bookings', [controllers.Bookings, 'store']).use(middleware.auth())
 

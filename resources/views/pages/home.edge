@@ -12,6 +12,14 @@
             </a>
           </li>
         @else
+          <li class="hidden sm:block">
+            @link({
+              route: 'vehicles.create',
+              class: 'tracking-wide linkanimate',
+            })
+              Déposer une annonce
+            @end
+          </li>
           <div x-data="dropdown" class="relative">
             <button
               id="dropdownDefault"

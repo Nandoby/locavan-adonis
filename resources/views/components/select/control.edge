@@ -1,8 +1,9 @@
 @let(classes = [])
+@let(prompt = $props.get('prompt'))
 
 <select {{
   $props
-    .except(['options'])
+    .except(['options', 'prompt'])
     .merge({
       name: $context.name,
       id: $context.id,
@@ -13,6 +14,10 @@
     })
     .toAttrs()
 }}>
+  @if(prompt)
+    @let(hasSelection = $context.oldValue || $props.get('options').some((o) => o.isSelected))
+    <option value="" disabled {{ hasSelection ? '' : 'selected' }}>{{ prompt }}</option>
+  @end
   @each(option in $props.get('options'))
     @let(isSelected = option.isSelected
       ? true
