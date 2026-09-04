@@ -2,6 +2,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 import Vehicle from '#models/vehicle'
 import Type from '#models/type'
 import { vehicleValidator } from '#validators/vehicle'
+import { storeUpload } from '#services/upload_service'
+import Picture from '#models/picture'
 
 export default class VehiclesController {
   async index({ view }: HttpContext) {
@@ -45,9 +47,39 @@ export default class VehiclesController {
     return view.render('pages/vehicles/create', { types })
   }
 
-  async store({ request, response, auth }: HttpContext) {
-    console.log(request.all())
+  async store({ request, response, auth, session }: HttpContext) {
     const data = await request.validateUsing(vehicleValidator)
-    console.log(data)
+
+    const vehicle = await Vehicle.create({
+      beds: data.beds,
+      seats: data.seats,
+      city: data.city,
+      year: data.year,
+      wasteWater: data.wasteWater,
+      price: data.price,
+      model: data.model,
+      width: data.width,
+      height: data.height,
+      length: data.length,
+      km: data.km,
+      cleanWater: data.cleanWater,
+      animals: data.animals,
+      description: data.description,
+      travelAbroad: data.travelAbroad,
+      userId: auth.user!.id,
+      typeId: data.type,
+    })
+
+    for (const file of data.pictures) {
+      const name = await storeUpload(file, 'pictures')
+      await Picture.create({
+        title: file.fileName,
+        vehicleId: vehicle.id,
+        path: name,
+      })
+    }
+
+    session.flash('success', 'Véhicule créé avec succès')
+    return response.redirect().back()
   }
 }
