@@ -18,6 +18,7 @@ router
   .group(() => {
     router.get('/vehicles/create', [controllers.Vehicles, 'create'])
     router.post('/vehicles', [controllers.Vehicles, 'store'])
+    router.get('/listing', [controllers.Vehicles, 'listing'])
   })
   .use(middleware.auth())
 router.get('/vehicles/:id', [controllers.Vehicles, 'show'])

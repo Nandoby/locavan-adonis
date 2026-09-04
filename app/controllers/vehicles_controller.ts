@@ -82,4 +82,15 @@ export default class VehiclesController {
     session.flash('success', 'Véhicule créé avec succès')
     return response.redirect().back()
   }
+
+  async listing({ view, auth }: HttpContext) {
+    const vehicles = await Vehicle.query()
+      .where({ userId: auth.user!.id })
+      .preload('type')
+      .preload('bookings')
+      .preload('comments')
+      .exec()
+
+    return view.render('pages/vehicles/listing', { vehicles })
+  }
 }
