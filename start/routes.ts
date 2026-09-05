@@ -61,3 +61,15 @@ router
 
 // Recherche
 router.get('/search', [controllers.Vehicles, 'search'])
+
+/**
+ * Administration
+ */
+router
+  .group(() => {
+    router.get('/admin', [controllers.Admin, 'index'])
+    router.get('/admin/users', [controllers.Admin, 'users'])
+    router.get('/admin/vehicles', [controllers.Admin, 'vehicles'])
+    router.get('/admin/comments', [controllers.Admin, 'comments'])
+  })
+  .use(middleware.admin())

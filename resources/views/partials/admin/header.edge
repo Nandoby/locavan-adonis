@@ -1,0 +1,56 @@
+<header>
+  <!--Nav-->
+  <nav class="bg-gray-800 pt-2 md:pt-1 pb-1 px-1 mt-0 h-auto fixed w-full z-20 top-0">
+    <div class="flex flex-wrap items-center">
+      <div class="flex shrink md:w-1/3 justify-center md:justify-start text-white">
+        <h1 class="text-3xl uppercase text-amber-500 mr-4 pl-2">
+          <a href="{{ urlFor('home.index') }}">
+            <span class="text-white border-y-2 border-y-amber-500">Loca</span>van
+          </a>
+        </h1>
+      </div>
+
+      <div class="flex w-full pt-2 content-center justify-between md:w-1/3 md:justify-end">
+        <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
+          <li class="flex-1 md:flex-none md:mr-3">
+            <div class="relative inline-block" x-data="dropdown">
+              <button class="drop-button text-white py-2 px-2" @click="toggle()">
+                <span class="pr-2"><i class="fa fa-user"></i></span>
+                Bonjour
+                {{ auth.user.firstName }}
+                <i class="fa-solid" :class="dropped ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+              </button>
+              <div
+                x-show="dropped"
+                id="dropdown"
+                class="z-10 bg-white rounded shadow w-54 absolute mt-3 overflow-hidden"
+              >
+                <ul class="text-sm text-gray-700 divide-y divide-gray-200">
+                  <li>
+                    <a href="{{ urlFor('profile') }}" class="dropdown-item">
+                      <i class="fa-solid fa-user w-6"></i>Profil
+                    </a>
+                  </li>
+                  <li>
+                    @form({
+                      route: 'session.destroy',
+                      method: 'POST',
+                    })
+                      @button({
+                        class:
+                          'flex items-center w-full dropdown-item cursor-pointer bg-gray-200 hover:bg-gray-300',
+                      })
+                        <i class="fa-solid fa-arrow-right-from-bracket w-6"></i>
+                        <span>Déconnexion</span>
+                      @end
+                    @end
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

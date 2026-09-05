@@ -23,6 +23,10 @@ export type ScannedRoutes = {
     'profile': { paramsTuple?: []; params?: {} }
     'profile.update': { paramsTuple?: []; params?: {} }
     'vehicles.search': { paramsTuple?: []; params?: {} }
+    'admin.index': { paramsTuple?: []; params?: {} }
+    'admin.users': { paramsTuple?: []; params?: {} }
+    'admin.vehicles': { paramsTuple?: []; params?: {} }
+    'admin.comments': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'drive.fs.serve': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
@@ -37,6 +41,10 @@ export type ScannedRoutes = {
     'session.create': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
     'vehicles.search': { paramsTuple?: []; params?: {} }
+    'admin.index': { paramsTuple?: []; params?: {} }
+    'admin.users': { paramsTuple?: []; params?: {} }
+    'admin.vehicles': { paramsTuple?: []; params?: {} }
+    'admin.comments': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'drive.fs.serve': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
@@ -51,6 +59,10 @@ export type ScannedRoutes = {
     'session.create': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
     'vehicles.search': { paramsTuple?: []; params?: {} }
+    'admin.index': { paramsTuple?: []; params?: {} }
+    'admin.users': { paramsTuple?: []; params?: {} }
+    'admin.vehicles': { paramsTuple?: []; params?: {} }
+    'admin.comments': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'vehicles.store': { paramsTuple?: []; params?: {} }

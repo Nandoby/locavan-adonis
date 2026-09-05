@@ -1,0 +1,84 @@
+@admin.layout({ title: 'Annonces' })
+  <main>
+    <div class="flex flex-col md:flex-row">
+      @include('partials/admin/nav')
+      <section class="w-full">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table class="w-full text-sm text-left text-gray-500 mt-28 mb-28">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3">#</th>
+                <th scope="col" class="px-6 py-3">Annonceur</th>
+                <th scope="col" class="px-6 py-3">Modèle</th>
+                <th scope="col" class="px-6 py-3">Prix</th>
+                <th scope="col" class="px-6 py-3">Année</th>
+                <th scope="col" class="px-6 py-3">Lon | Lar | Hau</th>
+                <th scope="col" class="px-6 py-3">Km</th>
+                <th scope="col" class="px-6 py-3">E.C. | E.U.</th>
+                <th scope="col" class="px-6 py-3">Etranger</th>
+                <th scope="col" class="px-6 py-3">Animaux</th>
+                <th scope="col" class="px-6 py-3">Lits</th>
+                <th scope="col" class="px-6 py-3">Sièges</th>
+                <th scope="col" class="px-6 py-3">Ville</th>
+                <th scope="col" class="px-6 py-3">Commentaires</th>
+              </tr>
+            </thead>
+            <tbody>
+              @each(vehicle in vehicles)
+                <tr class="bg-white border-b">
+                  <td class="px-6 py-4">{{ vehicle.id }}</td>
+                  <td class="px-6 py-4">
+                    {{ vehicle.user.firstName }}
+                    {{ vehicle.user.lastName }}
+                  </td>
+                  <td class="px-6 py-4">{{ vehicle.model }}</td>
+                  <td class="px-6 py-4">
+                    {{
+                      vehicle.price.toLocaleString('fr-BE', {
+                        style: 'currency',
+                        currency: 'EUR',
+                      })
+                    }}
+                  </td>
+                  <td class="px-6 py-4">{{ vehicle.year }}</td>
+                  <td class="px-6 py-4">
+                    {{ vehicle.length }}
+                    m |
+                    {{ vehicle.width }}
+                    m |
+                    {{ vehicle.height }}
+                    m
+                  </td>
+                  <td class="px-6 py-4">{{ vehicle.km.toLocaleString() }}</td>
+                  <td class="px-6 py-4">{{ vehicle.cleanWater }} L | {{ vehicle.wasteWater }} L</td>
+                  <td class="px-6 py-4">
+                    @if(vehicle.travelAbroad)
+                      <i class="fa-solid fa-check text-green-600"></i>
+                    @else
+                      <i class="fa-solid fa-x text-red-600"></i>
+                    @end
+                  </td>
+                  <td class="px-6 py-4">
+                    @if(vehicle.animals)
+                      <i class="fa-solid fa-check text-green-600"></i>
+                    @else
+                      <i class="fa-solid fa-x text-red-600"></i>
+                    @end
+                  </td>
+                  <td class="px-6 py-4">{{ vehicle.beds }}</td>
+                  <td class="px-6 py-4">{{ vehicle.seats }}</td>
+                  <td class="px-6 py-4 text-nowrap">{{ vehicle.city }}</td>
+                  <td class="px-6 py-4">
+                    <span class="bg-black px-2.5 py-0.5 text-white rounded font-bold">
+                      {{ vehicle.comments.length }}
+                    </span>
+                  </td>
+                </tr>
+              @end
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+@end

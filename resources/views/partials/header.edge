@@ -67,6 +67,14 @@
                       <i class="fa-solid fa-book-open w-6"></i>Mes annonces
                     </a>
                   </li>
+                  @if(auth.user.isAdmin)
+                    <li>
+                      <a href="{{ urlFor('admin.index') }}" class="dropdown-item">
+                        <i class="fa-solid fa-user-key"></i>Admin
+                      </a>
+                    </li>
+                  @end
+
                   <li>
                     @form({
                       route: 'session.destroy',

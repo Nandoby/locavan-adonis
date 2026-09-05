@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title ? 'Locavan | Adminstration | ' + title : 'Locavan' }}</title>
+    @vite([
+      'resources/css/app.css',
+      'resources/css/fontawesome.css',
+      'resources/css/regular.css',
+      'resources/css/solid.css',
+      'resources/css/light.css',
+      'resources/js/app.js',
+    ])
+    @stack('dumper')
+  </head>
+  <body class="bg-slate-50">
+    @include('partials/flash_alerts')
+    @include('partials/admin/header')
+    {{{ await $slots.main() }}}
+    @stack('javascript')
+  </body>
+</html>

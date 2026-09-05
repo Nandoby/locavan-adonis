@@ -1,0 +1,33 @@
+@admin.layout({ title: 'Home' })
+  <main>
+    <div class="flex flex-col md:flex-row">
+      @include('partials/admin/nav')
+      <section class="w-full">
+        <div class="grid justify-center md:grid-cols-3 mt-40 gap-8 md:p-8">
+          <div class="p-6 max-w-sm bg-white rounded-lg shadow-md border-b-4 border-pink-500">
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-pink-500 text-center">
+              Utilisateurs
+            </h5>
+            <p class="text-2xl flex justify-center font-bold text-pink-600">{{ usersCount }}</p>
+          </div>
+
+          <div class="p-6 max-w-sm bg-white rounded-lg shadow-md border-b-4 border-indigo-500">
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-indigo-500 text-center">
+              Annonces
+            </h5>
+            <p class="text-2xl flex justify-center font-bold text-indigo-600">
+              {{ vehiclesCount }}
+            </p>
+          </div>
+
+          <div class="p-6 max-w-sm bg-white rounded-lg shadow-md border-b-4 border-blue-500">
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-blue-500 text-center">
+              Commentaires
+            </h5>
+            <p class="text-2xl flex justify-center font-bold text-blue-600">{{ commentsCount }}</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+@end
