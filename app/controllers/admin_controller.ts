@@ -18,18 +18,30 @@ export default class AdminController {
     })
   }
 
-  async users({ view }: HttpContext) {
-    const users = await User.query()
+  async users({ view, request }: HttpContext) {
+    const page = request.input('page', 1)
+    const users = await User.query().paginate(page, 5)
+    users.baseUrl(request.url())
     return view.render('pages/admin/users', { users })
   }
 
-  async vehicles({ view }: HttpContext) {
-    const vehicles = await Vehicle.query().preload('user').preload('comments')
+  async vehicles({ view, request }: HttpContext) {
+    const page = request.input('page', 1)
+    const perPage = 5
+    const vehicles = await Vehicle.query()
+      .preload('user')
+      .preload('comments')
+      .paginate(page, perPage)
+
+    vehicles.baseUrl(request.url())
+
     return view.render('pages/admin/vehicles', { vehicles })
   }
 
-  async comments({ view }: HttpContext) {
-    const comments = await Comment.query().preload('user')
+  async comments({ view, request }: HttpContext) {
+    const page = request.input('page', 1)
+    const comments = await Comment.query().preload('user').paginate(page, 10)
+    comments.baseUrl(request.url())
     return view.render('pages/admin/comments', { comments })
   }
 }

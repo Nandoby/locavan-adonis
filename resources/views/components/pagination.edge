@@ -1,0 +1,58 @@
+@let(paginator = $props.get('paginator'))
+@let(accent = $props.get('accent', 'indigo'))
+@let(accentClasses = {
+  indigo: {
+    active: 'bg-indigo-500 text-indigo-50',
+    hover: 'hover:bg-gray-100 hover:text-indigo-600',
+  },
+  yellow: {
+    active: 'bg-yellow-400 text-yellow-900',
+    hover: 'hover:bg-gray-100 hover:text-yellow-700',
+  },
+  blue: {
+    active: 'bg-blue-500 text-blue-50',
+    hover: 'hover:bg-gray-100 hover:text-blue-600',
+  },
+  pink: {
+    active: 'bg-pink-500 text-pink-50',
+    hover: 'hover:bg-gray-100 hover:text-pink-600',
+  },
+})
+@let(theme = accentClasses[accent] ?? accentClasses.indigo)
+@if(paginator.hasPages)
+  <nav aria-label="Pagination" class="flex items-center justify-center gap-1 py-6">
+    @if(paginator.currentPage > 1)
+      <a
+        href="{{ paginator.getPreviousPageUrl() }}"
+        class="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg transition-colors {{ theme.hover }}"
+      >
+        <i class="fa-solid fa-chevron-left text-xs"></i>
+        Précédent
+      </a>
+    @end
+
+    <div class="flex items-center gap-1">
+      @each(link in paginator.getUrlsForRange(1, paginator.lastPage))
+        <a
+          href="{{ link.url }}"
+          class="min-w-9 h-9 flex items-center justify-center rounded-lg text-sm transition-colors {{
+            link.isActive
+              ? 'font-bold ' + theme.active
+              : 'text-gray-600 font-medium ' + theme.hover
+          }}"
+        >
+          {{ link.page }}
+        </a>
+      @end
+    </div>
+    @if(paginator.hasMorePages)
+      <a
+        href="{{ paginator.getNextPageUrl() }}"
+        class="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg transition-colors {{ theme.hover }}"
+      >
+        Suivant
+        <i class="fa-solid fa-chevron-right text-xs"></i>
+      </a>
+    @end
+  </nav>
+@end
