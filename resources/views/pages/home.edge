@@ -173,7 +173,7 @@
             <div class="md:w-4/12 sm:w-6/12 px-4 my-4">
               <div class="border border-neutral-300 bg-white rounded-lg">
                 <img
-                  src="{{ await driveUrl(vehicle.pictures[0].path) }}"
+                  src="{{ (await driveUrl(vehicle.pictures[0]?.path)) || '/images/default.webp' }}"
                   alt="vehicle picture"
                   class="block object-cover w-full rounded-t-lg aspect-video"
                 />

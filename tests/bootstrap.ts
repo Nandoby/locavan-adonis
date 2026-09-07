@@ -1,3 +1,7 @@
+import { apiClient } from '@japa/api-client'
+import { sessionApiClient } from '@adonisjs/session/plugins/api_client'
+import { authApiClient } from '@adonisjs/auth/plugins/api_client'
+import { shieldApiClient } from '@adonisjs/shield/plugins/api_client'
 import { assert } from '@japa/assert'
 import app from '@adonisjs/core/services/app'
 import type { Config } from '@japa/runner/types'
@@ -19,6 +23,10 @@ import { sessionBrowserClient } from '@adonisjs/session/plugins/browser_client'
 export const plugins: Config['plugins'] = [
   assert(),
   pluginAdonisJS(app),
+  apiClient(),
+  sessionApiClient(app),
+  shieldApiClient(),
+  authApiClient(app),
   dbAssertions(app),
   browserClient({ runInSuites: ['browser'] }),
   sessionBrowserClient(app),
@@ -33,7 +41,7 @@ export const plugins: Config['plugins'] = [
  * The teardown functions are executed after all the tests
  */
 export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
-  setup: [],
+  setup: [() => testUtils.db().migrate()],
   teardown: [],
 }
 

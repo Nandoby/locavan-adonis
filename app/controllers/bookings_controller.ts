@@ -8,6 +8,7 @@ import { commentValidator } from '#validators/comment'
 import { storeUpload } from '#services/upload_service'
 import Memory from '#models/memory'
 import BookingPolicy from '#policies/booking_policy'
+import CommentPolicy from '#policies/comment_policy'
 
 export default class BookingsController {
   async store({ params, request, auth, response, session }: HttpContext) {
@@ -59,10 +60,12 @@ export default class BookingsController {
     return view.render('pages/bookings/show', { booking, dateNow, bookingCompleted, hasComment })
   }
 
-  async storeComment({ params, request, auth, session, response }: HttpContext) {
+  async storeComment({ params, request, auth, session, response, bouncer }: HttpContext) {
     const { id } = params
     const { memories = [], ...data } = await request.validateUsing(commentValidator)
     const booking = await Booking.query().where({ id }).preload('vehicle').firstOrFail()
+
+    await bouncer.with(CommentPolicy).authorize('create', booking)
 
     const existingComment = await Comment.query()
       .where({ vehicleId: booking.vehicleId, userId: auth.user!.id })

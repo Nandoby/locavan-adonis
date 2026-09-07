@@ -1,22 +1,32 @@
 import vine from '@vinejs/vine'
 import { imageFile } from '#validators/rules'
 
+const currentYear = new Date().getFullYear()
+
 export const vehicleValidator = vine.create({
-  model: vine.string().maxLength(50).trim(),
+  model: vine.string().trim().maxLength(50),
   type: vine.number().exists({ table: 'types', column: 'id' }),
-  price: vine.number(),
-  year: vine.number(),
-  length: vine.number(),
-  height: vine.number(),
-  width: vine.number(),
-  km: vine.number(),
-  city: vine.string().alpha().maxLength(50),
-  cleanWater: vine.number(),
-  wasteWater: vine.number(),
-  seats: vine.number(),
-  beds: vine.number(),
+  price: vine.number().positive().max(100000),
+  year: vine
+    .number()
+    .min(1950)
+    .max(currentYear + 1),
+  length: vine.number().positive().max(20),
+  height: vine.number().positive().max(5),
+  width: vine.number().positive().max(4),
+  km: vine.number().min(0).max(2000000),
+  city: vine
+    .string()
+    .trim()
+    .minLength(2)
+    .maxLength(50)
+    .regex(/^\p{L}[\p{L}\s'-]*$/u),
+  cleanWater: vine.number().min(0).max(1000),
+  wasteWater: vine.number().min(0).max(1000),
+  seats: vine.number().min(1).max(9),
+  beds: vine.number().min(1).max(12),
   animals: vine.boolean(),
   travelAbroad: vine.boolean(),
-  description: vine.string().trim(),
-  pictures: vine.array(imageFile()),
+  description: vine.string().trim().maxLength(5000),
+  pictures: vine.array(imageFile()).minLength(1),
 })
