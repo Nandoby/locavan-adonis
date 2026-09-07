@@ -30,7 +30,7 @@ export default class AdminController {
     const perPage = 5
     const vehicles = await Vehicle.query()
       .preload('user')
-      .preload('comments')
+      .withCount('comments')
       .paginate(page, perPage)
 
     vehicles.baseUrl(request.url())

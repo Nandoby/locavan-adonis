@@ -8,7 +8,15 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class BookingSchema extends BaseModel {
-  static $columns = ['createdAt', 'endDate', 'id', 'startDate', 'updatedAt', 'userId', 'vehicleId'] as const
+  static $columns = [
+    'createdAt',
+    'endDate',
+    'id',
+    'startDate',
+    'updatedAt',
+    'userId',
+    'vehicleId',
+  ] as const
   $columns = BookingSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime | null
@@ -27,7 +35,15 @@ export class BookingSchema extends BaseModel {
 }
 
 export class CommentSchema extends BaseModel {
-  static $columns = ['content', 'createdAt', 'id', 'rating', 'updatedAt', 'userId', 'vehicleId'] as const
+  static $columns = [
+    'content',
+    'createdAt',
+    'id',
+    'rating',
+    'updatedAt',
+    'userId',
+    'vehicleId',
+  ] as const
   $columns = CommentSchema.$columns
   @column()
   declare content: string | null
@@ -91,7 +107,17 @@ export class TypeSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['avatarPath', 'createdAt', 'email', 'firstName', 'id', 'isAdmin', 'lastName', 'password', 'updatedAt'] as const
+  static $columns = [
+    'avatarPath',
+    'createdAt',
+    'email',
+    'firstName',
+    'id',
+    'isAdmin',
+    'lastName',
+    'password',
+    'updatedAt',
+  ] as const
   $columns = UserSchema.$columns
   @column()
   declare avatarPath: string | null
@@ -114,7 +140,28 @@ export class UserSchema extends BaseModel {
 }
 
 export class VehicleSchema extends BaseModel {
-  static $columns = ['animals', 'beds', 'city', 'cleanWater', 'createdAt', 'description', 'height', 'id', 'km', 'length', 'model', 'price', 'seats', 'travelAbroad', 'typeId', 'updatedAt', 'userId', 'wasteWater', 'width', 'year'] as const
+  static $columns = [
+    'animals',
+    'beds',
+    'city',
+    'cleanWater',
+    'createdAt',
+    'description',
+    'height',
+    'id',
+    'km',
+    'length',
+    'model',
+    'price',
+    'seats',
+    'travelAbroad',
+    'typeId',
+    'updatedAt',
+    'userId',
+    'wasteWater',
+    'width',
+    'year',
+  ] as const
   $columns = VehicleSchema.$columns
   @column()
   declare animals: boolean | null

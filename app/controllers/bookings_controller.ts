@@ -9,6 +9,7 @@ import { storeUpload } from '#services/upload_service'
 import Memory from '#models/memory'
 import BookingPolicy from '#policies/booking_policy'
 import CommentPolicy from '#policies/comment_policy'
+import db from '@adonisjs/lucid/services/db'
 
 export default class BookingsController {
   async store({ params, request, auth, response, session }: HttpContext) {
@@ -18,18 +19,27 @@ export default class BookingsController {
     const startDate = data.booking_startDate
     const endDate = data.booking_endDate
 
-    const overlap = await Booking.query()
-      .where('vehicleId', vehicle.id)
-      .where('startDate', '<=', endDate.toSQL()!)
-      .where('endDate', '>=', startDate.toSQL()!)
-      .first()
+    const created = await db.transaction(async (trx) => {
+      const overlap = await Booking.query({ client: trx })
+        .where('vehicleId', vehicle.id)
+        .where('startDate', '<=', endDate.toSQL()!)
+        .where('endDate', '>=', startDate.toSQL()!)
+        .first()
 
-    if (overlap) {
+      if (overlap) return false
+
+      await Booking.create(
+        { userId: auth.user!.id, vehicleId: vehicle.id, startDate, endDate },
+        { client: trx }
+      )
+      return true
+    })
+
+    if (!created) {
       session.flash('error', 'Ce véhicule est déjà réservé sur cette période')
       return response.redirect().back()
     }
 
-    await Booking.create({ userId: auth.user!.id, vehicleId: vehicle.id, startDate, endDate })
     session.flash('success', 'Réservation confirmée !')
     return response.redirect().toRoute('vehicles.show', { id: vehicle.id })
   }
