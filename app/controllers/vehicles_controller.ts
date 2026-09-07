@@ -6,8 +6,16 @@ import { storeUpload } from '#services/upload_service'
 import Picture from '#models/picture'
 
 export default class VehiclesController {
-  async index({ view }: HttpContext) {
-    const vehicles = await Vehicle.query().preload('pictures').preload('user').preload('type')
+  async index({ view, request }: HttpContext) {
+    const page = request.input('page', 1)
+    const vehicles = await Vehicle.query()
+      .preload('pictures')
+      .preload('user')
+      .preload('type')
+      .orderBy('createdAt', 'desc')
+      .paginate(page, 12)
+
+    vehicles.baseUrl('/vehicles')
 
     return view.render('pages/vehicles/index', { vehicles })
   }
@@ -32,12 +40,18 @@ export default class VehiclesController {
 
   async search({ view, request }: HttpContext) {
     const inputSearch = request.input('city', '').trim()
+    const page = request.input('page', 1)
 
     const vehicles = await Vehicle.query()
       .where('city', 'LIKE', `%${inputSearch}%`)
       .preload('pictures')
       .preload('type')
       .preload('user')
+      .orderBy('createdAt', 'desc')
+      .paginate(page, 12)
+
+    vehicles.baseUrl('/search')
+    vehicles.queryString({ city: inputSearch })
 
     return view.render('pages/vehicles/index', { vehicles, inputSearch })
   }
@@ -87,8 +101,8 @@ export default class VehiclesController {
     const vehicles = await Vehicle.query()
       .where({ userId: auth.user!.id })
       .preload('type')
-      .preload('bookings')
-      .preload('comments')
+      .withCount('bookings')
+      .withCount('comments')
       .exec()
 
     return view.render('pages/vehicles/listing', { vehicles })
