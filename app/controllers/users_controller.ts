@@ -17,10 +17,10 @@ export default class UsersController {
 
     const user = await User.findOrFail(auth.user!.id)
 
-    if (!password) {
-      user.merge({ firstName: firstname, lastName: lastname })
-    } else {
-      user.merge({ password: password })
+    user.merge({ firstName: firstname, lastName: lastname })
+
+    if (password) {
+      user.merge({ password })
     }
 
     if (avatar) {

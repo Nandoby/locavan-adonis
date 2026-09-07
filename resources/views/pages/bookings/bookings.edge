@@ -11,7 +11,7 @@
             <a href="{{ urlFor('bookings.show', { id: book.id }) }}">
               <img
                 class="rounded-t-lg w-full object-cover object-center aspect-video"
-                src="{{ await driveUrl(book.vehicle.pictures[0].path) }}"
+                src="{{ (await driveUrl(book.vehicle.pictures[0]?.path)) || '/images/default.webp' }}"
                 alt="image du véhicule réservé"
               />
             </a>
