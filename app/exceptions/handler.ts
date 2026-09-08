@@ -1,5 +1,6 @@
 import app from '@adonisjs/core/services/app'
 import { type HttpContext, ExceptionHandler } from '@adonisjs/core/http'
+import { errors as limiterErrors } from '@adonisjs/limiter'
 import type { StatusPageRange, StatusPageRenderer } from '@adonisjs/core/types/http'
 
 export default class HttpExceptionHandler extends ExceptionHandler {
@@ -34,6 +35,15 @@ export default class HttpExceptionHandler extends ExceptionHandler {
    * response to the client
    */
   async handle(error: unknown, ctx: HttpContext) {
+    if (
+      error instanceof limiterErrors.E_TOO_MANY_REQUESTS &&
+      ctx.request.method() !== 'GET' &&
+      'session' in ctx
+    ) {
+      ctx.session.flashExcept(['password'])
+      ctx.session.flash('error', error.message)
+      return ctx.response.redirect().back()
+    }
     return super.handle(error, ctx)
   }
 
