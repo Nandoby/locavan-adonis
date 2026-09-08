@@ -1,11 +1,5 @@
 import vine from '@vinejs/vine'
-import { imageFile } from '#validators/rules'
-
-/**
- * Shared rules for email and password.
- */
-const email = () => vine.string().email().maxLength(254)
-const password = () => vine.string().minLength(8).maxLength(32)
+import { imageFile, email, password } from '#validators/rules'
 
 /**
  * Validator to use when performing self-signup
