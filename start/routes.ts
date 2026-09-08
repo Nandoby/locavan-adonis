@@ -10,6 +10,7 @@
 import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
+import { loginThrottle } from '#start/limiter'
 
 router.get('/', [controllers.Home, 'index'])
 
@@ -41,7 +42,7 @@ router
     router.post('signup', [controllers.NewAccount, 'store'])
 
     router.get('login', [controllers.Session, 'create'])
-    router.post('login', [controllers.Session, 'store'])
+    router.post('login', [controllers.Session, 'store']).use(loginThrottle)
   })
   .use(middleware.guest())
 
