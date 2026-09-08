@@ -1,5 +1,7 @@
 import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
+import { errors as authErrors } from '@adonisjs/auth'
+import { loginValidator } from '#validators/auth'
 
 /**
  * SessionController handles user authentication and session management.
@@ -17,12 +19,22 @@ export default class SessionController {
   /**
    * Authenticate user credentials and create a new session
    */
-  async store({ request, auth, response }: HttpContext) {
-    const { email, password } = request.all()
-    const user = await User.verifyCredentials(email, password)
+  async store({ request, auth, response, session }: HttpContext) {
+    const { email, password } = await request.validateUsing(loginValidator)
 
-    await auth.use('web').login(user)
-    response.redirect().toRoute('home.index')
+    try {
+      const user = await User.verifyCredentials(email, password)
+      await auth.use('web').login(user)
+    } catch (error) {
+      if (error instanceof authErrors.E_INVALID_CREDENTIALS) {
+        session.flashExcept(['password'])
+        session.flash('error', 'E-mail ou mot de passe incorrect.')
+        return response.redirect().back()
+      }
+      throw error
+    }
+
+    return response.redirect().toRoute('home.index')
   }
 
   /**

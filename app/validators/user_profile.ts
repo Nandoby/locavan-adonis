@@ -1,7 +1,5 @@
 import vine from '@vinejs/vine'
-import { imageFile } from '#validators/rules'
-
-const password = () => vine.string().minLength(8).maxLength(32)
+import { imageFile, password } from '#validators/rules'
 
 export const UserProfileValidator = vine.create({
   firstname: vine.string().minLength(2).maxLength(255),
