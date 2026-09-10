@@ -9,6 +9,9 @@ export type ScannedRoutes = {
     'vehicles.index': { paramsTuple?: []; params?: {} }
     'vehicles.create': { paramsTuple?: []; params?: {} }
     'vehicles.store': { paramsTuple?: []; params?: {} }
+    'vehicles.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'vehicles.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'vehicles.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'vehicles.listing': { paramsTuple?: []; params?: {} }
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -33,6 +36,7 @@ export type ScannedRoutes = {
     'home.index': { paramsTuple?: []; params?: {} }
     'vehicles.index': { paramsTuple?: []; params?: {} }
     'vehicles.create': { paramsTuple?: []; params?: {} }
+    'vehicles.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'vehicles.listing': { paramsTuple?: []; params?: {} }
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.bookings': { paramsTuple?: []; params?: {} }
@@ -51,6 +55,7 @@ export type ScannedRoutes = {
     'home.index': { paramsTuple?: []; params?: {} }
     'vehicles.index': { paramsTuple?: []; params?: {} }
     'vehicles.create': { paramsTuple?: []; params?: {} }
+    'vehicles.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'vehicles.listing': { paramsTuple?: []; params?: {} }
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.bookings': { paramsTuple?: []; params?: {} }
@@ -66,6 +71,8 @@ export type ScannedRoutes = {
   }
   POST: {
     'vehicles.store': { paramsTuple?: []; params?: {} }
+    'vehicles.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'vehicles.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.store_comment': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.store': { paramsTuple?: []; params?: {} }

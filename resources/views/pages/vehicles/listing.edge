@@ -15,6 +15,7 @@
               <th scope="col" class="px-6 py-3">Prix</th>
               <th scope="col" class="px-6 py-3">Réservations</th>
               <th scope="col" class="px-6 py-3">Commentaires</th>
+              <th scope="col" class="px-6 py-3">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -38,6 +39,29 @@
                   >
                     {{ vehicle.$extras.comments_count }}
                   </span>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-3">
+                    <a
+                      href="{{ urlFor('vehicles.edit', [vehicle.id]) }}"
+                      class="font-medium text-blue-600 hover:underline"
+                    >
+                      Modifier
+                    </a>
+                    <form
+                      method="POST"
+                      action="{{ urlFor('vehicles.destroy', [vehicle.id]) }}"
+                      onsubmit="return confirm('Supprimer définitivement cette annonce ?')"
+                    >
+                      {{ csrfField() }}
+                      <button
+                        type="submit"
+                        class="font-medium text-red-600 hover:underline cursor-pointer"
+                      >
+                        Supprimer
+                      </button>
+                    </form>
+                  </div>
                 </td>
               </tr>
             @else
