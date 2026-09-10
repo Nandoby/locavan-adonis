@@ -3,7 +3,10 @@ import { imageFile } from '#validators/rules'
 
 const currentYear = new Date().getFullYear()
 
-export const vehicleValidator = vine.create({
+/**
+ * Champs communs création / édition d'une annonce (hors photos).
+ */
+const vehicleFields = {
   model: vine.string().trim().maxLength(50),
   type: vine.number().exists({ table: 'types', column: 'id' }),
   price: vine.number().positive().max(100000),
@@ -28,5 +31,16 @@ export const vehicleValidator = vine.create({
   animals: vine.boolean(),
   travelAbroad: vine.boolean(),
   description: vine.string().trim().maxLength(5000),
+}
+
+/** Création : au moins une photo obligatoire. */
+export const vehicleValidator = vine.create({
+  ...vehicleFields,
   pictures: vine.array(imageFile()).minLength(1),
+})
+
+/** Édition : les photos sont optionnelles (celles existantes sont conservées). */
+export const vehicleUpdateValidator = vine.create({
+  ...vehicleFields,
+  pictures: vine.array(imageFile()).optional(),
 })
