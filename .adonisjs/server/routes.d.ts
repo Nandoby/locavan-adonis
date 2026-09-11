@@ -12,6 +12,7 @@ export type ScannedRoutes = {
     'vehicles.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'vehicles.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'vehicles.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'vehicles.update_status': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'vehicles.listing': { paramsTuple?: []; params?: {} }
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -73,6 +74,7 @@ export type ScannedRoutes = {
     'vehicles.store': { paramsTuple?: []; params?: {} }
     'vehicles.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'vehicles.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'vehicles.update_status': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.store_comment': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.store': { paramsTuple?: []; params?: {} }

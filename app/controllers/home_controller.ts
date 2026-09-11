@@ -4,6 +4,7 @@ import Vehicle from '#models/vehicle'
 export default class HomeController {
   async index({ view }: HttpContext) {
     const vehicles = await Vehicle.query()
+      .where('status', 'published')
       .preload('pictures')
       .preload('type')
       .preload('user')

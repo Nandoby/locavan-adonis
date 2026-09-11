@@ -22,6 +22,7 @@ router
     router.get('/vehicles/:id/edit', [controllers.Vehicles, 'edit'])
     router.post('/vehicles/:id', [controllers.Vehicles, 'update'])
     router.post('/vehicles/:id/delete', [controllers.Vehicles, 'destroy'])
+    router.post('/vehicles/:id/status', [controllers.Vehicles, 'updateStatus'])
     router.get('/listing', [controllers.Vehicles, 'listing'])
   })
   .use(middleware.auth())

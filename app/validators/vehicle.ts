@@ -44,3 +44,8 @@ export const vehicleUpdateValidator = vine.create({
   ...vehicleFields,
   pictures: vine.array(imageFile()).optional(),
 })
+
+/** Changement de statut d'une annonce depuis « Mes annonces ». */
+export const vehicleStatusValidator = vine.create({
+  status: vine.enum(['draft', 'published', 'paused']),
+})
