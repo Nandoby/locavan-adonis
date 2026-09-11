@@ -15,6 +15,7 @@
               <th scope="col" class="px-6 py-3">Prix</th>
               <th scope="col" class="px-6 py-3">Réservations</th>
               <th scope="col" class="px-6 py-3">Commentaires</th>
+              <th scope="col" class="px-6 py-3">Status</th>
               <th scope="col" class="px-6 py-3">Actions</th>
             </tr>
           </thead>
@@ -41,6 +42,27 @@
                   </span>
                 </td>
                 <td class="px-6 py-4">
+                  @if(vehicle.status === 'published')
+                    <span
+                      class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                    >
+                      En ligne
+                    </span>
+                  @elseif(vehicle.status === 'paused')
+                    <span
+                      class="bg-gray-200 text-gray-700 text-xs font-medium px-2.5 py-0.5 rounded"
+                    >
+                      En pause
+                    </span>
+                  @else
+                    <span
+                      class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                    >
+                      Brouillon
+                    </span>
+                  @end
+                </td>
+                <td class="px-6 py-4">
                   <div class="flex items-center gap-3">
                     <a
                       href="{{ urlFor('vehicles.edit', [vehicle.id]) }}"
@@ -48,6 +70,24 @@
                     >
                       Modifier
                     </a>
+                    <form
+                      method="POST"
+                      action="{{ urlFor('vehicles.update_status', [vehicle.id]) }}"
+                    >
+                      {{ csrfField() }}
+                      <input
+                        type="hidden"
+                        name="status"
+                        value="{{ vehicle.status === 'published' ? 'paused' : 'published' }}"
+                      />
+                      <button
+                        type="submit"
+                        class="font-medium text-amber-600 hover:underline cursor-pointer"
+                      >
+                        {{ vehicle.status === 'published' ? 'Mettre en pause' : 'Publier' }}
+                      </button>
+                    </form>
+
                     <form
                       method="POST"
                       action="{{ urlFor('vehicles.destroy', [vehicle.id]) }}"

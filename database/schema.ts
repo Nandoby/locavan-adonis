@@ -165,6 +165,7 @@ export class VehicleSchema extends BaseModel {
     'model',
     'price',
     'seats',
+    'status',
     'travelAbroad',
     'typeId',
     'updatedAt',
@@ -200,6 +201,8 @@ export class VehicleSchema extends BaseModel {
   declare price: number | null
   @column()
   declare seats: number | null
+  @column()
+  declare status: string
   @column()
   declare travelAbroad: boolean | null
   @column()
