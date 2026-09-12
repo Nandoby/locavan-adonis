@@ -45,8 +45,9 @@ export default class VehiclesController {
     const notAvailableDaysJson = notAvailableDays
       .map((date) => date.toFormat('dd/MM/yyyy'))
       .join(',')
+    const ratingAverage = await vehicle.ratingAverage()
 
-    return view.render('pages/vehicles/show', { vehicle, notAvailableDaysJson })
+    return view.render('pages/vehicles/show', { vehicle, notAvailableDaysJson, ratingAverage })
   }
 
   async search({ view, request }: HttpContext) {
@@ -106,7 +107,7 @@ export default class VehiclesController {
     }
 
     session.flash('success', 'Véhicule créé avec succès')
-    return response.redirect().back()
+    return response.redirect().toRoute('vehicles.show', { id: vehicle.id })
   }
 
   async listing({ view, auth }: HttpContext) {

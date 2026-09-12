@@ -12,6 +12,8 @@ import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 import { loginThrottle } from '#start/limiter'
 
+router.where('id', router.matchers.number())
+
 router.get('/', [controllers.Home, 'index'])
 
 router.get('/vehicles', [controllers.Vehicles, 'index'])

@@ -27,12 +27,14 @@ export default class Vehicle extends VehicleSchema {
 
   async ratingAverage(): Promise<number> {
     const [result] = await db.from('comments').where('vehicle_id', this.id).avg('rating', 'avg')
-    return Math.trunc(Number(result.avg ?? 0))
+    return Math.round(Number(result.avg ?? 0))
   }
 
   async getNotAvailableDays(): Promise<DateTime[]> {
     const notAvailableDays: DateTime[] = []
-    const bookings = await Booking.query().where('vehicle_id', this.id)
+    const bookings = await Booking.query()
+      .where('vehicle_id', this.id)
+      .where('end_date', '>=', DateTime.now().startOf('day').toSQL())
 
     for (const booking of bookings) {
       if (!booking.startDate || !booking.endDate) continue
