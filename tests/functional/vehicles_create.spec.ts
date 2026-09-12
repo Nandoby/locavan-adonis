@@ -90,6 +90,7 @@ test.group("Création d'annonce - validation (B1/B4/B6)", (group) => {
       .redirects(0)
     res.assertStatus(302)
     const v = await Vehicle.query().where('userId', user.id).firstOrFail()
+    res.assertHeader('location', `/vehicles/${v.id}`)
     assert.equal(v.city, 'Aix en Provence')
   })
 })
