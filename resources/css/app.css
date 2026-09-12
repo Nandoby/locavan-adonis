@@ -6,6 +6,10 @@
   font-family: 'Poppins', sans-serif;
 }
 
+body {
+  background: var(--color-page);
+}
+
 :root {
   --gray-1: oklch(98.5% 0 0);
   --gray-2: oklch(97% 0 0);
@@ -67,6 +71,13 @@
 
 @theme {
   --font-poppins: 'Poppins', sans-serif;
+  --color-page: #F1F0EC;
+  --color-ink: #1F2434;
+  --color-accent: #E8930C;
+  --color-accent-dark: #8A5403;
+  --color-muted: #5A6070;
+  --color-muted-dark: #3B4152;
+  --color-line: #E4E3DE;
 }
 
 @layer components {
@@ -87,7 +98,7 @@
     right: 0;
     height: 2px;
     bottom: -8px;
-    background-color: #F59E0B
+    background-color: var(--color-accent);
   }
 
   .linkanimate:hover::after {
