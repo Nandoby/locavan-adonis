@@ -1,14 +1,43 @@
 @layout()
-  <header class="header relative">
-    <nav class="mt-8" x-data="burger">
-      <ul class="container mx-auto flex space-x-4 justify-end items-center text-white p-4">
+  @let(url = request.url())
+  @let(urls = {
+    home: '/',
+  })
+  <header class="header relative min-h-140">
+    <nav class="container flex mx-auto items-center mt-8" x-data="burger">
+      <div
+        class="text-white text-4xl uppercase mr-6 border-y-2 py-2 border-amber-500 tracking-wide"
+      >
+        Loca<span class="text-amber-500">van</span>
+      </div>
+      <ul class="container mx-auto flex space-x-4 items-center text-white p-4">
         <li class="hidden sm:block">
-          <a class="tracking-wide linkanimate" href="{{ urlFor('home.index') }}">Accueil</a>
+          <a
+            class="tracking-wide linkanimate {{ urls.home ? 'active font-bold' : '' }}"
+            href="{{ urlFor('home.index') }}"
+          >
+            Accueil
+          </a>
         </li>
+        <li class="hidden sm:block">
+          <a href="#" class="tracking-wide linkanimate">Nos véhicules</a>
+        </li>
+        <li class="hidden sm:block">
+          <a href="#" class="tracking-wide linkanimate">Devenir loueur</a>
+        </li>
+        <li class="hidden sm:block"><a href="#" class="tracking-wide linkanimate">Aide</a></li>
         @if(!auth.isAuthenticated)
-          <li class="hidden sm:block">
-            <a class="tracking-wide linkanimate" href="{{ urlFor('session.create') }}">
-              Connexion | Inscription
+          <li class="hidden sm:block ml-auto">
+            <a class="tracking-wide linkanimate font-bold" href="{{ urlFor('session.create') }}">
+              Connexion
+            </a>
+          </li>
+          <li>
+            <a
+              href="{{ urlFor('new_account.create') }}"
+              class="bg-amber-500 text-amber-950 p-3 rounded-lg font-bold hover:bg-amber-500/80 transition-colors"
+            >
+              Inscription
             </a>
           </li>
         @else
@@ -102,115 +131,312 @@
       @!burger()
     </nav>
 
-    <div class="flex flex-col items-center">
-      <h1 class="text-4xl text-white text-center mt-16">Voyagez en camping-car</h1>
-      <h3 class="text-2xl text-white text-center mt-8">Explorez de nouveaux horizons</h3>
+    <div class="container mx-auto mt-13.5">
+      <div class="max-w-180">
+        <span class="py-1.5 px-3 bg-amber-500 rounded-full font-poppins text-[13px] font-medium">
+          128 vans disponibles ce week-end
+        </span>
+        <h1 class="font-bold text-white text-[52px] tracking-wide mt-4.5 leading-[1.10]">
+          Louez le van d'un particulier, près de chez vous
+        </h1>
+        <p class="mt-2 text-white/90 text-[18px] max-w-[52ch]">
+          Vans, fourgons aménagés et intégraux à partir de 58 € la nuit. Assurance et assistance incluses, annulation gratuite jusqu'à 48 h.
+        </p>
+        {{--
+          Seule "Où" filtre réellement pour l'instant (route vehicles.search) ;
+          Dates et Voyageurs sont posés visuellement en préparation de F4
+          (recherche par disponibilité)
+        --}}
+        @form({
+          route: 'vehicles.search',
+          method: 'GET',
+          class:
+            'flex bg-white mt-[24px] rounded-[14px] justify-between divide-x divide-gray-200',
+        })
+          <div class="px-4.5 py-3 flex flex-col w-1/4">
+            @field.root({ name: 'city' })
+              @!field.label({
+                text: 'Où',
+                class: 'text-[#666D7D] text-[11px] font-semibold uppercase',
+              })
+              @!input.control({
+                type: 'text',
+                placeholder: 'Ville ou région',
+                class: 'mt-[2px] focus:outline-none text-[15px]',
+              })
+            @end
+          </div>
+          <div class="px-4.5 py-3 flex flex-col w-1/4">
+            @field.root({ name: 'date' })
+              @!field.label({
+                text: 'Dates',
+                class: 'text-[#666D7D] text-[11px] font-semibold uppercase',
+              })
+              @!input.control({
+                type: 'text',
+                placeholder: 'Départ - retour',
+                class: 'mt-[2px] focus:outline-none text-[15px]',
+              })
+            @end
+          </div>
+          <div class="px-4.5 py-3 flex flex-col w-1/4">
+            @field.root({ name: 'voyageur' })
+              @!field.label({
+                text: 'Voyageurs',
+                class: 'text-[#666D7D] text-[11px] font-semibold uppercase',
+              })
+              @!input.control({
+                type: 'text',
+                placeholder: '2 voyageurs',
+                class: 'mt-[2px] focus:outline-none text-[15px]',
+              })
+            @end
+          </div>
+          <div class="p-2 w-1/4 flex">
+            <button
+              class="bg-amber-500 text-neutral-900 w-full h-full rounded-xl hover:bg-amber-500/80 cursor-pointer font-semibold"
+            >
+              Rechercher
+            </button>
+          </div>
+        @end
 
-      <div id="locavan" class="min-w-50 max-w-200 min-h-25 max-h-100 mt-16">
-        <svg
-          xmlns:svg="http://www.w3.org/2000/svg"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 63.905641 10.8"
-          class="stroke-amber-500 p-4"
-        >
-          <g transform="translate(-53.523377,-35.723976)" id="layer1">
-            <g id="text4703" aria-label="LOCAVAN">
-              <path
-                d="m 54.974232,44.82741 h 5.299898 v 1.203711 H 53.656266 V 36.000165 h 1.317966 z"
-                pathLength="1"
-              />
-              <path
-                pathLength="1"
-                d="m 65.973618,46.174423 q -1.682509,0 -2.607888,-1.275369 -0.92538,-1.275357 -0.92538,-3.596805 0,-2.608055 0.995486,-4.026727 1.009503,-1.418659 2.846242,-1.418659 1.668487,0 2.579846,1.275369 0.92538,1.261028 0.92538,3.582477 0,2.608054 -0.995484,4.041055 -0.995483,1.418659 -2.818202,1.418659 z m -1.640445,-2.13516 q 0.532794,0.888462 1.780654,0.888462 1.247862,0 1.780656,-0.90279 0.532794,-0.902791 0.532794,-3.037949 0,-2.106502 -0.532794,-2.994963 -0.518774,-0.90279 -1.766635,-0.90279 -1.261881,0 -1.794675,0.90279 -0.532793,0.90279 -0.532793,3.037949 0,2.120831 0.532793,3.009291 z"
-              />
-              <path
-                pathLength="1"
-                d="m 77.912409,40.127182 q 0,-1.576291 -0.546814,-2.30712 -0.546816,-0.730829 -1.66849,-0.730829 -1.247859,0 -1.794674,0.931447 -0.546815,0.917119 -0.546815,3.009292 0,2.092172 0.546815,2.994963 0.546815,0.90279 1.808697,0.90279 1.472194,0 2.97243,-0.974448 v 1.390014 q -1.556318,0.831132 -3.12666,0.831132 -1.69653,0 -2.635932,-1.275369 -0.925377,-1.275357 -0.925377,-3.596805 0,-2.608055 0.995484,-4.026727 1.009504,-1.418659 2.846242,-1.418659 1.598383,0 2.509742,1.132067 0.925381,1.117737 0.925381,3.138252 z"
-              />
-              <path
-                pathLength="1"
-                d="m 87.481669,46.031121 c -0.149556,-0.812027 -0.29444,-1.542857 -0.434649,-2.192475 h -3.855748 c -0.14021,0.58275 -0.289767,1.31358 -0.448668,2.192475 h -1.374049 c 0.644962,-3.544266 1.626423,-6.887927 2.94439,-10.030956 h 1.612402 c 1.299271,3.104819 2.276062,6.448479 2.93037,10.030956 z M 83.45767,42.634935 h 3.308933 c -0.204352,-0.863277 -0.43959,-1.747972 -0.705715,-2.654073 -0.281654,-0.958985 -0.597905,-1.941976 -0.948752,-2.948946 -0.682351,1.958423 -1.233839,3.826095 -1.654466,5.603019 z"
-              />
-              <path
-                pathLength="1"
-                d="m 96.98082,36.000165 h 1.374049 q -0.967443,5.259084 -2.93037,10.030956 H 93.812095 Q 91.863189,41.388223 90.867706,36.000165 h 1.374049 q 0.883317,4.714544 2.369532,8.984876 1.528279,-4.399292 2.369533,-8.984876 z"
-              />
-              <path
-                pathLength="1"
-                d="m 106.47999,46.031121 q -0.22434,-1.218041 -0.43465,-2.192475 h -3.85574 q -0.21032,0.874118 -0.44869,2.192475 h -1.37403 q 0.96743,-5.316412 2.94438,-10.030956 h 1.6124 q 1.94889,4.657228 2.93035,10.030956 z m -4.024,-3.396186 h 3.30891 q -0.63092,-2.665379 -1.65445,-5.603019 -1.02355,2.93764 -1.65446,5.603019 z"
-              />
-              <path
-                pathLength="1"
-                d="m 115.57253,36.000165 h 1.31796 v 10.030956 h -1.45817 l -3.78564,-7.422914 v 7.422914 h -1.31796 V 36.000165 h 1.45815 l 3.78566,7.394252 z"
-              />
-            </g>
-          </g>
-        </svg>
+        <div class="flex gap-3 my-6">
+          <span
+            class="text-[13px] leading-[1.20] text-white border border-white/55 px-3 py-2 rounded-full"
+          >
+            Week-end
+          </span>
+          <span
+            class="text-[13px] leading-[1.20] text-white border border-white/55 px-3 py-2 rounded-full"
+          >
+            Permis B
+          </span>
+          <span
+            class="text-[13px] leading-[1.20] text-white border border-white/55 px-3 py-2 rounded-full"
+          >
+            4 couchages
+          </span>
+          <span
+            class="text-[13px] leading-[1.20] text-white border border-white/55 px-3 py-2 rounded-full"
+          >
+            Animaux acceptés
+          </span>
+        </div>
       </div>
     </div>
-
-    <div class="w-full flex justify-center mt-4 md:mt-16">
-      <a
-        href="{{ urlFor('vehicles.index') }}"
-        class="text-white bg-linear-to-r from-yellow-500 via-yellow-600 to-yellow-700 hover:bg-linear-to-br focus:ring-4 focus:outline-none focus:ring-yellow-300 shadow-lg shadow-yellow-500/50 font-medium rounded-lg text-md px-5 py-2.5 text-center"
-      >
-        Réservez dès maintenant
-      </a>
-    </div>
   </header>
+  <div class="border-b border-line">
+    <div
+      class="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 py-6 lg:py-0 lg:divide-x lg:divide-line"
+    >
+      <div class="lg:p-6 lg:first:pl-0">
+        <h3 class="font-semibold text-ink">Assurance incluse</h3>
+        <p class="text-muted text-sm">Tous risques pendant toute la durée du séjour</p>
+      </div>
+      <div class="lg:p-6">
+        <h3 class="font-semibold text-ink">Annulation 48 h</h3>
+        <p class="text-muted text-sm">Remboursement intégral sans justificatif</p>
+      </div>
+      <div class="lg:p-6">
+        <h3 class="font-semibold text-ink">Assistance 24/7</h3>
+        <p class="text-muted text-sm">Dépannage partout en Belgique et en Europe</p>
+      </div>
+      <div class="lg:p-6">
+        <h3 class="font-semibold text-ink">Profils vérifiés</h3>
+        <p class="text-muted text-sm">Identité et permis contrôlés des deux côtés</p>
+      </div>
+    </div>
+  </div>
 
-  <main>
-    <!--Latest ADS-->
-    <section class="bg-neutral-100 pb-8">
-      <div class="container mx-auto p-1">
-        <h2
-          class="text-center font-bold text-3xl p-2 tracking-wide my-8 underline underline-offset-8 decoration-amber-500"
-        >
-          Dernières annonces
-        </h2>
-        <div class="flex flex-wrap justify-center">
-          @each(vehicle in vehicles)
-            <div class="md:w-4/12 sm:w-6/12 px-4 my-4">
-              <div class="border border-neutral-300 bg-white rounded-lg">
-                <img
-                  src="{{ (await driveUrl(vehicle.pictures[0]?.path)) || '/images/default.webp' }}"
-                  alt="vehicle picture"
-                  class="block object-cover w-full rounded-t-lg aspect-video"
-                />
+  <main class="container mx-auto px-4">
+    <section class="mt-10">
+      <h3 class="font-bold text-ink text-2xl">Par type de véhicule</h3>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+        @each(type in types)
+          {{-- Lien vers le catalogue complet : le filtre par type réel arrive avec F4 --}}
+          @link({
+            route: 'vehicles.index',
+            class:
+              'block bg-white border border-line rounded-2xl overflow-hidden hover:shadow-lg transition-shadow',
+          })
+            <div
+              class="h-24 bg-amber-100 flex items-center justify-center"
+              style="background:{{ type.tint }}"
+            >
+              <i class="fa-solid {{ type.icon }} text-3xl text-ink/70"></i>
+            </div>
+            <div class="p-3 5">
+              <p class="font-semibold text-ink">{{ type.name }}</p>
+              <p class="text-sm muted mt-1">
+                <span>
+                  {{ type.vehiclesCount }}
+                  annonce{{ type.vehiclesCount === 1 ? '' : 's' }}
+                </span>
+                @if(type.minPrice)
+                  - dès
+                  {{ type.minPrice }}
+                  € / nuit
+                @end
+              </p>
+            </div>
+          @end
+        @end
+      </div>
+    </section>
 
-                <div class="flex p-4 justify-between">
-                  <div class="space-y-2">
-                    <h1 class="font-bold text-xl">{{ vehicle.type.name }}</h1>
-                    <p class="text-sm text-neutral-700">{{ vehicle.city }}</p>
-                    <p class="text-sm text-neutral-700">
-                      {{ vehicle.seats }}
-                      places -
-                      {{ vehicle.beds }}
-                      couchages
-                    </p>
-                  </div>
-
-                  <div class="text-right text-sm text-neutral-700 space-y-2">
-                    <p>À partir de <b>{{ Math.round(vehicle.price) }} &euro;</b></p>
-                    <p>Ajouté {{ vehicle.createdAt.toRelative() }}</p>
-                    <p>Par <b>{{ vehicle.user.firstName }} {{ vehicle.user.lastName }}</b></p>
-                  </div>
-                </div>
-
-                <a
-                  href="{{ urlFor('vehicles.show', [vehicle.id]) }}"
-                  class="group m-4 inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-yellow-500 rounded-lg hover:bg-yellow-500"
-                >
-                  Voir plus
-                  <i
-                    class="fa-solid fa-arrow-right group-hover:ml-6 transition-all duration-500 ml-2 -mr-1 w-4 h-4"
-                  ></i>
-                </a>
+    <section class="mt-14">
+      <div class="flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <h3 class="font-bold text-ink text-2xl">Les mieux notés</h3>
+          <p class="text-muted text-sm mt-1">Sélection des dernières annonces publiées</p>
+        </div>
+        @link({
+          route: 'vehicles.index',
+          class:
+            'text-sm font-semibold text-ink border border-ink rounded-lg px-3.5 py-2.5 hover:bg-ink hover:text-white transition-colors',
+        })
+          Voir les
+          {{ vehiclesTotal }}
+          véhicules
+        @end
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+        @each(item in vehicles)
+          @link({
+            route: 'vehicles.show',
+            routeParams: [item.vehicle.id],
+            class:
+              'block border border-line rounded-2xl overflow-hidden bg-white hover:shadow-lg transition-shadow',
+          })
+            <div class="relative aspect-4/3">
+              <img
+                class="w-full h-full object-cover"
+                src="{{ (await driveUrl(item.vehicle.pictures[0]?.path)) || '/images/default.webp' }}"
+                alt=""
+              />
+              <span
+                class="absolute top-3 left-3 bg-ink/85 text-white text-xs font-semibold px-2.5 py-1 rounded-lg"
+              >
+                {{ item.vehicle.type.name }}
+              </span>
+            </div>
+            <div class="p-4 space-y-1.5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-semibold text-neutral-900 leading-tight">{{ item.vehicle.model }}</p>
+                <p class="text-sm text-neutral-800 whitespace-nowrap">
+                  <i class="fa-solid fa-star text-accent"></i>
+                  {{ item.rating }}
+                  <span class="text-[#666D7D]">({{ item.reviewsCount }})</span>
+                </p>
+              </div>
+              <p class="text-sm text-muted">
+                {{ item.vehicle.beds }}
+                couchages -
+                {{ item.vehicle.seats }}
+                places
+              </p>
+              <p class="text-sm text-muted">{{ item.vehicle.city }}</p>
+              <div class="flex items-end justify-between pt-2 border-t border-neutral-100 mt-2">
+                <p>
+                  <span class="text-lg font-bold text-ink">{{ item.vehicle.price }} €</span>
+                  <span class="text-sm text-muted">/ nuit</span>
+                </p>
               </div>
             </div>
           @end
+        @else
+          <p class="text-muted col-span-3">Aucune annonce publiée pour le moment.</p>
+        @end
+      </div>
+    </section>
+
+    <section class="mt-14">
+      <h3 class="font-bold text-ink text-2xl">Comment ça marche</h3>
+      <div class="grid sm:grid-cols-3 gap-6 mt-4">
+        <div class="border-t-2 border-accent pt-3.5">
+          <p class="text-xs font-bold text-accent-dark uppercase tracking-wide">Étape 1</p>
+          <p class="font-semibold text-ink mt-1 5">Cherchez et comparez</p>
+          <p class="text-sm text-muted mt-1 leading-relaxed">
+            Filtrez par ville, dates et couchages, puis comparez les prix par nuit.
+          </p>
+        </div>
+        <div class="border-t-2 border-accent pt-3.5">
+          <p class="text-xs font-bold text-accent-dark uppercase tracking-wide">Étape 2</p>
+          <p class="font-semibold text-ink mt-1 5">Réservez vos dates</p>
+          <p class="text-sm text-muted mt-1 leading-relaxed">
+            La disponibilité du véhicule est vérifiée en direct sur les dates choisies.
+          </p>
+        </div>
+        <div class="border-t-2 border-accent pt-3.5">
+          <p class="text-xs font-bold text-accent-dark uppercase tracking-wide">Étape 3</p>
+          <p class="font-semibold text-neutral-900 mt-1 5">Prenez la route</p>
+          <p class="text-sm text-muted mt-1 leading-relaxed">
+            Remise des clés en main propre avec le propriétaire, le jour du départ.
+          </p>
         </div>
       </div>
     </section>
+
+    <section
+      class="mt-14 mb-16 bg-[#FDF0C9] border border-[#F0DFA8] rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6"
+    >
+      <div class="flex-1">
+        <h3 class="font-bold text-ink text-2xl">Vous avez un camping-car ? Rentabilisez-le.</h3>
+        <p class="text-muted-dark mt-2 max-w-[60ch]">
+          Déposez votre annonce gratuitement et fixez votre propre prix par nuit.
+        </p>
+      </div>
+      @link({
+        class:
+          'shrink-0 bg-accent text-ink font-semibold px-5 py-3.5 rounded-xl hover:bg-accent/80 transition-colors',
+      })
+        Mettre mon véhicule en location
+      @end
+    </section>
   </main>
+
+  <footer class="bg-ink">
+    <div class="container mx-auto px-4 py-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div>
+        <div class="text-xl uppercase text-white border-y-2 border-accent py-1 inline-block">
+          Loca<span class="text-accent">van</span>
+        </div>
+        <p class="text-white/70 text-sm mt-3 max-w-[34ch]">
+          La location de camping-cars entre particuliers, sans intermédiaire.
+        </p>
+      </div>
+      <div>
+        <p class="text-accent text-xs font-semibold uppercase tracking-wide">Louer</p>
+        <div class="flex flex-col gap-2 mt-3 text-sm text-white/80">
+          @link({ route: 'vehicles.index', class: 'hover:text-white' })
+            Tous les véhicules
+          @end
+
+          <a href="#" class="hover:text-white">Idées d'itinéraires</a>
+          <a href="#" class="hover:text-white">Prix et frais</a>
+        </div>
+      </div>
+      <div>
+        <p class="text-accent text-xs font-semibold uppercase tracking-wide">Loueurs</p>
+        <div class="flex flex-col gap-2 mt-3 text-sm text-white/80">
+          @link({ route: 'vehicles.create', class: 'hover:text-white' })
+            Mettre son van en location
+          @end
+
+          <a href="#" class="hover:text-white">Assurance propriétaire</a>
+          <a href="#" class="hover:text-white">Guide du loueur</a>
+        </div>
+      </div>
+      <div>
+        <p class="text-accent text-xs font-semibold uppercase tracking-wide">Locavan</p>
+        <div class="flex flex-col gap-2 mt-3 text-sm text-white/80">
+          <a href="#" class="hover:text-white">Aide</a>
+          <a href="#" class="hover:text-white">Nous contacter</a>
+          <a href="#" class="hover:text-white">CGU</a>
+          <a href="#" class="hover:text-white">Confidentialité</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 @end
