@@ -13,18 +13,24 @@ import VehiclePolicy from '#policies/vehicle_policy'
 
 export default class VehiclesController {
   async index({ view, request }: HttpContext) {
+    const inputSearch = request.input('city', '').trim()
     const page = request.input('page', 1)
     const vehicles = await Vehicle.query()
       .where('status', 'published')
       .preload('pictures')
       .preload('user')
       .preload('type')
+      .withCount('comments')
       .orderBy('createdAt', 'desc')
       .paginate(page, 12)
 
     vehicles.baseUrl('/vehicles')
 
-    return view.render('pages/vehicles/index', { vehicles })
+    for (const vehicle of vehicles.all()) {
+      vehicle.$extras.rating = await vehicle.ratingAverage()
+    }
+
+    return view.render('pages/vehicles/index', { vehicles, inputSearch })
   }
 
   async show({ params, view, auth, response }: HttpContext) {
@@ -60,11 +66,16 @@ export default class VehiclesController {
       .preload('pictures')
       .preload('type')
       .preload('user')
+      .withCount('comments')
       .orderBy('createdAt', 'desc')
       .paginate(page, 12)
 
     vehicles.baseUrl('/search')
     vehicles.queryString({ city: inputSearch })
+
+    for (const vehicle of vehicles.all()) {
+      vehicle.$extras.rating = await vehicle.ratingAverage()
+    }
 
     return view.render('pages/vehicles/index', { vehicles, inputSearch })
   }
