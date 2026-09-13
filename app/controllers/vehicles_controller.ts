@@ -39,7 +39,9 @@ export default class VehiclesController {
       .preload('pictures')
       .preload('user')
       .preload('type')
-      .preload('comments', (query) => query.preload('user').preload('memories'))
+      .preload('comments', (query) =>
+        query.preload('user').preload('memories').orderBy('createdAt', 'desc')
+      )
       .where({ id: id })
       .firstOrFail()
 
