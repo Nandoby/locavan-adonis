@@ -1,136 +1,9 @@
-@layout()
+@layout({ headerVariant: 'transparent' })
   @let(url = request.url())
   @let(urls = {
     home: '/',
   })
-  <header class="header relative min-h-140">
-    <nav class="container flex mx-auto items-center mt-8" x-data="burger">
-      <div
-        class="text-white text-4xl uppercase mr-6 border-y-2 py-2 border-amber-500 tracking-wide"
-      >
-        Loca<span class="text-amber-500">van</span>
-      </div>
-      <ul class="container mx-auto flex space-x-4 items-center text-white p-4">
-        <li class="hidden sm:block">
-          <a
-            class="tracking-wide linkanimate {{ urls.home ? 'active font-bold' : '' }}"
-            href="{{ urlFor('home.index') }}"
-          >
-            Accueil
-          </a>
-        </li>
-        <li class="hidden sm:block">
-          <a href="#" class="tracking-wide linkanimate">Nos véhicules</a>
-        </li>
-        <li class="hidden sm:block">
-          <a href="#" class="tracking-wide linkanimate">Devenir loueur</a>
-        </li>
-        <li class="hidden sm:block"><a href="#" class="tracking-wide linkanimate">Aide</a></li>
-        @if(!auth.isAuthenticated)
-          <li class="hidden sm:block ml-auto">
-            <a class="tracking-wide linkanimate font-bold" href="{{ urlFor('session.create') }}">
-              Connexion
-            </a>
-          </li>
-          <li>
-            <a
-              href="{{ urlFor('new_account.create') }}"
-              class="bg-amber-500 text-amber-950 p-3 rounded-lg font-bold hover:bg-amber-500/80 transition-colors"
-            >
-              Inscription
-            </a>
-          </li>
-        @else
-          <li class="hidden sm:block">
-            @link({
-              route: 'vehicles.create',
-              class: 'tracking-wide linkanimate',
-            })
-              Déposer une annonce
-            @end
-          </li>
-          <div x-data="dropdown" class="relative">
-            <button
-              id="dropdownDefault"
-              class="group text-white hover:bg-neutral-500 font-medium rounded-lg text-sm px-4 py-2.5 text-center flex items-center gap-3 cursor-pointer"
-              type="button"
-              @click="toggle()"
-            >
-              {{ auth.user.firstName }}
-              {{ auth.user.lastName }}
-              <img
-                class="w-10 h-10 rounded-full"
-                src="{{ await driveUrl(auth.user.avatarPath) }}"
-                alt="avatar image"
-              />
-              <i class="fa-solid" :class="dropped ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-              <!--Dropdown menu-->
-            </button>
-            <!--Dropdown-->
-            <div
-              x-show="dropped"
-              id="dropdown"
-              class="z-10 bg-white rounded shadow w-54 absolute mt-3 overflow-hidden"
-            >
-              <ul class="text-sm text-gray-700 divide-y divide-gray-200">
-                <li>
-                  <a href="{{ urlFor('profile') }}" class="dropdown-item">
-                    <i class="fa-solid fa-user w-6"></i>Modifier profil
-                  </a>
-                </li>
-                <li>
-                  <a href="{{ urlFor('bookings.bookings') }}" class="dropdown-item">
-                    <i class="fa-solid fa-caravan w-6"></i>Mes réservations
-                  </a>
-                </li>
-                <li>
-                  <a href="{{ urlFor('vehicles.listing') }}" class="dropdown-item">
-                    <i class="fa-solid fa-book-open w-6"></i>Mes annonces
-                  </a>
-                </li>
-                @if(auth.user.isAdmin)
-                  <li>
-                    <a href="{{ urlFor('admin.index') }}" class="dropdown-item">
-                      <i class="fa-solid fa-user-key"></i>Admin
-                    </a>
-                  </li>
-                @end
-
-                <li>
-                  @form({
-                    route: 'session.destroy',
-                    method: 'POST',
-                  })
-                    @button({
-                      class:
-                        'flex items-center w-full dropdown-item cursor-pointer bg-gray-200 hover:bg-gray-300',
-                    })
-                      <i class="fa-solid fa-arrow-right-from-bracket w-6"></i>
-                      <span>Déconnexion</span>
-                    @end
-                  @end
-                </li>
-              </ul>
-            </div>
-          </div>
-        @end
-
-        <li class="sm:hidden cursor-pointer" @click="toggle()">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-8 w-8 stroke-amber-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </li>
-      </ul>
-      {{-- Mobile menu --}}
-      @!burger()
-    </nav>
-
+  <section class="header relative min-h-140 pt-9">
     <div class="container mx-auto mt-13.5">
       <div class="max-w-180">
         <span class="py-1.5 px-3 bg-amber-500 rounded-full font-poppins text-[13px] font-medium">
@@ -225,7 +98,7 @@
         </div>
       </div>
     </div>
-  </header>
+  </section>
   <div class="border-b border-line">
     <div
       class="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 py-6 lg:py-0 lg:divide-x lg:divide-line"

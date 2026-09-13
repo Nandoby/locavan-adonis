@@ -1,58 +1,170 @@
 @let(isSearch = request.url() === '/search')
 @layout({ title: isSearch ? 'Recherche' : 'Tous les véhicules' })
-  @include('partials/header')
+  <section class="bg-white border-b border-line">
+    <div class="container mx-auto px-4 py-6">
+      {{-- Seul "Où" filtre réellement (route vehicles.search) - Dates, Voyageurs et les filtres ci-dessous sont posés visuellement en préparation de F4 --}}
+      @form({
+        route: 'vehicles.search',
+        method: 'GET',
+        class:
+          'flex flex-col sm:flex-row bg-white border border-line rounded-2xl overflow-hidden sm:divide-x divide-line shadow-sm',
+      })
+        <div class="flex-[1.4] px-4.5 py-3">
+          @field.root({ name: 'city' })
+            @!field.label({
+              text: 'Où',
+              class: 'text-[#666D7D] text-[11px] font-semidbold uppercase',
+            })
+            @!input.control({
+              type: 'text',
+              placeholder: 'Ville ou région',
+              class: 'mt-[2px] focus:outline-none text-[15px] w-full',
+            })
+          @end
+        </div>
+        <div class="flex-[1.2] px-4.5 py-3 opacity-60 pointer-events-none">
+          <p class="text-[#666D7D] text-[11px] font-semibold uppercase">Dates</p>
+          <p class="text-[15px] text-[#666D7D] mt-0.5">Départ - retour</p>
+        </div>
+        <div class="flex-1 px-4.5 py-3 opacity-60 pointer-events-none">
+          <p class="text-[#666D7D] text-[11px] font-semibold uppercase">Voyageurs</p>
+          <p class="text-[15px] text-[#666D7D] mt-[2px]">Peu importe</p>
+        </div>
+        <div class="p-2 flex">
+          <button
+            class="bg-accent text-ink w-full h-full rounded-xl hover:bg-accent/80 cursor-pointer font-semibold px-6"
+          >
+            Rechercher
+          </button>
+        </div>
+      @end
 
-  <section>
-    <h1
-      class="font-bold tracking-wide text-2xl sm:text-3xl md:text-5xl text-gray-900 text-center my-24 mx-3"
-    >
-      {{ isSearch ? 'Résultat de votre recherche' : 'Tous nos véhicules' }}
-    </h1>
+      <div class="flex items-center gap-2 mt-4 flex-wrap">
+        <span
+          class="text-sm text-muted-dark border border-line bg-white px-3.5 py-2 rounded-full opacity-60 cursor-not-allowed"
+          title="Filtre par type - arrive avec une prochaine évolution"
+        >
+          Fourgon aménagé
+        </span>
+        <span
+          class="text-sm text-muted-dark border border-line bg-white px-3.5 py-2 rounded-full opacity-60 cursor-not-allowed"
+          title="Filtre par type — arrive avec une prochaine évolution"
+        >
+          Van
+        </span>
+        <span
+          class="text-sm text-muted-dark border border-line bg-white px-3.5 py-2 rounded-full opacity-60 cursor-not-allowed"
+          title="Filtre par type — arrive avec une prochaine évolution"
+        >
+          Intégral
+        </span>
+        <span
+          class="text-sm text-muted-dark border border-line bg-white px-3.5 py-2 rounded-full opacity-60 cursor-not-allowed"
+          title="Filtre par type — arrive avec une prochaine évolution"
+        >
+          Caravane
+        </span>
+        <span class="w-px h-6 bg-line mx-1"></span>
+        <span
+          class="text-sm text-muted-dark border border-line bg-white px-3.5 py-2 rounded-full opacity-60 cursor-not-allowed"
+          title="Filtre par prix — arrive avec une prochaine évolution"
+        >
+          Prix / nuit
+        </span>
+        <span
+          class="text-sm text-muted-dark border border-line bg-white px-3.5 py-2 rounded-full opacity-60 cursor-not-allowed"
+          title="Filtre par équipements — arrive avec une prochaine évolution"
+        >
+          Équipements
+        </span>
+      </div>
+    </div>
+  </section>
 
-    <div
-      class="container mx-auto px-4 grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-rows-0 gap-4 justify-center mt-4"
-    >
+  <section class="container mx-auto px-4">
+    <div class="flex items-end justify-between gap-4 flex-wrap py-6">
+      <div>
+        <h1 class="font-bold text-ink text-2xl sm:text-3xl">
+          {{
+            isSearch && inputSearch
+              ? `Véhicules à louer près de ${inputSearch}`
+              : 'Tous nos véhicules'
+          }}
+        </h1>
+        <p class="text-muted text-sm mt-1.5">
+          {{ vehicles.total }}
+          véhicule{{ vehicles.total === 1 ? '' : 's' }}
+          disponible{{ vehicles.total === 1 ? '' : 's' }}
+        </p>
+      </div>
+
+      <p class="text-sm text-muted-dark border border-line rounded-lg px-3.5 py-2.5 bg-white">
+        Triées par : plus récentes
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-6">
       @each(vehicle in vehicles)
-        <div class="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md">
-          <a href="{{ urlFor('vehicles.show', [vehicle.id]) }}">
+        @link({
+          route: 'vehicles.show',
+          routeParams: [vehicle.id],
+          class:
+            'block bg-white border border-line rounded-2xl overflow-hidden hover:shadow-lg transition-shadow',
+        })
+          <div class="relative aspect-4/3">
             <img
-              class="rounded-t-lg w-full max-h-56 object-cover object-center"
-              src="{{ (await driveUrl(vehicle.pictures[0]?.path)) || '/images/default.webp' }}"
+              class="w-full h-full object-cover"
+              src="{{
+                await driveUrl(
+                  vehicle.pictures[0]?.path || 'images/default.webp',
+                )
+              }}"
               alt=""
             />
-          </a>
-          <div class="p-5">
-            <a href="#">
-              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-                {{ vehicle.type.name }}
-                {{ vehicle.model }}
-              </h5>
-            </a>
-            <p class="mb-3 font-normal text-gray-700">
-              {{ vehicle.type.name }}
-              de
-              {{ vehicle.user.firstName }}
-              {{ vehicle.user.lastName[0] }}.
-            </p>
-            <p class="mb-3 font-normal text-gray-700">
-              Cette annonce a été ajoutée
-              {{ vehicle.createdAt.toRelative() }}
-            </p>
             <span
-              class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"
+              class="absolute top-3 left-3 bg-ink/85 text-white text-xs font-semibold px-2.5 py-1 rounded-lg"
             >
-              {{ vehicle.city }}
+              {{ vehicle.type.name }}
             </span>
           </div>
-        </div>
+          <div class="p-4 space-y-1.5">
+            <div class="flex items-start justify-between gap-3">
+              <p class="font-semibold text-ink leading-tight line-clamp-2 min-h-11">
+                {{ vehicle.model }}
+              </p>
+              <p>
+                <i class="fa-solid fa-star text-accent"></i>
+                {{ vehicle.$extras.rating }}
+                <span class="text-[#666D7D]">({{ vehicle.$extras.comments_count }})</span>
+              </p>
+            </div>
+            <p class="text-sm text-muted">
+              {{ vehicle.beds }}
+              couchages -
+              {{ vehicle.seats }}
+              places
+            </p>
+            <p class="text-sm text-muted-dark">{{ vehicle.city }}</p>
+            <div class="flex items-end justify-between pt-2 border-t border-line mt-2">
+              <p>
+                <span class="text-lg font-bold text-ink">{{ vehicle.price }} €</span>
+                <span class="text-sm text-muted">/ nuit</span>
+              </p>
+            </div>
+          </div>
+        @end
       @else
-        <p class="text-yellow-700 col-span-4 text-center bg-yellow-100 p-6 rounded">
-          Aucun résultat pour la recherche
-          <b>« {{ inputSearch }}</b>
-          »
+        <p class="text-muted col-span-3 bg-white border border-line rounded-2xl p-8 text-center">
+          @if(isSearch)
+            Aucun résultat pour «
+            {{ inputSearch }}
+            ».
+          @else
+            Aucune annonce publiée pour le moment.
+          @end
         </p>
       @end
     </div>
-    @!pagination({ paginator: vehicles, accent: 'yellow' })
+    @!pagination({ paginator: vehicles, accent: 'ink' })
   </section>
 @end
