@@ -29,6 +29,8 @@
         </p>
         <p><b>Modèle :</b> {{ booking.vehicle.model }}</p>
         <p><b>Type :</b> {{ booking.vehicle.type.name }}</p>
+        <p><b>Durée :</b> {{ booking.nights }} nuit{{ booking.nights > 1 ? 's' : '' }}</p>
+        <p><b>Prix total :</b> {{ booking.totalPrice }} €</p>
         <p><b>Année :</b> {{ booking.vehicle.year }}</p>
         <p><b>Km avant réservation :</b> {{ booking.vehicle.km }} km</p>
         <p><b>Description :</b> {{ booking.vehicle.description }}</p>

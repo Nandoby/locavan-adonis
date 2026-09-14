@@ -18,6 +18,8 @@ export default class BookingsController {
     const data = await request.validateUsing(bookingValidator)
     const startDate = data.booking_startDate
     const endDate = data.booking_endDate
+    const nights = Math.round(endDate.startOf('day').diff(startDate.startOf('day'), 'days').days)
+    const totalPrice = Math.round(nights * (vehicle.price ?? 0) * 100) / 100
 
     const created = await db.transaction(async (trx) => {
       const overlap = await Booking.query({ client: trx })
@@ -29,7 +31,7 @@ export default class BookingsController {
       if (overlap) return false
 
       await Booking.create(
-        { userId: auth.user!.id, vehicleId: vehicle.id, startDate, endDate },
+        { userId: auth.user!.id, vehicleId: vehicle.id, startDate, endDate, nights, totalPrice },
         { client: trx }
       )
       return true
