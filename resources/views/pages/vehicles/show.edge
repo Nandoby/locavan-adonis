@@ -45,12 +45,14 @@
             class="text-sm text-muted-dark border border-line rounded-lg px-3.5 py-2.5 bg-white opacity-60 cursor-not-allowed"
             title="Favoris — arrive avec une prochaine évolution"
           >
-            ♡ Enregistrer
+            <i class="fa-light fa-heart"></i>
+            Enregistrer
           </span>
           <span
             class="text-sm text-muted-dark border border-line rounded-lg px-3.5 py-2.5 bg-white opacity-60 cursor-not-allowed"
             title="Partage — arrive avec une prochaine évolution"
           >
+            <i class="fa-light fa-share"></i>
             Partager
           </span>
         </div>
@@ -377,6 +379,7 @@
                         type: 'text',
                         class: 'mt-0.5 w-full text-[15px] focus:outline-none',
                         dataDatesDisabled: notAvailableDaysJson,
+                        dataPrice: vehicle.price,
                       })
                       @!field.error()
                     </div>
@@ -396,6 +399,7 @@
                     </div>
                   @end
                 </div>
+                <p id="booking-summary" class="text-sm text-muted-dark mt-3" hidden></p>
                 @!button({
                   type: 'submit',
                   class:

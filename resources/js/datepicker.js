@@ -65,7 +65,29 @@ export function initBookingDatepickers() {
     ) {
       datepickerEnd.setDate({ clear: true })
     }
+
+    updateSummary()
   })
+
+  endDate.addEventListener('changeDate', updateSummary)
+
+  function updateSummary() {
+    const summaryEl = document.querySelector('#booking-summary')
+    if (!summaryEl) return
+
+    const pricePerNight = Number(startDate.dataset.price || 0)
+    const start = datepickerStart.getDate()
+    const end = datepickerEnd.getDate()
+
+    if (start && end && end > start) {
+      const nights = Math.round((end - start) / 86400000)
+      const total = nights * pricePerNight
+      summaryEl.hidden = false
+      summaryEl.textContent = `${nights} nuit${nights > 1 ? 's' : ''} × ${pricePerNight.toFixed(2)} € = ${total.toFixed(2)} €`
+    } else {
+      summaryEl.hidden = true
+    }
+  }
 
   return { datepickerStart, datepickerEnd }
 }
