@@ -10,27 +10,110 @@ import {
 } from '#validators/vehicle'
 import { storeUpload, deleteUpload } from '#services/upload_service'
 import VehiclePolicy from '#policies/vehicle_policy'
+import { DateTime } from 'luxon'
+
+interface VehicleSearchFilters {
+  city: string
+  typeId: number | null
+  maxPrice: number | null
+  minSeats: number | null
+  startDate: DateTime | null
+  endDate: DateTime | null
+}
 
 export default class VehiclesController {
   async index({ view, request }: HttpContext) {
-    const inputSearch = request.input('city', '').trim()
-    const page = request.input('page', 1)
-    const vehicles = await Vehicle.query()
+    return this.renderResults(view, request, '/vehicles')
+  }
+
+  async search({ view, request }: HttpContext) {
+    return this.renderResults(view, request, '/search')
+  }
+
+  private parseSearchFilters(request: HttpContext['request']): VehicleSearchFilters {
+    const city = request.input('city', '').trim()
+    const typeId = Number(request.input('type')) || null
+    const maxPrice = Number(request.input('maxPrice')) || null
+    const minSeats = Number(request.input('minSeats')) || null
+
+    const rawStart = DateTime.fromFormat(request.input('startDate', ''), 'dd/MM/yyyy')
+    const rawEnd = DateTime.fromFormat(request.input('endDate', ''), 'dd/MM/yyyy')
+    const hasDateRange = rawStart.isValid && rawEnd.isValid && rawEnd >= rawStart
+
+    return {
+      city,
+      typeId,
+      maxPrice,
+      minSeats,
+      startDate: hasDateRange ? rawStart : null,
+      endDate: hasDateRange ? rawEnd : null,
+    }
+  }
+
+  private buildVehiclesQuery(filters: VehicleSearchFilters) {
+    const query = Vehicle.query()
       .where('status', 'published')
       .preload('pictures')
-      .preload('user')
       .preload('type')
+      .preload('user')
       .withCount('comments')
-      .orderBy('createdAt', 'desc')
-      .paginate(page, 12)
 
-    vehicles.baseUrl('/vehicles')
+    if (filters.city) query.where('city', 'LIKE', `%${filters.city}%`)
+    if (filters.typeId) query.where('typeId', filters.typeId)
+    if (filters.maxPrice) query.where('price', '<=', filters.maxPrice)
+    if (filters.minSeats) query.where('seats', '>=', filters.minSeats)
+
+    if (filters.startDate && filters.endDate) {
+      const { startDate, endDate } = filters
+      query.whereNotExists((builder) => {
+        builder
+          .from('bookings')
+          .whereRaw('bookings.vehicle_id = vehicles.id')
+          .where('start_date', '<=', endDate.toSQL()!)
+          .where('end_date', '>=', startDate.toSQL()!)
+      })
+    }
+
+    return query.orderBy('createdAt', 'desc')
+  }
+
+  private async renderResults(
+    view: HttpContext['view'],
+    request: HttpContext['request'],
+    baseUrl: string
+  ) {
+    const filters = this.parseSearchFilters(request)
+    const page = request.input('page', 1)
+    const types = await Type.all()
+
+    const vehicles = await this.buildVehiclesQuery(filters).paginate(page, 12)
+    vehicles.baseUrl(baseUrl)
+
+    const queryString: Record<string, string | number> = {}
+    if (filters.city) queryString.city = filters.city
+    if (filters.typeId) queryString.type = filters.typeId
+    if (filters.maxPrice) queryString.maxPrice = filters.maxPrice
+    if (filters.minSeats) queryString.minSeats = filters.minSeats
+    if (filters.startDate) queryString.startDate = request.input('startDate')
+    if (filters.endDate) queryString.endDate = request.input('endDate')
+    vehicles.queryString(queryString)
 
     for (const vehicle of vehicles.all()) {
       vehicle.$extras.rating = await vehicle.ratingAverage()
     }
 
-    return view.render('pages/vehicles/index', { vehicles, inputSearch })
+    return view.render('pages/vehicles/index', {
+      vehicles,
+      inputSearch: filters.city,
+      types,
+      filters: {
+        type: filters.typeId,
+        maxPrice: filters.maxPrice,
+        minSeats: filters.minSeats,
+        startDate: request.input('startDate', ''),
+        endDate: request.input('endDate', ''),
+      },
+    })
   }
 
   async show({ params, view, auth, response }: HttpContext) {
@@ -56,30 +139,6 @@ export default class VehiclesController {
     const ratingAverage = await vehicle.ratingAverage()
 
     return view.render('pages/vehicles/show', { vehicle, notAvailableDaysJson, ratingAverage })
-  }
-
-  async search({ view, request }: HttpContext) {
-    const inputSearch = request.input('city', '').trim()
-    const page = request.input('page', 1)
-
-    const vehicles = await Vehicle.query()
-      .where('city', 'LIKE', `%${inputSearch}%`)
-      .where('status', 'published')
-      .preload('pictures')
-      .preload('type')
-      .preload('user')
-      .withCount('comments')
-      .orderBy('createdAt', 'desc')
-      .paginate(page, 12)
-
-    vehicles.baseUrl('/search')
-    vehicles.queryString({ city: inputSearch })
-
-    for (const vehicle of vehicles.all()) {
-      vehicle.$extras.rating = await vehicle.ratingAverage()
-    }
-
-    return view.render('pages/vehicles/index', { vehicles, inputSearch })
   }
 
   async create({ view }: HttpContext) {
