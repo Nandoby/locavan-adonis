@@ -1,7 +1,7 @@
 import Alpine from 'alpinejs'
 import Splide from '@splidejs/splide'
 import { Lightbox } from 'lightbox3'
-import { initBookingDatepickers } from './datepicker.js'
+import { initBookingDatepickers, initSearchDatepickers } from './datepicker.js'
 
 import '@splidejs/splide/css'
 
@@ -72,3 +72,4 @@ document.querySelectorAll('.splide').forEach((el) => {
 Lightbox.init()
 
 initBookingDatepickers()
+initSearchDatepickers()

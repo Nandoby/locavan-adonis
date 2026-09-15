@@ -97,3 +97,31 @@ function findNextDisabledDate(afterDate, disabledDatesSorted) {
     return disabledDate > afterDate
   })
 }
+
+/**
+ * Datepickers du formulaire de recherche : même comportement que la
+ * réservation (retour >= départ) mais sans dates indisponibles, puisqu'on
+ * filtre sur plusieurs véhicules à la fois
+ */
+export function initSearchDatepickers() {
+  const startDate = document.querySelector('#search_startDate')
+  const endDate = document.querySelector('#search_endDate')
+
+  if (!startDate || !endDate) return
+
+  const datepickerStart = new Datepicker(startDate, {
+    language: 'fr-BE',
+    format: 'dd/mm/yyyy',
+    minDate: new Date(),
+  })
+
+  const datepickerEnd = new Datepicker(endDate, {
+    language: 'fr-BE',
+    format: 'dd/mm/yyyy',
+    minDate: datepickerStart.getDate() || new Date(),
+  })
+
+  startDate.addEventListener('changeDate', () => {
+    datepickerEnd.setOptions({ minDate: datepickerStart.getDate() || new Date() })
+  })
+}

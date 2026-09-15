@@ -1,34 +1,84 @@
 @let(isSearch = request.url() === '/search')
+@let(baseUrl = isSearch ? '/search' : '/vehicles')
+@let(priceBands = [
+  { label: "Jusqu'à 50€", value: 50 },
+  { label: "Jusqu'à 100€", value: 100 },
+  { label: "Jusqu'à 150€", value: 150 },
+])
+@let(currentFilters = {
+  city: inputSearch,
+  type: filters.type,
+  maxPrice: filters.maxPrice,
+  minSeats: filters.minSeats,
+  startDate: filters.startDate,
+  endDate: filters.endDate,
+})
 @layout({ title: isSearch ? 'Recherche' : 'Tous les véhicules' })
   <section class="bg-white border-b border-line">
     <div class="container mx-auto px-4 py-6">
-      {{-- Seul "Où" filtre réellement (route vehicles.search) - Dates, Voyageurs et les filtres ci-dessous sont posés visuellement en préparation de F4 --}}
       @form({
         route: 'vehicles.search',
         method: 'GET',
         class:
           'flex flex-col sm:flex-row bg-white border border-line rounded-2xl overflow-hidden sm:divide-x divide-line shadow-sm',
       })
-        <div class="flex-[1.4] px-4.5 py-3">
+        <div class="flex-[1.2] px-4.5 py-3">
           @field.root({ name: 'city' })
             @!field.label({
               text: 'Où',
-              class: 'text-[#666D7D] text-[11px] font-semidbold uppercase',
+              class: 'mt-[2px] focus:outline-none text-[15px] w-full',
             })
             @!input.control({
               type: 'text',
               placeholder: 'Ville ou région',
+              value: inputSearch,
               class: 'mt-[2px] focus:outline-none text-[15px] w-full',
             })
           @end
         </div>
-        <div class="flex-[1.2] px-4.5 py-3 opacity-60 pointer-events-none">
-          <p class="text-[#666D7D] text-[11px] font-semibold uppercase">Dates</p>
-          <p class="text-[15px] text-[#666D7D] mt-0.5">Départ - retour</p>
+        <div class="flex-[1.4] px-4.5 py-3 grid grid-cols-2 gap-2">
+          @field.root({ name: 'startDate' })
+            @!field.label({
+              text: 'Départ',
+              class: 'text-[#666D7D] text-[11px] font-semibold uppercase',
+            })
+            @!input.control({
+              type: 'text',
+              id: 'search_startDate',
+              placeholder: 'jj/mm/aaaa',
+              value: filters.startDate,
+              class: 'mt-[2px] focus:outline-none text-[15px] w-full',
+            })
+          @end
+          @field.root({ name: 'endDate' })
+            @!field.label({
+              text: 'Retour',
+              class: 'text-[#666D7D] text-[11px] font-semibold uppercase',
+            })
+            @!input.control({
+              type: 'text',
+              id: 'search_endDate',
+              placeholder: 'jj/mm/aaaa',
+              value: filters.endDate,
+              class: 'mt-[2px] focus:outline-none text-[15px] w-full',
+            })
+          @end
         </div>
-        <div class="flex-1 px-4.5 py-3 opacity-60 pointer-events-none">
-          <p class="text-[#666D7D] text-[11px] font-semibold uppercase">Voyageurs</p>
-          <p class="text-[15px] text-[#666D7D] mt-[2px]">Peu importe</p>
+        <div class="flex-1 px-4.5 py-3">
+          @field.root({ name: 'minSeats' })
+            @!field.label({
+              text: 'Voyageurs',
+              class: 'text-[#666D7D] text-[11px] font-semibold uppercase',
+            })
+            @!input.control({
+              type: 'number',
+              min: '1',
+              max: '9',
+              placeholder: 'Peu importe',
+              value: filters.minSeats,
+              class: 'mt-[2px] focus:outline-none text-[15px] w-full',
+            })
+          @end
         </div>
         <div class="p-2 flex">
           <button
@@ -40,37 +90,45 @@
       @end
 
       <div class="flex items-center gap-2 mt-4 flex-wrap">
-        <span
-          class="text-sm text-muted-dark border border-line bg-white px-3.5 py-2 rounded-full opacity-60 cursor-not-allowed"
-          title="Filtre par type - arrive avec une prochaine évolution"
-        >
-          Fourgon aménagé
-        </span>
-        <span
-          class="text-sm text-muted-dark border border-line bg-white px-3.5 py-2 rounded-full opacity-60 cursor-not-allowed"
-          title="Filtre par type — arrive avec une prochaine évolution"
-        >
-          Van
-        </span>
-        <span
-          class="text-sm text-muted-dark border border-line bg-white px-3.5 py-2 rounded-full opacity-60 cursor-not-allowed"
-          title="Filtre par type — arrive avec une prochaine évolution"
-        >
-          Intégral
-        </span>
-        <span
-          class="text-sm text-muted-dark border border-line bg-white px-3.5 py-2 rounded-full opacity-60 cursor-not-allowed"
-          title="Filtre par type — arrive avec une prochaine évolution"
-        >
-          Caravane
-        </span>
+        @each(type in types)
+          @let(isActive = filters.type === type.id)
+          <a
+            href="{{
+              queryUrl(baseUrl, {
+                ...currentFilters,
+                type: isActive ? '' : type.id,
+              })
+            }}"
+            class="text-sm px-3.5 py-2 rounded-full border {{
+              isActive
+                ? 'bg-ink text-white border-ink'
+                : 'text-muted-dark border-line bg-white hover:border-ink/40'
+            }}"
+          >
+            {{ type.name }}
+          </a>
+        @end
+
         <span class="w-px h-6 bg-line mx-1"></span>
-        <span
-          class="text-sm text-muted-dark border border-line bg-white px-3.5 py-2 rounded-full opacity-60 cursor-not-allowed"
-          title="Filtre par prix — arrive avec une prochaine évolution"
-        >
-          Prix / nuit
-        </span>
+        @each(band in priceBands)
+          @let(isActive = filters.maxPrice === band.value)
+          <a
+            href="{{
+              queryUrl(baseUrl, {
+                ...currentFilters,
+                maxPrice: isActive ? '' : band.value,
+              })
+            }}"
+            class="text-sm px-3.5 py-2 rounded-full border {{
+              isActive
+                ? 'bg-ink text-white border-ink'
+                : 'text-muted-dark border-line bg-white hover:border-ink/40'
+            }}"
+          >
+            {{ band.label }}
+          </a>
+        @end
+
         <span
           class="text-sm text-muted-dark border border-line bg-white px-3.5 py-2 rounded-full opacity-60 cursor-not-allowed"
           title="Filtre par équipements — arrive avec une prochaine évolution"
@@ -80,7 +138,6 @@
       </div>
     </div>
   </section>
-
   <section class="container mx-auto px-4">
     <div class="flex items-end justify-between gap-4 flex-wrap py-6">
       <div>
