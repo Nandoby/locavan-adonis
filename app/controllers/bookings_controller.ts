@@ -60,7 +60,7 @@ export default class BookingsController {
       .preload('vehicle', (v) => v.preload('pictures').preload('type'))
       .orderBy('createdAt', 'desc')
       .exec()
-    return view.render('pages/bookings/bookings', { bookings, dateNow: DateTime.now() })
+    return view.render('pages/bookings/bookings', { bookings })
   }
 
   /**
@@ -117,14 +117,13 @@ export default class BookingsController {
 
     await bouncer.with(BookingPolicy).authorize('view', booking)
 
-    const dateNow = DateTime.now()
-    const bookingCompleted = dateNow > booking.endDate!
+    const bookingCompleted = DateTime.now() > booking.endDate!
     const hasComment = await Comment.query()
       .where({ vehicleId: booking.vehicleId })
       .where({ userId: auth.user!.id })
       .exec()
 
-    return view.render('pages/bookings/show', { booking, dateNow, bookingCompleted, hasComment })
+    return view.render('pages/bookings/show', { booking, bookingCompleted, hasComment })
   }
 
   async storeComment({ params, request, auth, session, response, bouncer }: HttpContext) {
