@@ -75,11 +75,20 @@
           >
             {{ auth.user.firstName }}
             {{ auth.user.lastName }}
-            <img
-              class="w-10 h-10 rounded-full"
-              src="{{ await driveUrl(auth.user.avatarPath) }}"
-              alt="avatar image"
-            />
+            <span class="relative">
+              <img
+                class="w-10 h-10 rounded-full"
+                src="{{ await driveUrl(auth.user.avatarPath) }}"
+                alt="avatar image"
+              />
+              @if(pendingBookingsCount > 0)
+                <span
+                  class="absolute -top-1 -right-1 bg-accent text-ink text-xs font-semibold rounded-full min-w-5 h-5 px-1 flex items-center justify-center"
+                >
+                  {{ pendingBookingsCount }}
+                </span>
+              @end
+            </span>
             <i class="fa-solid" :class="dropped ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
           </button>
           <div
@@ -105,7 +114,17 @@
               </li>
               <li>
                 <a href="{{ urlFor('bookings.received') }}" class="dropdown-item">
-                  <i class="fa-solid fa-inbox w-6"></i>Réservations reçues
+                  <i class="fa-solid fa-inbox w-6"></i>
+                  
+                  Réservations reçues
+
+                  @if(pendingBookingsCount > 0)
+                    <span
+                      class="ml-auto bg-accent text-ink text-xs font-semibold rounded-full min-w-5 h-5 px-1 flex items-center justify-center"
+                    >
+                      {{ pendingBookingsCount }}
+                    </span>
+                  @end
                 </a>
               </li>
               @if(auth.user.isAdmin)
