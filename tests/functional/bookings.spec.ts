@@ -5,9 +5,14 @@ import User from '#models/user'
 import Type from '#models/type'
 import Vehicle from '#models/vehicle'
 import Booking from '#models/booking'
+import mail from '@adonisjs/mail/services/main'
 
 test.group('Réservation - chevauchement (B5)', (group) => {
   group.each.setup(() => testUtils.db().wrapInGlobalTransaction())
+  group.each.setup(() => {
+    mail.fake()
+    return () => mail.restore()
+  })
 
   async function scenario() {
     const owner = await User.create({

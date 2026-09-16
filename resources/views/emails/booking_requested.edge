@@ -1,0 +1,26 @@
+@email.layout()
+  <p>Bonjour {{ booking.vehicle.user.firstName }},</p>
+  <p>
+    {{ booking.user.firstName }}
+    {{ booking.user.lastName }}
+    souhaite réserver votre
+    <strong>{{ booking.vehicle.type.name }} {{ booking.vehicle.model }}</strong>
+    du
+    {{ booking.startDate.toFormat('dd/MM/yyyy') }}
+    au
+    {{ booking.endDate.toFormat('dd/MM/yyyy') }}
+    ({{ booking.nights }}
+    nuit{{ booking.nights > 1 ? 's' : '' }},
+    {{ booking.totalPrice.toFixed(2) }}
+    €).
+  </p>
+  <p>Ces dates restent bloquées tant que vous n'avez pas répondu.</p>
+  <p>
+    <a
+      href="{{ urlFor('bookings.received', [], { prefixUrl: appUrl }) }}"
+      style="display:inline-block;background:#E8930C;color:#1F2434;font-weight:bold;padding:10px 18px;border-radius:6px;text-decoration:none"
+    >
+      Répondre à la demande
+    </a>
+  </p>
+@end
