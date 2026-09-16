@@ -10,6 +10,9 @@ import Memory from '#models/memory'
 import BookingPolicy from '#policies/booking_policy'
 import CommentPolicy from '#policies/comment_policy'
 import db from '@adonisjs/lucid/services/db'
+import BookingRequested from '#events/booking_requested'
+import BookingDecided from '#events/booking_decided'
+import BookingCancelled from '#events/booking_cancelled'
 
 export default class BookingsController {
   async store({ params, request, auth, response, session }: HttpContext) {
@@ -50,6 +53,8 @@ export default class BookingsController {
       return response.redirect().back()
     }
 
+    await BookingRequested.dispatch(booking)
+
     session.flash('success', 'Demande de réservation envoyée au propriétaire !')
     return response.redirect().toRoute('bookings.show', { id: booking.id })
   }
@@ -83,6 +88,8 @@ export default class BookingsController {
     booking.status = 'confirmed'
     await booking.save()
 
+    await BookingDecided.dispatch(booking)
+
     session.flash('success', 'Réservation acceptée')
     return response.redirect().back()
   }
@@ -94,6 +101,8 @@ export default class BookingsController {
     booking.status = 'declined'
     await booking.save()
 
+    await BookingDecided.dispatch(booking)
+
     session.flash('success', 'Réservation refusée')
     return response.redirect().back()
   }
@@ -104,6 +113,8 @@ export default class BookingsController {
 
     booking.status = 'cancelled'
     await booking.save()
+
+    await BookingCancelled.dispatch(booking)
 
     session.flash('success', 'Réservation annulée')
     return response.redirect().back()

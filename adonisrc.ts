@@ -29,6 +29,7 @@ export default defineConfig({
     () => import('@adonisjs/lucid/commands'),
     () => import('@adonisjs/session/commands'),
     () => import('@adonisjs/bouncer/commands'),
+    () => import('@adonisjs/mail/commands'),
   ],
 
   /*
@@ -58,6 +59,7 @@ export default defineConfig({
     () => import('@adonisjs/bouncer/bouncer_provider'),
     () => import('@adonisjs/drive/drive_provider'),
     () => import('@adonisjs/limiter/limiter_provider'),
+    () => import('@adonisjs/mail/mail_provider'),
   ],
 
   /*
@@ -73,6 +75,7 @@ export default defineConfig({
     () => import('#start/kernel'),
     () => import('#start/validator'),
     () => import('#start/view'),
+    () => import('#start/events'),
   ],
 
   /*

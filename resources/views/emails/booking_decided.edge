@@ -1,0 +1,40 @@
+@email.layout()
+  <p>Bonjour {{ booking.user.firstName }},</p>
+  @if(accepted)
+    <p>
+      Bonne nouvelle : votre réservation du
+      <strong>{{ booking.vehicle.type.name }} {{ booking.vehicle.model }}</strong>
+      du
+      {{ booking.startDate.toFormat('dd/MM/yyyy') }}
+      au
+      {{ booking.endDate.toFormat('dd/MM/yyyy') }}
+      a été acceptée par le propriétaire.
+    </p>
+    <p>
+      <a
+        href="{{ urlFor('bookings.show', [booking.id], { prefixUrl: appUrl }) }}"
+        style="display:inline-block;background:#E8930C;color:#1F2434;font-weight:bold;padding:10px 18px;border-radius:6px;text-decoration:none;"
+      >
+        Voir ma réservation
+      </a>
+    </p>
+  @else
+    <p>
+      Votre demande de réservation du
+      <strong>{{ booking.vehicle.type.name }} {{ booking.vehicle.model }}</strong>
+      du
+      {{ booking.startDate.toFormat('dd/MM/yyyy') }}
+      au
+      {{ booking.endDate.toFormat('dd/MM/yyyy') }}
+      n'a pas été acceptée par le propriétaire.
+    </p>
+    <p>
+      <a
+        href="{{ urlFor('vehicles.index', [], { prefixUrl: appUrl }) }}"
+        style="display:inline-block;background:#E8930C;color:#1F2434;font-weight:bold;padding:10px 18px;border-radius:6px;text-decoration:none;"
+      >
+        Trouver un autre véhicule
+      </a>
+    </p>
+  @end
+@end

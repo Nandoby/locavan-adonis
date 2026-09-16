@@ -3,4 +3,6 @@
  * DO NOT EDIT manually
  */
 
-export const listeners = {}
+export const listeners = {
+  SendBookingEmails: () => import('#listeners/send_booking_emails'),
+}
