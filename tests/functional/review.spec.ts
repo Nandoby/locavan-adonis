@@ -81,7 +81,12 @@ test.group('Avis - autorisation (B2)', (group) => {
 
   test('pas de commentaire sur une réservation non terminée', async ({ client }) => {
     const { renter, vehicle } = await scenario()
-    const booking = await Booking.create({ userId: renter.id, vehicleId: vehicle.id, ...future() })
+    const booking = await Booking.create({
+      userId: renter.id,
+      vehicleId: vehicle.id,
+      status: 'confirmed',
+      ...future(),
+    })
 
     const res = await client
       .post(`/bookings/${booking.id}/comment`)
@@ -95,7 +100,12 @@ test.group('Avis - autorisation (B2)', (group) => {
 
   test('le locataire peut commenter sa réservation terminée', async ({ client, assert }) => {
     const { renter, vehicle } = await scenario()
-    const booking = await Booking.create({ userId: renter.id, vehicleId: vehicle.id, ...past() })
+    const booking = await Booking.create({
+      userId: renter.id,
+      vehicleId: vehicle.id,
+      status: 'confirmed',
+      ...past(),
+    })
 
     const res = await client
       .post(`/bookings/${booking.id}/comment`)

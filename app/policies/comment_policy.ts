@@ -11,6 +11,10 @@ export default class CommentPolicy extends BasePolicy {
    */
   create(user: User, booking: Booking): AuthorizerResponse {
     if (!booking.endDate) return false
-    return user.id === booking.userId && DateTime.now() > booking.endDate
+    return (
+      user.id === booking.userId &&
+      booking.status === 'confirmed' &&
+      DateTime.now() > booking.endDate
+    )
   }
 }

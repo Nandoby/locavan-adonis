@@ -17,8 +17,12 @@ export type ScannedRoutes = {
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.bookings': { paramsTuple?: []; params?: {} }
+    'bookings.received': { paramsTuple?: []; params?: {} }
     'bookings.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.store_comment': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookings.accept': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookings.decline': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookings.cancel': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
@@ -41,6 +45,7 @@ export type ScannedRoutes = {
     'vehicles.listing': { paramsTuple?: []; params?: {} }
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.bookings': { paramsTuple?: []; params?: {} }
+    'bookings.received': { paramsTuple?: []; params?: {} }
     'bookings.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
@@ -60,6 +65,7 @@ export type ScannedRoutes = {
     'vehicles.listing': { paramsTuple?: []; params?: {} }
     'vehicles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.bookings': { paramsTuple?: []; params?: {} }
+    'bookings.received': { paramsTuple?: []; params?: {} }
     'bookings.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
@@ -77,6 +83,9 @@ export type ScannedRoutes = {
     'vehicles.update_status': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'bookings.store_comment': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookings.accept': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookings.decline': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'bookings.cancel': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
