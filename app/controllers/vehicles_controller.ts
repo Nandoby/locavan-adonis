@@ -69,6 +69,7 @@ export default class VehiclesController {
         builder
           .from('bookings')
           .whereRaw('bookings.vehicle_id = vehicles.id')
+          .whereNotIn('status', ['declined', 'cancelled'])
           .where('start_date', '<=', endDate.toSQL()!)
           .where('end_date', '>=', startDate.toSQL()!)
       })

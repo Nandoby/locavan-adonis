@@ -15,34 +15,71 @@
               />
             </a>
             <div class="p-5">
-              <a href="#">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
-                  {{ book.vehicle.type.name }}
-                  {{ book.vehicle.model }}
-                </h5>
-                <p class="mb-3 font-normal text-gray-700">
-                  Réservation du
-                  {{ book.createdAt.toLocaleString() }}
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900">
+                {{ book.vehicle.type.name }}
+                {{ book.vehicle.model }}
+              </h5>
+              <p class="mb-3 font-normal text-gray-700">
+                Réservation du
+                {{ book.createdAt.toLocaleString() }}
+              </p>
+              <div class="text-gray-500 mb-3">
+                <p>Début : {{ book.startDate.toLocaleString() }}</p>
+                <p>Fin : {{ book.endDate.toLocaleString() }}</p>
+                <p class="font-semibold text-gray-900">
+                  {{ book.nights }}
+                  nuit{{ book.nights > 1 ? 's' : '' }}
+                  ·
+                  {{ book.totalPrice }}
+                  €
                 </p>
-                <div class="text-gray-500 mb-3">
-                  <p>Début : {{ book.startDate.toLocaleString() }}</p>
-                  <p>Fin : {{ book.endDate.toLocaleString() }}</p>
-                  <p class="font-semibold text-gray-900">
-                    {{ book.nights }}
-                    nuit{{ book.nights > 1 ? 's' : '' }}
-                    ·
-                    {{ book.totalPrice }}
-                    €
-                  </p>
-                </div>
-                <a
-                  href="#"
-                  class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-amber-600 rounded-lg hover:bg-amber-700 focus:ring-4 focus:ring-amber-300 focus:outline-none"
-                >
-                  En savoir plus
-                  <i class="fa-solid fa-arrow-right ml-4"></i>
-                </a>
+              </div>
+              <a
+                href="{{ urlFor('bookings.show', { id: book.id }) }}"
+                class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-white bg-amber-600 rounded-lg hover:bg-amber-700 focus:ring-4 focus:ring-amber-300 focus:outline-none"
+              >
+                En savoir plus
+                <i class="fa-solid fa-arrow-right ml-4"></i>
               </a>
+
+              <div class="flex items-center justify-between gap-2 mt-3">
+                @if(book.status === 'pending')
+                  <span
+                    class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >
+                    En attente
+                  </span>
+                @elseif(book.status === 'confirmed')
+                  <span
+                    class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                  >
+                    Confirmée
+                  </span>
+                @elseif(book.status === 'declined')
+                  <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                    Refusée
+                  </span>
+                @else
+                  <span class="bg-gray-200 text-gray-700 text-xs font-medium px-2.5 py-0.5 rounded">
+                    Annulée
+                  </span>
+                @end
+                @if(book.isCancellable)
+                  <form
+                    method="POST"
+                    action="{{ urlFor('bookings.cancel', [book.id]) }}"
+                    onsubmit="return confirm('Annuler cette réservation ?')"
+                  >
+                    {{ csrfField() }}
+                    <button
+                      type="submit"
+                      class="text-sm font-medium text-red-600 hover:underline cursor-pointer"
+                    >
+                      Annuler
+                    </button>
+                  </form>
+                @end
+              </div>
             </div>
           </div>
         @end

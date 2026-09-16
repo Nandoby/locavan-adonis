@@ -37,8 +37,12 @@ router.post('/vehicles/:id/bookings', [controllers.Bookings, 'store']).use(middl
 router
   .group(() => {
     router.get('/bookings', [controllers.Bookings, 'bookings'])
+    router.get('/bookings/received', [controllers.Bookings, 'received'])
     router.get('/bookings/:id', [controllers.Bookings, 'show'])
     router.post('/bookings/:id/comment', [controllers.Bookings, 'storeComment'])
+    router.post('/bookings/:id/accept', [controllers.Bookings, 'accept'])
+    router.post('/bookings/:id/decline', [controllers.Bookings, 'decline'])
+    router.post('/bookings/:id/cancel', [controllers.Bookings, 'cancel'])
   })
   .use(middleware.auth())
 

@@ -21,37 +21,92 @@ export default class BookingsController {
     const nights = Math.round(endDate.startOf('day').diff(startDate.startOf('day'), 'days').days)
     const totalPrice = Math.round(nights * (vehicle.price ?? 0) * 100) / 100
 
-    const created = await db.transaction(async (trx) => {
+    const booking = await db.transaction(async (trx) => {
       const overlap = await Booking.query({ client: trx })
         .where('vehicleId', vehicle.id)
+        .whereNotIn('status', ['declined', 'cancelled'])
         .where('startDate', '<=', endDate.toSQL()!)
         .where('endDate', '>=', startDate.toSQL()!)
         .first()
 
-      if (overlap) return false
+      if (overlap) return null
 
-      await Booking.create(
-        { userId: auth.user!.id, vehicleId: vehicle.id, startDate, endDate, nights, totalPrice },
+      return Booking.create(
+        {
+          userId: auth.user!.id,
+          vehicleId: vehicle.id,
+          startDate,
+          endDate,
+          nights,
+          totalPrice,
+          status: 'pending',
+        },
         { client: trx }
       )
-      return true
     })
 
-    if (!created) {
+    if (!booking) {
       session.flash('error', 'Ce véhicule est déjà réservé sur cette période')
       return response.redirect().back()
     }
 
-    session.flash('success', 'Réservation confirmée !')
-    return response.redirect().toRoute('vehicles.show', { id: vehicle.id })
+    session.flash('success', 'Demande de réservation envoyée au propriétaire !')
+    return response.redirect().toRoute('bookings.show', { id: booking.id })
   }
 
   async bookings({ view, auth }: HttpContext) {
     const bookings = await Booking.query()
       .where('userId', auth.user!.id)
       .preload('vehicle', (v) => v.preload('pictures').preload('type'))
+      .orderBy('createdAt', 'desc')
       .exec()
     return view.render('pages/bookings/bookings', { bookings })
+  }
+
+  /**
+   * Demandes de réservation reçues par le propriétaire, sur ses annonces.
+   */
+  async received({ view, auth }: HttpContext) {
+    const bookings = await Booking.query()
+      .whereHas('vehicle', (v) => v.where('userId', auth.user!.id))
+      .preload('vehicle', (v) => v.preload('type'))
+      .preload('user')
+      .orderBy('createdAt', 'desc')
+      .exec()
+    return view.render('pages/bookings/received', { bookings })
+  }
+
+  async accept({ params, response, session, bouncer }: HttpContext) {
+    const booking = await Booking.query().where('id', params.id).preload('vehicle').firstOrFail()
+    await bouncer.with(BookingPolicy).authorize('manage', booking)
+
+    booking.status = 'confirmed'
+    await booking.save()
+
+    session.flash('success', 'Réservation acceptée')
+    return response.redirect().back()
+  }
+
+  async decline({ params, response, session, bouncer }: HttpContext) {
+    const booking = await Booking.query().where('id', params.id).preload('vehicle').firstOrFail()
+    await bouncer.with(BookingPolicy).authorize('manage', booking)
+
+    booking.status = 'declined'
+    await booking.save()
+
+    session.flash('success', 'Réservation refusée')
+    return response.redirect().back()
+  }
+
+  async cancel({ params, response, session, bouncer }: HttpContext) {
+    const booking = await Booking.findOrFail(params.id)
+    await bouncer.with(BookingPolicy).authorize('cancel', booking)
+
+    booking.status = 'cancelled'
+    await booking.save()
+
+    session.flash('success', 'Réservation annulée')
+    return response.redirect().back()
   }
 
   async show({ params, view, auth, bouncer }: HttpContext) {
@@ -62,14 +117,13 @@ export default class BookingsController {
 
     await bouncer.with(BookingPolicy).authorize('view', booking)
 
-    const dateNow = DateTime.now()
-    const bookingCompleted = dateNow > booking.endDate!
+    const bookingCompleted = DateTime.now() > booking.endDate!
     const hasComment = await Comment.query()
       .where({ vehicleId: booking.vehicleId })
       .where({ userId: auth.user!.id })
       .exec()
 
-    return view.render('pages/bookings/show', { booking, dateNow, bookingCompleted, hasComment })
+    return view.render('pages/bookings/show', { booking, bookingCompleted, hasComment })
   }
 
   async storeComment({ params, request, auth, session, response, bouncer }: HttpContext) {

@@ -103,6 +103,11 @@
                   <i class="fa-solid fa-book-open w-6"></i>Mes annonces
                 </a>
               </li>
+              <li>
+                <a href="{{ urlFor('bookings.received') }}" class="dropdown-item">
+                  <i class="fa-solid fa-inbox w-6"></i>Réservations reçues
+                </a>
+              </li>
               @if(auth.user.isAdmin)
                 <li>
                   <a href="{{ urlFor('admin.index') }}" class="dropdown-item">

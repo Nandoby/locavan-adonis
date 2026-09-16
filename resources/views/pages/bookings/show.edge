@@ -5,7 +5,23 @@
       <div class="bg-white p-4 border border-b-gray-300">
         <p>
           <b>Status :</b>
-          @if(bookingCompleted)
+          @if(booking.status === 'pending')
+            <span
+              class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >
+              en attente de confirmation
+            </span>
+          @elseif(booking.status === 'declined')
+            <span class="bg-red-100 text-red-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded">
+              refusée par le propriétaire
+            </span>
+          @elseif(booking.status === 'cancelled')
+            <span
+              class="bg-gray-200 text-gray-700 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >
+              annulée
+            </span>
+          @elseif(bookingCompleted)
             <span
               class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"
             >
@@ -13,20 +29,27 @@
             </span>
           @else
             <span
-              class="bg-yellow-100 text-yellow-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"
+              class="bg-green-100 text-green-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded"
             >
-              en cours
+              confirmée
             </span>
           @end
         </p>
       </div>
       <div class="bg-gray-50 p-4">
-        <p class="my-4">
-          Votre séjour
-          {{ bookingCompleted ? "s'est terminé" : 'se terminera' }}
-          le
-          <span class="font-medium font-bold">{{ booking.endDate.toFormat('dd/MM/yyyy') }}</span>
-        </p>
+        @if(booking.status === 'pending')
+          <p class="my-4">
+            Votre demande a été envoyée au propriétaire. Vous serez fixé dès qu'il l'aura acceptée ou refusée.
+          </p>
+        @elseif(booking.status === 'confirmed')
+          <p class="my-4">
+            Votre séjour
+            {{ bookingCompleted ? "s'est terminé" : 'se terminera' }}
+            le
+            <span class="font-medium">{{ booking.endDate.toFormat('dd/MM/yyyy') }}</span>
+          </p>
+        @end
+
         <p><b>Modèle :</b> {{ booking.vehicle.model }}</p>
         <p><b>Type :</b> {{ booking.vehicle.type.name }}</p>
         <p><b>Durée :</b> {{ booking.nights }} nuit{{ booking.nights > 1 ? 's' : '' }}</p>
@@ -34,7 +57,20 @@
         <p><b>Année :</b> {{ booking.vehicle.year }}</p>
         <p><b>Km avant réservation :</b> {{ booking.vehicle.km }} km</p>
         <p><b>Description :</b> {{ booking.vehicle.description }}</p>
-        @if(bookingCompleted)
+        @if(booking.isCancellable)
+          <form
+            method="POST"
+            action="{{ urlFor('bookings.cancel', [booking.id]) }}"
+            onsubmit="return confirm('Annuler cette réservation ?')"
+            class="mt-4"
+          >
+            {{ csrfField() }}
+            <button type="submit" class="font-medium text-red-600 hover:underline cursor-pointer">
+              Annuler la réservation
+            </button>
+          </form>
+        @end
+        @if(booking.status === 'confirmed' && bookingCompleted)
           @if(hasComment.length > 0)
             @each(comment in hasComment)
               <p class="text-sm font-bold mb-3 mt-4">

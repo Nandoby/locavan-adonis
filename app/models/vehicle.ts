@@ -35,6 +35,7 @@ export default class Vehicle extends VehicleSchema {
     const bookings = await Booking.query()
       .where('vehicle_id', this.id)
       .where('end_date', '>=', DateTime.now().startOf('day').toSQL())
+      .whereNotIn('status', ['declined', 'cancelled'])
 
     for (const booking of bookings) {
       if (!booking.startDate || !booking.endDate) continue
