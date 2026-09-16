@@ -10,5 +10,5 @@ emitter.on(BookingRequested, [SendBookingEmails, 'onRequested'])
 emitter.on(BookingDecided, [SendBookingEmails, 'onDecided'])
 emitter.on(BookingCancelled, [SendBookingEmails, 'onCancelled'])
 emitter.on('queued:mail:error', ({ error }) =>
-  logger.error({ err: error }, "Échec d'envoie d'un mail")
+  logger.error({ err: error }, "Échec d'envoi d'un mail")
 )
