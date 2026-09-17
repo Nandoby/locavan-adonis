@@ -8,6 +8,7 @@ export const controllers = {
   Bookings: () => import('#controllers/bookings_controller'),
   Home: () => import('#controllers/home_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
+  PasswordReset: () => import('#controllers/password_reset_controller'),
   Session: () => import('#controllers/session_controller'),
   Users: () => import('#controllers/users_controller'),
   Vehicles: () => import('#controllers/vehicles_controller'),

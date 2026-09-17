@@ -66,6 +66,21 @@ export class MemorySchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class PasswordResetTokenSchema extends BaseModel {
+  static $columns = ['createdAt', 'expiresAt', 'id', 'tokenHash', 'userId'] as const
+  $columns = PasswordResetTokenSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime | null
+  @column.dateTime()
+  declare expiresAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare tokenHash: string
+  @column()
+  declare userId: number
+}
+
 export class PictureSchema extends BaseModel {
   static $columns = ['createdAt', 'id', 'path', 'title', 'updatedAt', 'vehicleId'] as const
   $columns = PictureSchema.$columns

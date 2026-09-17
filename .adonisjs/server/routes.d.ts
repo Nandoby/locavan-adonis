@@ -27,6 +27,10 @@ export type ScannedRoutes = {
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
+    'password_reset.create': { paramsTuple?: []; params?: {} }
+    'password_reset.store': { paramsTuple?: []; params?: {} }
+    'password_reset.edit': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
+    'password_reset.update': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'profile': { paramsTuple?: []; params?: {} }
     'profile.update': { paramsTuple?: []; params?: {} }
@@ -49,6 +53,8 @@ export type ScannedRoutes = {
     'bookings.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
+    'password_reset.create': { paramsTuple?: []; params?: {} }
+    'password_reset.edit': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'profile': { paramsTuple?: []; params?: {} }
     'vehicles.search': { paramsTuple?: []; params?: {} }
     'admin.index': { paramsTuple?: []; params?: {} }
@@ -69,6 +75,8 @@ export type ScannedRoutes = {
     'bookings.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.create': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
+    'password_reset.create': { paramsTuple?: []; params?: {} }
+    'password_reset.edit': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'profile': { paramsTuple?: []; params?: {} }
     'vehicles.search': { paramsTuple?: []; params?: {} }
     'admin.index': { paramsTuple?: []; params?: {} }
@@ -88,6 +96,8 @@ export type ScannedRoutes = {
     'bookings.cancel': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
+    'password_reset.store': { paramsTuple?: []; params?: {} }
+    'password_reset.update': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'profile.update': { paramsTuple?: []; params?: {} }
   }
