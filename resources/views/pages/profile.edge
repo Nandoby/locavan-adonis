@@ -52,6 +52,23 @@
       </div>
 
       <div class="mb-3">
+        @field.root({ name: 'currentPassword' })
+          @field.label({ class: 'block mb-2 text-sm font-medium text-gray-900' })
+            Mot de passe actuel
+          @end
+          @!input.control({
+            type: 'password',
+            class:
+              'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block w-full p-2.5',
+          })
+          @!field.error({ class: 'mt-1 text-sm text-red-500' })
+          <p class="mt-1 text-xs text-gray-500">
+            À renseigner uniquement si vous changez de mot de passe.
+          </p>
+        @end
+      </div>
+
+      <div class="mb-3">
         @field.root({ name: 'password' })
           @field.label({
             class: 'block mb-2 text-sm font-medium text-gray-900',
