@@ -4,6 +4,10 @@ import { imageFile, password } from '#validators/rules'
 export const UserProfileValidator = vine.create({
   firstname: vine.string().minLength(2).maxLength(255),
   lastname: vine.string().minLength(1).maxLength(255),
+  currentPassword: vine
+    .string()
+    .optional()
+    .requiredWhen((field) => Boolean(field.parent.password)),
   password: password()
     .confirmed({
       as: 'passwordConfirm',
