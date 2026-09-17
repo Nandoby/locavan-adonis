@@ -20,3 +20,12 @@ export const loginThrottle = limiter.define('login', () => {
       error.setMessage('Trop de tentatives de connexion. Réessayez dans quelques minutes.')
     })
 })
+
+export const passwordResetThrottle = limiter.define('password_reset', () => {
+  return limiter
+    .allowRequests(3)
+    .every('15 minutes')
+    .limitExceeded((error) => {
+      error.setMessage('Trop de demandes de réinitialisation. Réessayez plus tard.')
+    })
+})
