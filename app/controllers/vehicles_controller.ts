@@ -1,4 +1,5 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import { Exception } from '@adonisjs/core/exceptions'
 import db from '@adonisjs/lucid/services/db'
 import Vehicle from '#models/vehicle'
 import Type from '#models/type'
@@ -117,7 +118,7 @@ export default class VehiclesController {
     })
   }
 
-  async show({ params, view, auth, response }: HttpContext) {
+  async show({ params, view, auth }: HttpContext) {
     const { id } = params
     const vehicle = await Vehicle.query()
       .preload('pictures')
@@ -130,7 +131,7 @@ export default class VehiclesController {
       .firstOrFail()
 
     if (vehicle.status !== 'published' && auth.user?.id !== vehicle.userId) {
-      return response.notFound('Annonce introuvable')
+      throw new Exception('Annonce introuvable', { status: 404, code: 'E_VEHICLE_NOT_FOUND' })
     }
 
     const notAvailableDays = await vehicle.getNotAvailableDays()

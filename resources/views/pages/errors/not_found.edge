@@ -1,6 +1,21 @@
-<h1>404 - Page not found</h1>
-<p>
-  This template is rendered by the
-  <a href="http://docs.adonisjs.com/guides/exception-handling#status-pages">status pages feature</a>
-  of the global exception handler.
-</p>
+@error.layout({ title: 'Page introuvable' })
+  <p class="text-xs font-bold uppercase tracking-wide text-accent-dark">Erreur 404</p>
+  <h1 class="text-3xl font-bold text-ink mt-2">Cette page n'existe pas ou plus</h1>
+  <p class="text-muted mt-3">
+    Le lien est peut-être erroné, ou l'annonce a été retirée ou mise en pause par son propriétaire.
+  </p>
+  <div class="flex flex-col sm:flex-row gap-3 justify-center mt-8">
+    <a
+      href="{{ urlFor('vehicles.index') }}"
+      class="px-5 py-2.5 rounded-lg font-semibold bg-accent text-ink hover:bg-accent/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-dark"
+    >
+      Voir les véhicules
+    </a>
+    <a
+      href="{{ urlFor('home.index') }}"
+      class="px-5 py-2.5 rounded-lg font-semibold border border-line bg-white text-ink hover:bh-line/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-dark"
+    >
+      Retour à l'accueil
+    </a>
+  </div>
+@end

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Locavan | {{ title }}</title>
+    @vite(['resources/css/app.css'])
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <header class="bg-white border-b border-line">
+      <div class="container mx-auto px-4 py-4">
+        <a
+          href="{{ urlFor('home.index') }}"
+          class="inline-block text-2xl uppercase border-y-2 border-accent py-1 tracking-wide text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-dark"
+        >
+          Loca<span class="text-accent">van</span>
+        </a>
+      </div>
+    </header>
+    <main class="flex-1 flex items-center">
+      <div class="container mx-auto px-4 py-16 max-w-xl text-center">
+        {{{ await $slots.main() }}}
+      </div>
+    </main>
+  </body>
+</html>

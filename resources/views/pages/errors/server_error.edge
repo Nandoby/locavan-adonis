@@ -1,6 +1,14 @@
-<h1>{{ error.code }} - Server error</h1>
-<p>
-  This template is rendered by the
-  <a href="http://docs.adonisjs.com/guides/exception-handling#status-pages">status pages feature</a>
-  of the global exception handler.
-</p>
+@error.layout({ title: 'Erreur' })
+  <p class="text-xs font-bold uppercase tracking-wide text-accent-dark">Erreur serveur</p>
+  <h1 class="text-3xl font-bold text-ink mt-2">Une erreur est survenue</h1>
+  <p class="text-muted mt-3">Le problème vient de notre côté. Réessayez dans quelques instants.</p>
+  <div class="flex justify-center mt-8">
+    <a
+      href="{{ urlFor('home.index') }}"
+      class="px-5 py-2.5 rounded-lg font-semibold bg-accent text-ink hover:bg-accent/80 focus-visible:outline-2
+        focus-visible:outline-offset-2 focus-visible:outline-accent-dark"
+    >
+      Retour à l'accueil
+    </a>
+  </div>
+@end

@@ -6,12 +6,11 @@
 
 ## Tableau de bord
 
-_Mis à jour le 2026-09-19 (session de dev : DSN-005 → à vérifier, branche `fix/recherche-accueil`)._
+_Mis à jour le 2026-09-20 par locavan-redesign (AUD-017 → à vérifier, branche `feat/pages-erreur`)._
 
 | ID | Titre | Statut | Porteur | Gravité |
 |---|---|---|---|---|
 | AUD-016 | Boutons et liens d'action illisibles sur les écrans pré-refonte (contraste 1,5 à 3,3:1) | ouvert | design | 🟠 |
-| AUD-017 | Pages d'erreur 404/500 : gabarit de démonstration AdonisJS en anglais | ouvert | design | 🟠 |
 | AUD-003 | Pages statiques absentes, liens morts dans le footer et l'accueil | ouvert | design | 🟡 |
 | AUD-009 | Back-office resté au style d'avant la refonte | ouvert | design | 🟡 |
 | AUD-022 | Messages flash : disparaissent en 5 s, peu lisibles, débordent sur mobile | ouvert | design | 🟡 |
@@ -39,11 +38,12 @@ _Mis à jour le 2026-09-19 (session de dev : DSN-005 → à vérifier, branche `
 | AUD-029 | Tests manquants sur des autorisations et des parcours critiques | ouvert | code | 🟡 |
 | AUD-030 | Validation : mot de passe plafonné à 32 caractères, champs sans borne | ouvert | code | 🟡 |
 | DSN-001 | Pages « Devenir loueur » et « Aide » à créer | ouvert | code | 🟡 |
-| DSN-005 | Accueil : « Dates » et « Voyageurs » de la barre de recherche ne filtrent rien | à vérifier | code | 🟠 |
+| AUD-017 | Pages d'erreur 404/500 : gabarit de démonstration AdonisJS en anglais | à vérifier | design | 🟠 |
 | AUD-015 | Focus clavier invisible sur les champs de saisie | clos | design | 🟠 |
 | DSN-003 | Refonte du menu burger mobile | clos | design | 🟠 |
 | AUD-018 | Visiteur qui clique « Réserver » : renvoyé vers l'accueil après connexion, annonce et dates perdues | clos | code | 🟠 |
 | DSN-002 | `<html lang="en-us">` sur un site en français | clos | code | 🟠 |
+| DSN-005 | Accueil : « Dates » et « Voyageurs » de la barre de recherche ne filtrent rien | clos | code | 🟠 |
 | AUD-014 | Promesses non tenues : assurance, assistance, annulation remboursée, profils vérifiés, confirmation immédiate | clos | design | 🟡 |
 | AUD-032 | Pastilles du hero qui ressemblent à des filtres mais ne font rien | clos | design | 🟡 |
 | DSN-004 | Composant `file.control` pour les champs fichier | clos | design | 🟡 |
@@ -115,7 +115,7 @@ _Mis à jour le 2026-09-19 (session de dev : DSN-005 → à vérifier, branche `
   - 2026-09-19 — **clos** par locavan-audit (re-vérification, `f031b63`). (1) `file.control` est utilisé par les 5 champs (`signup`, `profile`, `vehicles/create`, `vehicles/edit`, `bookings/show`) ; `.input-file` n'existe plus, ni dans `resources/` ni dans le CSS servi. (2) HTML rendu : `<label for>` relié, `accept="image/jpeg,image/png,image/webp"`, `aria-describedby="…-hint"`. (3) La règle `peer-focus-visible:outline-accent-dark` est générée. Nando a constaté dans le navigateur l'ouverture du sélecteur, l'affichage du nom du fichier et l'anneau. (4) `@change` (aperçu) et `x-on:change` (nom) coexistent sur l'input des avis, lu dans le code ; 52/52 tests. (5) Aucune couleur hors tokens dans le composant. Réserve : le formulaire d'avis n'a pas pu être rendu en dev, faute de réservation terminée sans avis.
 
 ### DSN-005 · Accueil : « Dates » et « Voyageurs » de la barre de recherche ne filtrent rien
-- **Statut** : à vérifier
+- **Statut** : clos
 - **Porteur** : code
 - **Domaine** : produit
 - **Gravité** : 🟠
@@ -127,6 +127,7 @@ _Mis à jour le 2026-09-19 (session de dev : DSN-005 → à vérifier, branche `
   - 2026-09-19 — signalé (locavan-redesign)
   - 2026-09-19 — qualifié par locavan-audit : **confirmé, 🟠**. Le formulaire de l'accueil envoie `city`, `date` et `voyageur` vers `/search` ; `parseSearchFilters` ne lit que `startDate`, `endDate` et `minSeats`. Mesure sur le serveur de dev : `/search?city=&date=01/12/2026 - 05/12/2026&voyageur=9` renvoie les mêmes 10 annonces que sans filtre, alors que `/search?city=&minSeats=9` n'en renvoie aucune (aucune annonce publiée n'a 9 places). Le champ « Dates » de l'accueil n'a pas non plus de datepicker : `initSearchDatepickers` ne vise que `#search_startDate`/`#search_endDate`. Le visiteur qui cherche depuis l'accueil, principale porte d'entrée, voit donc des véhicules indisponibles ou trop petits, présentés comme des résultats filtrés. D'où 🟠 : cela dégrade le parcours principal. Remarque : l'accueil a un seul segment « Dates » là où la recherche attend deux dates, ce qui suppose une petite décision de mise en forme de la barre en plus de la correction côté code.
   - 2026-09-19 — corrigé (session de dev), branche `fix/recherche-accueil`, commit `f144b60`. La barre de l'accueil est alignée sur celle des résultats (validé par Nando) : Où · Départ · Retour · Voyageurs, avec les champs `startDate`/`endDate` (ids `search_startDate`/`search_endDate`, qui branchent `initSearchDatepickers`) et `minSeats`, et les labels reliés. Elle passe en ligne à partir de `lg` (`lg:w-240`, pour que les dates restent lisibles) et s'empile en dessous. Commentaire obsolète « en préparation de F4 » retiré. 3 tests dans `tests/functional/home_search.spec.ts` ; suite à 55/55. Mesure de l'audit rejouée : `minSeats=9` depuis l'accueil donne 0 résultat (contre 10 avant) → à vérifier.
+  - 2026-09-19 — **clos** par locavan-audit (re-vérification, `main` au commit `026ef04`, PR #23). (1) Les formulaires de l'accueil et des résultats envoient exactement les mêmes champs (`city`, `startDate`, `endDate`, `minSeats`) vers `/search`, avec les mêmes ids `search_startDate`/`search_endDate` : une même recherche donne donc les mêmes annonces. Mesures sur le serveur de dev : `minSeats=9` → 0 annonce ; dates du 20 au 23/09/2026 → 8 annonces sur 10, et les véhicules 2 et 6, réservés sur cette période, sont exclus. (2) Calendrier de l'accueil (dates passées grisées, retour ≥ départ) et mise en page au-dessus et en dessous de 1024 px constatés dans le navigateur par Nando. (3) 3 tests dans `home_search.spec.ts` ; suite à 55/55.
 
 ### AUD-001 · Tiroir mobile ouvert : le focus clavier s'échappe vers la page masquée
 - **Statut** : ouvert
@@ -361,7 +362,7 @@ _Mis à jour le 2026-09-19 (session de dev : DSN-005 → à vérifier, branche `
   - 2026-09-19 — ouvert (audit complet)
 
 ### AUD-017 · Pages d'erreur 404/500 : gabarit de démonstration AdonisJS en anglais
-- **Statut** : ouvert
+- **Statut** : à vérifier
 - **Porteur** : design
 - **Domaine** : ux
 - **Gravité** : 🟠
@@ -370,6 +371,7 @@ _Mis à jour le 2026-09-19 (session de dev : DSN-005 → à vérifier, branche `
 - **Attendu** : 404 et 500 rendues dans le layout du site, en français, avec un chemin de sortie (accueil, recherche) ; l'annonce indisponible passe par la même page 404.
 - **Journal** :
   - 2026-09-19 — ouvert (audit complet)
+  - 2026-09-20 — traité (locavan-redesign, retouche validée par Nando), branche `feat/pages-erreur`, commit `f675884`. Nouveau `components/error/layout.edge` : logo, contenu centré, tokens, `noindex`. Écart assumé avec l'« Attendu » : ce n'est pas le layout du site, parce qu'une URL sans route ne passe pas par les middlewares du routeur et que `header.edge` (`auth.isAuthenticated`) et `flash_alerts` (`flashMessages`) feraient planter le rendu de la page d'erreur elle-même. 404 : « Cette page n'existe pas ou plus » + sorties vers les véhicules et l'accueil. 500 : « Une erreur est survenue », sans détail technique. `vehicles_controller.show` lève une erreur 404 au lieu de renvoyer le texte brut « Annonce introuvable ». `renderStatusPages = !app.inDev` : les pages sont actives en production et en test, Youch reste en dev. 3 tests (`error_pages.spec.ts`), suite à 58/58, dont `vehicle_status` et `routes_constraints` toujours verts. Rendu navigateur non observé : il demande une build de production → à vérifier.
 
 ### AUD-018 · Visiteur qui clique « Réserver » : renvoyé vers l'accueil après connexion, annonce et dates perdues
 - **Statut** : clos
