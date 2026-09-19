@@ -36,6 +36,16 @@ focus-visible:outline-accent-dark` (6:1 sur clair). Pour un élément de liste
 pleine largeur dans un conteneur qui défile : `focus-visible:-outline-offset-2`
 (anneau à l'intérieur, pour ne pas être rogné).
 
+**Champs de saisie** (AUD-015) :
+- *Barre segmentée* (recherche accueil/résultats, dates de réservation) : l'anneau
+  est porté par le **segment** : `rounded-… focus-within:outline-2
+  focus-within:-outline-offset-2 focus-within:outline-accent-dark`, avec l'arrondi
+  de la barre (`rounded-[14px]` accueil, `rounded-2xl` résultats, `rounded-l-xl` /
+  `rounded-r-xl` fiche). Le champ lui-même garde `focus:outline-none`. Un champ =
+  un segment (les dates des résultats sont deux segments).
+- *Champ encadré* (auth…) : anneau commun ci-dessus à la place de `focus:outline-none`.
+- Jamais de `focus:outline-none` sans l'un de ces remplacements.
+
 **Dette** : les écrans pré-refonte utilisent encore la palette Tailwind brute
 (`amber-500/600/700`, `gray-50…900`, `neutral-*`) : auth, profil, réservations,
 `listing`, admin, `pagination` (thèmes indigo/yellow/blue/pink), `burger`, et les
@@ -76,7 +86,8 @@ Google Fonts). Graisses réellement utilisées : 400, 500 (`font-medium`), 600
 | `rating.edge` | 5 étoiles Font Awesome `text-accent` | refondu |
 | `pagination.edge` | pagination, prop `accent` (utiliser `ink`) | thèmes hérités à nettoyer |
 | `form`, `field/*`, `input`, `select`, `textarea`, `checkbox`, `radio` | formulaires | pré-refonte (`gray`/`amber`) |
-| `layout.edge` | squelette HTML, `headerVariant` | `lang="en-us"` à corriger (hors design) |
+| `file/control.edge` | champ fichier, dans un `@field.root` : input natif `sr-only` + `<label>` bouton secondaire (`border-line bg-white`, survol `bg-line/40`, icône `fa-arrow-up-from-bracket`, « Choisir une image / des images »), nom du ou des fichiers à côté (Alpine `filePicker`, `aria-live`), texte d'aide `text-xs text-muted` relié par `aria-describedby` (prop `hint`, défaut = formats et 2 Mo du validateur), `accept` images, anneau `peer-focus-visible` | nouveau (2026-09-19) |
+| `layout.edge` | squelette HTML, `headerVariant` | `lang="fr"` (DSN-002) |
 
 Icônes : Font Awesome (`fa-solid`, `fa-regular`, `fa-light`), SVG inline ponctuels.
 
@@ -115,3 +126,10 @@ sidebar de réservation ; bandeau de réassurance ; footer `bg-ink` avec libell�
   d'identité, confirmation immédiate). Les chiffres affichés (nombre d'annonces,
   prix « à partir de ») sont calculés depuis la base, jamais écrits en dur. Une
   réservation est une *demande* : bouton « Demander à réserver » — AUD-014.
+- 2026-09-19 — focus des champs : anneau `accent-dark` porté par le segment
+  (`focus-within`) dans les barres segmentées plutôt qu'autour de la ligne de
+  saisie (plus lisible, cohérent avec l'anneau intérieur du tiroir) ; champs
+  encadrés = anneau commun — AUD-015.
+- 2026-09-19 — champ fichier : composant `file.control` plutôt que le contrôle
+  natif (libellés du navigateur, zone cliquable peu claire, signalé par Nando) ou
+  le seul habillage `file:` (textes restés dans la langue du navigateur) — DSN-004.
