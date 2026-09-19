@@ -53,6 +53,14 @@ export default class HomeController {
 
     const [{ $extras }] = await Vehicle.query().where('status', 'published').count('* as total')
 
-    return view.render('pages/home', { vehicles, types, vehiclesTotal: Number($extras.total) })
+    const minPrices = types.flatMap((type) => (type.minPrice === null ? [] : [type.minPrice]))
+    const minPrice = minPrices.length > 0 ? Math.floor(Math.min(...minPrices)) : null
+
+    return view.render('pages/home', {
+      vehicles,
+      types,
+      vehiclesTotal: Number($extras.total),
+      minPrice,
+    })
   }
 }
