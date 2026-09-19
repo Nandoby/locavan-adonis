@@ -6,11 +6,10 @@
 
 ## Tableau de bord
 
-_Mis à jour le 2026-09-19 par locavan-redesign (AUD-015 et DSN-004 → à vérifier, DSN-005 à qualifier, branche `fix/focus-champs`)._
+_Mis à jour le 2026-09-19 (session de dev : DSN-005 → à vérifier, branche `fix/recherche-accueil`)._
 
 | ID | Titre | Statut | Porteur | Gravité |
 |---|---|---|---|---|
-| DSN-005 | Accueil : « Dates » et « Voyageurs » de la barre de recherche ne filtrent rien | à qualifier | code | 🟡 |
 | AUD-016 | Boutons et liens d'action illisibles sur les écrans pré-refonte (contraste 1,5 à 3,3:1) | ouvert | design | 🟠 |
 | AUD-017 | Pages d'erreur 404/500 : gabarit de démonstration AdonisJS en anglais | ouvert | design | 🟠 |
 | AUD-003 | Pages statiques absentes, liens morts dans le footer et l'accueil | ouvert | design | 🟡 |
@@ -40,13 +39,14 @@ _Mis à jour le 2026-09-19 par locavan-redesign (AUD-015 et DSN-004 → à véri
 | AUD-029 | Tests manquants sur des autorisations et des parcours critiques | ouvert | code | 🟡 |
 | AUD-030 | Validation : mot de passe plafonné à 32 caractères, champs sans borne | ouvert | code | 🟡 |
 | DSN-001 | Pages « Devenir loueur » et « Aide » à créer | ouvert | code | 🟡 |
-| AUD-015 | Focus clavier invisible sur les champs de saisie | à vérifier | design | 🟠 |
-| DSN-004 | Composant `file.control` pour les champs fichier | à vérifier | design | 🟡 |
+| DSN-005 | Accueil : « Dates » et « Voyageurs » de la barre de recherche ne filtrent rien | à vérifier | code | 🟠 |
+| AUD-015 | Focus clavier invisible sur les champs de saisie | clos | design | 🟠 |
 | DSN-003 | Refonte du menu burger mobile | clos | design | 🟠 |
 | AUD-018 | Visiteur qui clique « Réserver » : renvoyé vers l'accueil après connexion, annonce et dates perdues | clos | code | 🟠 |
 | DSN-002 | `<html lang="en-us">` sur un site en français | clos | code | 🟠 |
 | AUD-014 | Promesses non tenues : assurance, assistance, annulation remboursée, profils vérifiés, confirmation immédiate | clos | design | 🟡 |
 | AUD-032 | Pastilles du hero qui ressemblent à des filtres mais ne font rien | clos | design | 🟡 |
+| DSN-004 | Composant `file.control` pour les champs fichier | clos | design | 🟡 |
 
 ## Éléments
 
@@ -97,7 +97,7 @@ _Mis à jour le 2026-09-19 par locavan-redesign (AUD-015 et DSN-004 → à véri
   - 2026-09-19 — **clos** par locavan-audit (re-vérification, commit `e643853`). Les 5 critères sont remplis, détail dans `audits/2026-09-19-reverif-burger.md`. Réserve : « Admin » vérifié dans le code seulement (même condition `auth.user.isAdmin` que le menu desktop), faute de compte admin en dev. Les deux limites connues sont reprises comme constats séparés (AUD-001, AUD-002), car elles ne font pas partie des critères.
 
 ### DSN-004 · Composant `file.control` pour les champs fichier
-- **Statut** : à vérifier
+- **Statut** : clos
 - **Porteur** : design
 - **Domaine** : ux
 - **Gravité** : 🟡
@@ -112,18 +112,21 @@ _Mis à jour le 2026-09-19 par locavan-redesign (AUD-015 et DSN-004 → à véri
 - **Liens** : AUD-015 · AUD-021 (partie profil)
 - **Journal** :
   - 2026-09-19 — créé et intégré (locavan-redesign), branche `fix/focus-champs`, commit `81e0c9c`. Vérifié : 52/52 tests, rendu d'inscription, profil, création et modification d'annonce. Formulaire d'avis non rendu en dev, faute de réservation terminée sans avis. Pas de navigateur : la mise à jour du nom de fichier est à tester à la main.
+  - 2026-09-19 — **clos** par locavan-audit (re-vérification, `f031b63`). (1) `file.control` est utilisé par les 5 champs (`signup`, `profile`, `vehicles/create`, `vehicles/edit`, `bookings/show`) ; `.input-file` n'existe plus, ni dans `resources/` ni dans le CSS servi. (2) HTML rendu : `<label for>` relié, `accept="image/jpeg,image/png,image/webp"`, `aria-describedby="…-hint"`. (3) La règle `peer-focus-visible:outline-accent-dark` est générée. Nando a constaté dans le navigateur l'ouverture du sélecteur, l'affichage du nom du fichier et l'anneau. (4) `@change` (aperçu) et `x-on:change` (nom) coexistent sur l'input des avis, lu dans le code ; 52/52 tests. (5) Aucune couleur hors tokens dans le composant. Réserve : le formulaire d'avis n'a pas pu être rendu en dev, faute de réservation terminée sans avis.
 
 ### DSN-005 · Accueil : « Dates » et « Voyageurs » de la barre de recherche ne filtrent rien
-- **Statut** : à qualifier
+- **Statut** : à vérifier
 - **Porteur** : code
 - **Domaine** : produit
-- **Gravité** : 🟡
+- **Gravité** : 🟠
 - **Où** : `resources/views/pages/home.edge` (champs `name: 'date'` et `name: 'voyageur'` ; commentaire « posés visuellement en préparation de F4 »), `app/controllers/vehicles_controller.ts:33-51` (`parseSearchFilters` lit `startDate`, `endDate`, `minSeats`)
 - **Constat** : signalement croisé pendant AUD-015, non diagnostiqué. Les deux champs semblent envoyés à `/search` sous des noms que le contrôleur ne lit pas, alors que F4 (recherche par disponibilité) existe sur la page des résultats.
-- **Attendu** : (à fixer par l'audit)
+- **Attendu** : une recherche lancée depuis l'accueil avec des dates et un nombre de voyageurs renvoie exactement les mêmes annonces que la même recherche faite depuis la page des résultats ; les dates de l'accueil se choisissent avec le même datepicker (dates passées exclues) ; un test fonctionnel couvre les paramètres envoyés par l'accueil.
 - **Liens** : AUD-015
 - **Journal** :
   - 2026-09-19 — signalé (locavan-redesign)
+  - 2026-09-19 — qualifié par locavan-audit : **confirmé, 🟠**. Le formulaire de l'accueil envoie `city`, `date` et `voyageur` vers `/search` ; `parseSearchFilters` ne lit que `startDate`, `endDate` et `minSeats`. Mesure sur le serveur de dev : `/search?city=&date=01/12/2026 - 05/12/2026&voyageur=9` renvoie les mêmes 10 annonces que sans filtre, alors que `/search?city=&minSeats=9` n'en renvoie aucune (aucune annonce publiée n'a 9 places). Le champ « Dates » de l'accueil n'a pas non plus de datepicker : `initSearchDatepickers` ne vise que `#search_startDate`/`#search_endDate`. Le visiteur qui cherche depuis l'accueil, principale porte d'entrée, voit donc des véhicules indisponibles ou trop petits, présentés comme des résultats filtrés. D'où 🟠 : cela dégrade le parcours principal. Remarque : l'accueil a un seul segment « Dates » là où la recherche attend deux dates, ce qui suppose une petite décision de mise en forme de la barre en plus de la correction côté code.
+  - 2026-09-19 — corrigé (session de dev), branche `fix/recherche-accueil`, commit `f144b60`. La barre de l'accueil est alignée sur celle des résultats (validé par Nando) : Où · Départ · Retour · Voyageurs, avec les champs `startDate`/`endDate` (ids `search_startDate`/`search_endDate`, qui branchent `initSearchDatepickers`) et `minSeats`, et les labels reliés. Elle passe en ligne à partir de `lg` (`lg:w-240`, pour que les dates restent lisibles) et s'empile en dessous. Commentaire obsolète « en préparation de F4 » retiré. 3 tests dans `tests/functional/home_search.spec.ts` ; suite à 55/55. Mesure de l'audit rejouée : `minSeats=9` depuis l'accueil donne 0 résultat (contre 10 avant) → à vérifier.
 
 ### AUD-001 · Tiroir mobile ouvert : le focus clavier s'échappe vers la page masquée
 - **Statut** : ouvert
@@ -325,7 +328,7 @@ _Mis à jour le 2026-09-19 par locavan-redesign (AUD-015 et DSN-004 → à véri
   - 2026-09-19 — **clos** par locavan-audit (re-vérification) : le bloc a disparu de `home.edge` et du rendu de `/`.
 
 ### AUD-015 · Focus clavier invisible sur les champs de saisie
-- **Statut** : à vérifier
+- **Statut** : clos
 - **Porteur** : design
 - **Domaine** : a11y
 - **Gravité** : 🟠
@@ -336,6 +339,7 @@ _Mis à jour le 2026-09-19 par locavan-redesign (AUD-015 et DSN-004 → à véri
 - **Journal** :
   - 2026-09-19 — ouvert (audit complet)
   - 2026-09-19 — traité (locavan-redesign, retouche validée par Nando), branche `fix/focus-champs`, commit `c2fe762`. Barres segmentées : anneau `accent-dark` sur le segment (`focus-within`, arrondi de la barre) sur l'accueil (3 segments), les résultats (4 : les dates séparées en deux segments) et la fiche (2 dates). Champs d'authentification : anneau commun. Au passage, le libellé « Où » des résultats avait les classes du champ : corrigé. Les champs fichier sont passés au composant `file.control` (DSN-004, commit `81e0c9c`), qui porte son propre anneau. Hors périmètre : les boutons à `focus:ring-*` (profil, annonces, réservations) ont un remplacement, mais peu contrasté, ce qui relève d'AUD-016. Vérifié : 52/52 tests, classes rendues et règles CSS générées sur `/`, `/vehicles`, `/vehicles/1`, `/login`, `/signup`, `/forgot-password` → à vérifier.
+  - 2026-09-19 — **clos** par locavan-audit (re-vérification, `main` au commit `f031b63`, PR #22). Les 9 champs qui gardent `focus:outline-none` sont tous dans un segment `focus-within:outline-accent-dark`, contrôle fait sur le HTML rendu : `/` 3, `/vehicles` 4, `/vehicles/1` 2. `accent-dark` a un contraste de 6,3:1 sur blanc. Champs d'authentification : anneau commun. La règle est dans le style guide (« Focus clavier › Champs de saisie »). Anneau constaté dans le navigateur par Nando. Réserve : les champs du profil et de la création/modification d'annonce n'ont pas de `focus:outline-none` et gardent l'anneau par défaut du navigateur (bleu). Ils sont donc visibles et conformes au critère, mais pas encore alignés sur le style guide : c'est noté dans AUD-028. Les boutons à `focus:ring-*` peu contrastés relèvent d'AUD-016.
 
 ### AUD-016 · Boutons et liens d'action illisibles sur les écrans pré-refonte (contraste 1,5 à 3,3:1)
 - **Statut** : ouvert
@@ -512,6 +516,7 @@ _Mis à jour le 2026-09-19 par locavan-redesign (AUD-015 et DSN-004 → à véri
 - **Liens** : AUD-015 · AUD-016 · AUD-027 · AUD-009 (admin)
 - **Journal** :
   - 2026-09-19 — ouvert (audit complet)
+  - 2026-09-19 — précision (re-vérification d'AUD-015) : sur `/profile` (5 champs texte, classes `gray`) et `/vehicles/create`/`edit` (`.input-field`, `.select`, `.textarea`, 15 champs), le focus est l'anneau bleu par défaut du navigateur, constaté par Nando. Il est visible, mais pas encore l'anneau `accent-dark` du style guide. À aligner lors de la refonte de ces écrans.
 
 ### AUD-029 · Tests manquants sur des autorisations et des parcours critiques
 - **Statut** : ouvert
@@ -545,3 +550,5 @@ _Mis à jour le 2026-09-19 par locavan-redesign (AUD-015 et DSN-004 → à véri
 - **Attendu** : `grep` des couleurs hex et des palettes Tailwind brutes vide sur `home`, `vehicles/index`, `vehicles/show`, `header` et `burger`, ou chaque valeur restante est un token documenté dans le style guide.
 - **Journal** :
   - 2026-09-19 — ouvert (audit complet)
+  - 2026-09-19 — en partie réglé en passant (DSN-005, commit `f144b60`) : le bouton « Rechercher » de l'accueil est en `bg-accent text-ink`, comme celui des résultats, et le séparateur de la barre en `divide-line` au lieu de `divide-gray-200`. Restent `bg-amber-500` sur le badge du hero, `#666D7D` et les autres valeurs listées.
+

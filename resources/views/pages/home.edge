@@ -20,19 +20,14 @@
         <p class="mt-2 text-white/90 text-[18px] max-w-[52ch]">
           Vans, fourgons aménagés et intégraux{{ minPrice ? ` à partir de ${minPrice} € la nuit` : '' }}. Réservez en ligne, le propriétaire vous répond par e-mail.
         </p>
-        {{--
-          Seule "Où" filtre réellement pour l'instant (route vehicles.search) ;
-          Dates et Voyageurs sont posés visuellement en préparation de F4
-          (recherche par disponibilité)
-        --}}
         @form({
           route: 'vehicles.search',
           method: 'GET',
           class:
-            'flex bg-white mt-[24px] rounded-[14px] justify-between divide-x divide-gray-200',
+            'flex flex-col lg:flex-row lg:w-240 bg-white mt-[24px] rounded-[14px] divide-y lg:divide-y-0 lg:divide-x divide-line',
         })
           <div
-            class="px-4.5 py-3 flex flex-col w-1/4 rounded-[14px] focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
+            class="flex-[1.2] px-4.5 py-3 rounded-[14px] focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
           >
             @field.root({ name: 'city' })
               @!field.label({
@@ -42,43 +37,62 @@
               @!input.control({
                 type: 'text',
                 placeholder: 'Ville ou région',
-                class: 'mt-[2px] focus:outline-none text-[15px]',
+                class: 'mt-[2px] focus:outline-none text-[15px] w-full',
               })
             @end
           </div>
           <div
-            class="px-4.5 py-3 flex flex-col w-1/4 rounded-[14px] focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
+            class="flex-[0.7] px-4.5 py-3 rounded-[14px] focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
           >
-            @field.root({ name: 'date' })
+            @field.root({ name: 'startDate', id: 'search_startDate' })
               @!field.label({
-                text: 'Dates',
+                text: 'Départ',
                 class: 'text-[#666D7D] text-[11px] font-semibold uppercase',
               })
               @!input.control({
                 type: 'text',
-                placeholder: 'Départ - retour',
-                class: 'mt-[2px] focus:outline-none text-[15px]',
+                placeholder: 'jj/mm/aaaa',
+                autocomplete: 'off',
+                class: 'mt-[2px] focus:outline-none text-[15px] w-full',
               })
             @end
           </div>
           <div
-            class="px-4.5 py-3 flex flex-col w-1/4 rounded-[14px] focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
+            class="flex-[0.7] px-4.5 py-3 rounded-[14px] focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
           >
-            @field.root({ name: 'voyageur' })
+            @field.root({ name: 'endDate', id: 'search_endDate' })
+              @!field.label({
+                text: 'Retour',
+                class: 'text-[#666D7D] text-[11px] font-semibold uppercase',
+              })
+              @!input.control({
+                type: 'text',
+                placeholder: 'jj/mm/aaaa',
+                autocomplete: 'off',
+                class: 'mt-[2px] focus:outline-none text-[15px] w-full',
+              })
+            @end
+          </div>
+          <div
+            class="flex-1 px-4.5 py-3 rounded-[14px] focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
+          >
+            @field.root({ name: 'minSeats' })
               @!field.label({
                 text: 'Voyageurs',
                 class: 'text-[#666D7D] text-[11px] font-semibold uppercase',
               })
               @!input.control({
-                type: 'text',
-                placeholder: '2 voyageurs',
-                class: 'mt-[2px] focus:outline-none text-[15px]',
+                type: 'number',
+                min: '1',
+                max: '9',
+                placeholder: 'Peu importe',
+                class: 'mt-[2px] focus:outline-none text-[15px] w-full',
               })
             @end
           </div>
-          <div class="p-2 w-1/4 flex">
+          <div class="p-2 flex">
             <button
-              class="bg-amber-500 text-neutral-900 w-full h-full rounded-xl hover:bg-amber-500/80 cursor-pointer font-semibold"
+              class="bg-accent text-ink w-full h-full rounded-xl hover:bg-accent/80 cursor-pointer font-semibold px-6 py-3"
             >
               Rechercher
             </button>
