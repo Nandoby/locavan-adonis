@@ -1,9 +1,11 @@
 import { test } from '@japa/runner'
 import testUtils from '@adonisjs/core/services/test_utils'
+import limiter from '@adonisjs/limiter/services/main'
 import User from '#models/user'
 
 test.group('Login (B11)', (group) => {
   group.each.setup(() => testUtils.db().wrapInGlobalTransaction())
+  group.each.setup(() => limiter.clear())
 
   test('refuse un e-mail mal formé (erreur de champ)', async ({ client, assert }) => {
     const res = await client

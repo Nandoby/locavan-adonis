@@ -34,7 +34,7 @@ export default class SessionController {
       throw error
     }
 
-    return response.redirect().toRoute('home.index')
+    return response.redirect().toPath(session.pull('intendedUrl', '/'))
   }
 
   /**
