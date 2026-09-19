@@ -6,7 +6,7 @@
 
 ## Tableau de bord
 
-_Mis à jour le 2026-09-19 (session de dev : DSN-002 et AUD-018 → à vérifier, branche `fix/lang-et-retour-apres-connexion`)._
+_Mis à jour le 2026-09-19 par locavan-audit (re-vérification DSN-002 et AUD-018 : clos, rapport `audits/2026-09-19-reverif-lang-connexion.md`)._
 
 | ID | Titre | Statut | Porteur | Gravité |
 |---|---|---|---|---|
@@ -40,9 +40,9 @@ _Mis à jour le 2026-09-19 (session de dev : DSN-002 et AUD-018 → à vérifier
 | AUD-029 | Tests manquants sur des autorisations et des parcours critiques | ouvert | code | 🟡 |
 | AUD-030 | Validation : mot de passe plafonné à 32 caractères, champs sans borne | ouvert | code | 🟡 |
 | DSN-001 | Pages « Devenir loueur » et « Aide » à créer | ouvert | code | 🟡 |
-| AUD-018 | Visiteur qui clique « Réserver » : renvoyé vers l'accueil après connexion, annonce et dates perdues | à vérifier | code | 🟠 |
-| DSN-002 | `<html lang="en-us">` sur un site en français | à vérifier | code | 🟠 |
 | DSN-003 | Refonte du menu burger mobile | clos | design | 🟠 |
+| AUD-018 | Visiteur qui clique « Réserver » : renvoyé vers l'accueil après connexion, annonce et dates perdues | clos | code | 🟠 |
+| DSN-002 | `<html lang="en-us">` sur un site en français | clos | code | 🟠 |
 | AUD-014 | Promesses non tenues : assurance, assistance, annulation remboursée, profils vérifiés, confirmation immédiate | clos | design | 🟡 |
 | AUD-032 | Pastilles du hero qui ressemblent à des filtres mais ne font rien | clos | design | 🟡 |
 
@@ -61,7 +61,7 @@ _Mis à jour le 2026-09-19 (session de dev : DSN-002 et AUD-018 → à vérifier
   - 2026-09-19 — ouvert (locavan-redesign, refonte du burger)
 
 ### DSN-002 · `<html lang="en-us">` sur un site en français
-- **Statut** : à vérifier
+- **Statut** : clos
 - **Porteur** : code
 - **Domaine** : a11y
 - **Gravité** : 🟠
@@ -74,6 +74,7 @@ _Mis à jour le 2026-09-19 (session de dev : DSN-002 et AUD-018 → à vérifier
   - 2026-09-19 — qualifié par locavan-audit : confirmé. Le scan affiche `lang=en-us` sur les 12 pages analysées (la 13e est la page de debug 404), visiteur comme connecté. Même défaut dans `components/admin/layout.edge:2`, alors que `components/email/layout.edge:2` déclare déjà `fr`. Non-conformité WCAG 3.1.1 (niveau A) sur tout le site : 🟠. Correction mécanique, donc porteur code.
   - 2026-09-19 — toujours présent (audit complet) : `lang=en-us` sur les 19 pages scannées, y compris les 4 pages admin rendues avec un compte admin.
   - 2026-09-19 — corrigé (session de dev), branche `fix/lang-et-retour-apres-connexion`, commit `795cc11` : `lang="fr"` sur `components/layout.edge` et `components/admin/layout.edge`. Scan : `lang=fr` sur les 7 pages publiques → à vérifier.
+  - 2026-09-19 — **clos** par locavan-audit (re-vérification, `main` au commit `ddb9629`, PR #21). `lang=fr` sur les 17 pages rendues : 7 publiques en visiteur, 6 en connecté, 4 admin. Les 3 layouts (`layout`, `admin/layout`, `email/layout`) déclarent `fr`.
 
 ### DSN-003 · Refonte du menu burger mobile
 - **Statut** : clos
@@ -335,7 +336,7 @@ _Mis à jour le 2026-09-19 (session de dev : DSN-002 et AUD-018 → à vérifier
   - 2026-09-19 — ouvert (audit complet)
 
 ### AUD-018 · Visiteur qui clique « Réserver » : renvoyé vers l'accueil après connexion, annonce et dates perdues
-- **Statut** : à vérifier
+- **Statut** : clos
 - **Porteur** : code
 - **Domaine** : ux
 - **Gravité** : 🟠
@@ -345,6 +346,7 @@ _Mis à jour le 2026-09-19 (session de dev : DSN-002 et AUD-018 → à vérifier
 - **Journal** :
   - 2026-09-19 — ouvert (audit complet)
   - 2026-09-19 — corrigé (session de dev), branche `fix/lang-et-retour-apres-connexion`, commit `795cc11`. `auth_middleware.ts` mémorise `intendedUrl` en session : l'URL demandée pour un GET, sinon le chemin du `referer`. Seul un chemin local est gardé, et `//…` est refusé. `session_controller.ts` et `new_account_controller.ts` y redirigent avec `session.pull`, sinon vers `/`. Les dates de réservation ne sont pas conservées : le visiteur revient sur l'annonce et les re-sélectionne. 5 tests dans `tests/functional/intended_url.spec.ts`. Parcours vérifié sur le serveur de dev : POST de réservation en visiteur → `/login` → connexion → `/vehicles/1`. Au passage, les tests utilisent le limiteur en mémoire (`.env.test`), remis à zéro dans `login.spec.ts` et `intended_url.spec.ts`. Le store en base gardait la connexion de la transaction d'un autre test, ce qui bloquait `login_throttle` → à vérifier.
+  - 2026-09-19 — **clos** par locavan-audit (re-vérification, `ddb9629`). Parcours rejoué sur le serveur de dev : « Demander à réserver » en visiteur sur `/vehicles/2` → `/login` → connexion → `/vehicles/2`. Referer forgé `https://evil.example//evil.example/x` : rien n'est mémorisé et la connexion ramène sur `/`. Les 5 tests d'`intended_url.spec.ts` couvrent la connexion, l'inscription, le GET et le referer refusé ; suite à 52/52. Les dates ne sont pas conservées : c'est accepté, puisque le critère disait « si possible ».
 
 ### AUD-019 · Règles de réservation vérifiées seulement côté navigateur
 - **Statut** : ouvert
