@@ -88,6 +88,7 @@ Google Fonts). Graisses réellement utilisées : 400, 500 (`font-medium`), 600
 | `form`, `field/*`, `input`, `select`, `textarea`, `checkbox`, `radio` | formulaires | pré-refonte (`gray`/`amber`) |
 | `file/control.edge` | champ fichier, dans un `@field.root` : input natif `sr-only` + `<label>` bouton secondaire (`border-line bg-white`, survol `bg-line/40`, icône `fa-arrow-up-from-bracket`, « Choisir une image / des images »), nom du ou des fichiers à côté (Alpine `filePicker`, `aria-live`), texte d'aide `text-xs text-muted` relié par `aria-describedby` (prop `hint`, défaut = formats et 2 Mo du validateur), `accept` images, anneau `peer-focus-visible` | nouveau (2026-09-19) |
 | `layout.edge` | squelette HTML, `headerVariant` | `lang="fr"` (DSN-002) |
+| `error/layout.edge` | layout des pages d'erreur : logo seul (lien vers l'accueil), contenu centré `max-w-xl`, `robots noindex`, uniquement `app.css`. **Ne lit ni session, ni auth, ni CSRF** : sur une URL sans route, les middlewares du routeur ne tournent pas, donc `header.edge` (`auth.isAuthenticated`) et `flash_alerts` (`flashMessages`) feraient planter le rendu | nouveau (2026-09-20) |
 
 Icônes : Font Awesome (`fa-solid`, `fa-regular`, `fa-light`), SVG inline ponctuels.
 
@@ -110,7 +111,8 @@ sidebar de réservation ; bandeau de réassurance ; footer `bg-ink` avec libell�
 | Résultats véhicules | `pages/vehicles/index.edge` | refondu (PR #9) | idem |
 | Détail annonce | `pages/vehicles/show.edge` | refondu (PR #10) | idem |
 | Menu burger mobile | `components/burger.edge` | refondu (commit `957fd5d`) | `briefs/burger-mobile.md` |
-| Auth, profil, réservations, listing, création/édition, erreurs | `pages/…` | pré-refonte | — |
+| Pages d'erreur 404/500 | `pages/errors/*` | refondu (2026-09-20) | — |
+| Auth, profil, réservations, listing, création/édition | `pages/…` | pré-refonte | — |
 | Admin | `components/admin/layout.edge`, `partials/admin/*` | pré-refonte, reporté | — |
 
 ## Journal des décisions
@@ -133,3 +135,8 @@ sidebar de réservation ; bandeau de réassurance ; footer `bg-ink` avec libell�
 - 2026-09-19 — champ fichier : composant `file.control` plutôt que le contrôle
   natif (libellés du navigateur, zone cliquable peu claire, signalé par Nando) ou
   le seul habillage `file:` (textes restés dans la langue du navigateur) — DSN-004.
+- 2026-09-20 — pages d'erreur : layout d'erreur séparé plutôt que le layout du site
+  (contrainte technique : pas de session ni d'auth hors route) ; surtitre
+  `accent-dark` + titre `ink` + sorties « Voir les véhicules » / « Retour à
+  l'accueil » ; aucun détail technique affiché ; pages actives hors dev pour être
+  testables — AUD-017.

@@ -6,12 +6,11 @@
 
 ## Tableau de bord
 
-_Mis à jour le 2026-09-19 par locavan-audit (re-vérification : DSN-005 clos, rapport `audits/2026-09-19-reverif-recherche-accueil.md`)._
+_Mis à jour le 2026-09-20 par locavan-redesign (AUD-017 → à vérifier, branche `feat/pages-erreur`)._
 
 | ID | Titre | Statut | Porteur | Gravité |
 |---|---|---|---|---|
 | AUD-016 | Boutons et liens d'action illisibles sur les écrans pré-refonte (contraste 1,5 à 3,3:1) | ouvert | design | 🟠 |
-| AUD-017 | Pages d'erreur 404/500 : gabarit de démonstration AdonisJS en anglais | ouvert | design | 🟠 |
 | AUD-003 | Pages statiques absentes, liens morts dans le footer et l'accueil | ouvert | design | 🟡 |
 | AUD-009 | Back-office resté au style d'avant la refonte | ouvert | design | 🟡 |
 | AUD-022 | Messages flash : disparaissent en 5 s, peu lisibles, débordent sur mobile | ouvert | design | 🟡 |
@@ -39,6 +38,7 @@ _Mis à jour le 2026-09-19 par locavan-audit (re-vérification : DSN-005 clos, r
 | AUD-029 | Tests manquants sur des autorisations et des parcours critiques | ouvert | code | 🟡 |
 | AUD-030 | Validation : mot de passe plafonné à 32 caractères, champs sans borne | ouvert | code | 🟡 |
 | DSN-001 | Pages « Devenir loueur » et « Aide » à créer | ouvert | code | 🟡 |
+| AUD-017 | Pages d'erreur 404/500 : gabarit de démonstration AdonisJS en anglais | à vérifier | design | 🟠 |
 | AUD-015 | Focus clavier invisible sur les champs de saisie | clos | design | 🟠 |
 | DSN-003 | Refonte du menu burger mobile | clos | design | 🟠 |
 | AUD-018 | Visiteur qui clique « Réserver » : renvoyé vers l'accueil après connexion, annonce et dates perdues | clos | code | 🟠 |
@@ -362,7 +362,7 @@ _Mis à jour le 2026-09-19 par locavan-audit (re-vérification : DSN-005 clos, r
   - 2026-09-19 — ouvert (audit complet)
 
 ### AUD-017 · Pages d'erreur 404/500 : gabarit de démonstration AdonisJS en anglais
-- **Statut** : ouvert
+- **Statut** : à vérifier
 - **Porteur** : design
 - **Domaine** : ux
 - **Gravité** : 🟠
@@ -371,6 +371,7 @@ _Mis à jour le 2026-09-19 par locavan-audit (re-vérification : DSN-005 clos, r
 - **Attendu** : 404 et 500 rendues dans le layout du site, en français, avec un chemin de sortie (accueil, recherche) ; l'annonce indisponible passe par la même page 404.
 - **Journal** :
   - 2026-09-19 — ouvert (audit complet)
+  - 2026-09-20 — traité (locavan-redesign, retouche validée par Nando), branche `feat/pages-erreur`, commit `f675884`. Nouveau `components/error/layout.edge` : logo, contenu centré, tokens, `noindex`. Écart assumé avec l'« Attendu » : ce n'est pas le layout du site, parce qu'une URL sans route ne passe pas par les middlewares du routeur et que `header.edge` (`auth.isAuthenticated`) et `flash_alerts` (`flashMessages`) feraient planter le rendu de la page d'erreur elle-même. 404 : « Cette page n'existe pas ou plus » + sorties vers les véhicules et l'accueil. 500 : « Une erreur est survenue », sans détail technique. `vehicles_controller.show` lève une erreur 404 au lieu de renvoyer le texte brut « Annonce introuvable ». `renderStatusPages = !app.inDev` : les pages sont actives en production et en test, Youch reste en dev. 3 tests (`error_pages.spec.ts`), suite à 58/58, dont `vehicle_status` et `routes_constraints` toujours verts. Rendu navigateur non observé : il demande une build de production → à vérifier.
 
 ### AUD-018 · Visiteur qui clique « Réserver » : renvoyé vers l'accueil après connexion, annonce et dates perdues
 - **Statut** : clos
