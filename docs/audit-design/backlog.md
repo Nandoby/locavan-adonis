@@ -6,7 +6,7 @@
 
 ## Tableau de bord
 
-_Mis à jour le 2026-09-19 par locavan-redesign (AUD-014 → à vérifier, branche `fix/microcopie-promesses`)._
+_Mis à jour le 2026-09-19 par locavan-audit (re-vérification AUD-014, rapport `audits/2026-09-19-reverif-aud014.md`)._
 
 | ID | Titre | Statut | Porteur | Gravité |
 |---|---|---|---|---|
@@ -17,10 +17,12 @@ _Mis à jour le 2026-09-19 par locavan-redesign (AUD-014 → à vérifier, branc
 | DSN-002 | `<html lang="en-us">` sur un site en français | ouvert | code | 🟠 |
 | AUD-003 | Pages statiques absentes, liens morts dans le footer et l'accueil | ouvert | design | 🟡 |
 | AUD-009 | Back-office resté au style d'avant la refonte | ouvert | design | 🟡 |
+| AUD-014 | Promesses non tenues : assurance, assistance, annulation remboursée, profils vérifiés, confirmation immédiate | ouvert | design | 🟡 |
 | AUD-022 | Messages flash : disparaissent en 5 s, peu lisibles, débordent sur mobile | ouvert | design | 🟡 |
 | AUD-027 | Écrans propriétaire : réservations reçues sans détail, annonces sans lien | ouvert | design | 🟡 |
 | AUD-028 | Écrans pré-refonte : palette brute, microcopie mêlée d'anglais, états vides à concevoir | ouvert | design | 🟡 |
 | AUD-031 | Écrans refondus : couleurs hors tokens | ouvert | design | 🟡 |
+| AUD-032 | Pastilles du hero qui ressemblent à des filtres mais ne font rien | ouvert | design | 🟡 |
 | AUD-001 | Tiroir mobile ouvert : le focus clavier s'échappe vers la page masquée | ouvert | code | 🟡 |
 | AUD-002 | Défilement bloqué si la fenêtre dépasse 640 px menu ouvert | ouvert | code | 🟡 |
 | AUD-004 | Nommage des routes : `bookings()` et `/listing` | ouvert | code | 🟡 |
@@ -42,7 +44,6 @@ _Mis à jour le 2026-09-19 par locavan-redesign (AUD-014 → à vérifier, branc
 | AUD-029 | Tests manquants sur des autorisations et des parcours critiques | ouvert | code | 🟡 |
 | AUD-030 | Validation : mot de passe plafonné à 32 caractères, champs sans borne | ouvert | code | 🟡 |
 | DSN-001 | Pages « Devenir loueur » et « Aide » à créer | ouvert | code | 🟡 |
-| AUD-014 | Promesses non tenues : assurance, assistance, annulation remboursée, profils vérifiés, confirmation immédiate | à vérifier | design | 🟠 |
 | DSN-003 | Refonte du menu burger mobile | clos | design | 🟠 |
 
 ## Éléments
@@ -252,10 +253,10 @@ _Mis à jour le 2026-09-19 par locavan-redesign (AUD-014 → à vérifier, branc
   - 2026-09-19 — confirmé (audit complet) : `config/shield.ts`, `csp.enabled: false`. Les autres protections sont actives : CSRF, `X-Frame-Options: DENY`, HSTS de 180 jours, `nosniff`. Si AUD-025 supprime la feuille lightbox3 servie par jsDelivr, la CSP aura une source externe de moins à autoriser.
 
 ### AUD-014 · Promesses non tenues : assurance, assistance, annulation remboursée, profils vérifiés, confirmation immédiate
-- **Statut** : à vérifier
+- **Statut** : ouvert
 - **Porteur** : design
 - **Domaine** : produit
-- **Gravité** : 🟠
+- **Gravité** : 🟡
 - **Où** : `resources/views/pages/home.edge:16` (texte du hero), `home.edge:105-121` (bandeau de réassurance), `resources/views/pages/vehicles/show.edge:411-419` (encart sous « Réserver »)
 - **Constat** : le premier écran et la fiche annonce vendent des services qui n'existent pas :
   - « Assurance et assistance incluses » et « Tous risques pendant toute la durée du séjour » : aucune assurance.
@@ -272,6 +273,19 @@ _Mis à jour le 2026-09-19 par locavan-redesign (AUD-014 → à vérifier, branc
 - **Journal** :
   - 2026-09-19 — ouvert (audit complet)
   - 2026-09-19 — traité (locavan-redesign, retouche sans maquette), branche `fix/microcopie-promesses`, commit `479b519`. Accueil : badge « 128 vans disponibles ce week-end » (codé en dur, non relevé par l'audit) remplacé par le nombre réel d'annonces publiées ; texte sous le titre avec le prix minimum publié arrondi à l'euro inférieur (`home_controller.ts`, masqué s'il n'y a aucune annonce) et « Réservez en ligne, le propriétaire vous répond par e-mail » ; bandeau réécrit (Disponibilités en direct · Annulation en ligne · Le propriétaire confirme · Avis de vrais voyageurs). Fiche : bouton « Demander à réserver », encart réduit à « Le propriétaire confirme votre demande, réponse par e-mail » ; la ligne sur le paiement est retirée (décision de Nando : pas de paiement, projet portfolio). Hors périmètre, laissés en l'état : « Assurance propriétaire » dans le footer (AUD-003), couleurs hors tokens (AUD-031), `<h3>` du bandeau (AUD-023). Vérifié : typecheck, 47/47 tests, rendu de `/` et `/vehicles/1`, scan sans nouveau signal.
+  - 2026-09-19 — re-vérifié par locavan-audit (commit `b2c7722`) : **critère KO, rouvert en 🟡**. Toutes les promesses listées dans le constat ont disparu (vérifié dans `home.edge` et `show.edge`, rendu contrôlé à l'intégration), et le prix et le nombre d'annonces viennent de la base. Mais deux libellés de l'accueil décrivent encore un comportement absent du code : (1) « Les mieux notés » (`home.edge:167`) coiffe les 3 dernières annonces publiées, triées par date (`home_controller.ts:27`) et non par note, alors que le sous-titre dit lui-même « Sélection des dernières annonces publiées » ; (2) « Filtrez par ville, dates et couchages » (`home.edge:237`) : la recherche filtre par voyageurs (`minSeats`), pas par couchages. Gravité abaissée à 🟡 : il ne reste ni garantie inventée ni promesse sur la réservation. « Assurance propriétaire » dans le footer reste suivi par AUD-003. Les pastilles du hero font l'objet d'un constat séparé (AUD-032).
+
+### AUD-032 · Pastilles du hero qui ressemblent à des filtres mais ne font rien
+- **Statut** : ouvert
+- **Porteur** : design
+- **Domaine** : ux
+- **Gravité** : 🟡
+- **Où** : `resources/views/pages/home.edge:81-99` (« Week-end », « Permis B », « 4 couchages », « Animaux acceptés » : des `<span>` sous la barre de recherche)
+- **Constat** : les pastilles ont la forme de raccourcis de recherche (bordure arrondie, placées sous « Rechercher »), mais ce ne sont ni des liens ni des boutons : cliquer ne fait rien. « Permis B » laisse aussi entendre que tous les véhicules se conduisent avec un permis B, ce que rien ne garantit : aucun champ de poids ni de permis, et le type « Intégral » est proposé. Il faut choisir entre de vrais raccourcis et un retrait : porteur design.
+- **Attendu** : chaque pastille du hero mène à une recherche réellement filtrée sur son critère, ou est retirée. Aucune pastille n'affirme une caractéristique que les données ne permettent pas de filtrer.
+- **Liens** : AUD-014
+- **Journal** :
+  - 2026-09-19 — ouvert (locavan-audit, re-vérification AUD-014)
 
 ### AUD-015 · Focus clavier invisible sur les champs de saisie
 - **Statut** : ouvert
