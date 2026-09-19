@@ -110,3 +110,8 @@ sidebar de réservation ; bandeau de réassurance ; footer `bg-ink` avec libell�
   `bg-line/40`/`bg-line/70` plutôt que les crèmes `#F5F3EE`/`#EFEDE7` de la maquette
   (pas de couleur hors tokens) ; anneau de focus `accent-dark` généralisé ; pas de
   badge sur l'avatar (déjà sur le bouton et l'entrée) — DSN-003.
+- 2026-09-19 — microcopie : aucun libellé ne promet un service, une garantie ou un
+  comportement absent du code (assurance, assistance, paiement, vérification
+  d'identité, confirmation immédiate). Les chiffres affichés (nombre d'annonces,
+  prix « à partir de ») sont calculés depuis la base, jamais écrits en dur. Une
+  réservation est une *demande* : bouton « Demander à réserver » — AUD-014.

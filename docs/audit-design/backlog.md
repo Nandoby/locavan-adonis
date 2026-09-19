@@ -6,11 +6,10 @@
 
 ## Tableau de bord
 
-_Mis à jour le 2026-09-19 par locavan-audit (audit complet, rapport `audits/2026-09-19-complet.md`)._
+_Mis à jour le 2026-09-19 par locavan-redesign (AUD-014 → à vérifier, branche `fix/microcopie-promesses`)._
 
 | ID | Titre | Statut | Porteur | Gravité |
 |---|---|---|---|---|
-| AUD-014 | Promesses non tenues : assurance, assistance, annulation remboursée, profils vérifiés, confirmation immédiate | ouvert | design | 🟠 |
 | AUD-015 | Focus clavier invisible sur les champs de saisie | ouvert | design | 🟠 |
 | AUD-016 | Boutons et liens d'action illisibles sur les écrans pré-refonte (contraste 1,5 à 3,3:1) | ouvert | design | 🟠 |
 | AUD-017 | Pages d'erreur 404/500 : gabarit de démonstration AdonisJS en anglais | ouvert | design | 🟠 |
@@ -43,6 +42,7 @@ _Mis à jour le 2026-09-19 par locavan-audit (audit complet, rapport `audits/202
 | AUD-029 | Tests manquants sur des autorisations et des parcours critiques | ouvert | code | 🟡 |
 | AUD-030 | Validation : mot de passe plafonné à 32 caractères, champs sans borne | ouvert | code | 🟡 |
 | DSN-001 | Pages « Devenir loueur » et « Aide » à créer | ouvert | code | 🟡 |
+| AUD-014 | Promesses non tenues : assurance, assistance, annulation remboursée, profils vérifiés, confirmation immédiate | à vérifier | design | 🟠 |
 | DSN-003 | Refonte du menu burger mobile | clos | design | 🟠 |
 
 ## Éléments
@@ -252,7 +252,7 @@ _Mis à jour le 2026-09-19 par locavan-audit (audit complet, rapport `audits/202
   - 2026-09-19 — confirmé (audit complet) : `config/shield.ts`, `csp.enabled: false`. Les autres protections sont actives : CSRF, `X-Frame-Options: DENY`, HSTS de 180 jours, `nosniff`. Si AUD-025 supprime la feuille lightbox3 servie par jsDelivr, la CSP aura une source externe de moins à autoriser.
 
 ### AUD-014 · Promesses non tenues : assurance, assistance, annulation remboursée, profils vérifiés, confirmation immédiate
-- **Statut** : ouvert
+- **Statut** : à vérifier
 - **Porteur** : design
 - **Domaine** : produit
 - **Gravité** : 🟠
@@ -271,6 +271,7 @@ _Mis à jour le 2026-09-19 par locavan-audit (audit complet, rapport `audits/202
 - **Liens** : AUD-003 (« Assurance propriétaire » dans le footer) · AUD-006
 - **Journal** :
   - 2026-09-19 — ouvert (audit complet)
+  - 2026-09-19 — traité (locavan-redesign, retouche sans maquette), branche `fix/microcopie-promesses`, commit `479b519`. Accueil : badge « 128 vans disponibles ce week-end » (codé en dur, non relevé par l'audit) remplacé par le nombre réel d'annonces publiées ; texte sous le titre avec le prix minimum publié arrondi à l'euro inférieur (`home_controller.ts`, masqué s'il n'y a aucune annonce) et « Réservez en ligne, le propriétaire vous répond par e-mail » ; bandeau réécrit (Disponibilités en direct · Annulation en ligne · Le propriétaire confirme · Avis de vrais voyageurs). Fiche : bouton « Demander à réserver », encart réduit à « Le propriétaire confirme votre demande, réponse par e-mail » ; la ligne sur le paiement est retirée (décision de Nando : pas de paiement, projet portfolio). Hors périmètre, laissés en l'état : « Assurance propriétaire » dans le footer (AUD-003), couleurs hors tokens (AUD-031), `<h3>` du bandeau (AUD-023). Vérifié : typecheck, 47/47 tests, rendu de `/` et `/vehicles/1`, scan sans nouveau signal.
 
 ### AUD-015 · Focus clavier invisible sur les champs de saisie
 - **Statut** : ouvert
