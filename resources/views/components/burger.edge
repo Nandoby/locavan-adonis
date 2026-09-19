@@ -1,46 +1,197 @@
-<ul
-  id="mobile"
-  class="fixed w-full h-screen bg-blend-overlay bg-black/75 bg-[url('https://images.unsplash.com/photo-1578047960766-2cc2da98009b?ixlib=rb-1.2.1&raw_url=true&q=80&fm=jpg&crop=entropy&cs=tinysrgb&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470')] bg-cover bg-center transition-left duration-300 ease-in-out top-0 sm:hidden container mx-auto p-4"
-  :class="isVisible ? 'left-0' : '-left-full'"
+@let(isHomeActive = $props.get('isHomeActive', false))
+@let(isVehiclesActive = $props.get('isVehiclesActive', false))
+@let(linkBase =
+  'flex items-center gap-3.5 h-12 px-3 rounded-lg text-base active:bg-line/70 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent-dark')
+@let(linkIdle = linkBase + ' text-muted-dark')
+@let(linkActive = linkBase + ' font-semibold text-ink bg-line/40')
+@let(sectionTitle =
+  'text-[11px] font-semibold uppercase tracking-[0.14em] text-muted px-3 pb-2')
+@let(iconClass = 'fa-solid w-5 text-center text-muted')
+@let(focusRing =
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-dark')
+{{-- Voile : un toucher ferme le menu --}}
+<div
+  class="sm:hidden fixed inset-0 z-50 bg-ink/55"
+  x-show="isVisible"
+  x-cloak
+  x-transition.opacity.duration.200ms
+  @click="close()"
+></div>
+{{-- Tiroir --}}
+<div
+  id="mobile-menu"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu principal"
+  class="sm:hidden fixed inset-y-0 right-0 z-50 w-[87%] max-w-sm bg-page shadow-2xl flex flex-col"
+  x-show="isVisible"
+  x-cloak
+  x-transition:enter="transition-transform duration-200 ease-out"
+  x-transition:enter-start="translate-x-full"
+  x-transition:enter-end="translate-x-0"
+  x-transition:leave="transition-transform duration-200 ease-in"
+  x-transition:leave-end="translate-x-full"
+  @keydown.escape.window="close()"
 >
-  <li>
-    <svg
-      id="close"
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-8 w-8 stroke-amber-500 cursor-pointer ml-auto mt-8"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      stroke-width="2"
-      @click="toggle()"
-    >
-      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-  </li>
-  <li>
+  <div class="flex items-center justify-between px-4 py-3 bg-white border-b border-line">
     <a
-      class="text-amber-500 text-lg block text-center p-2 transition duration-300 active:bg-amber-50"
-      href="#"
+      href="{{ urlFor('home.index') }}"
+      class="text-2xl uppercase border-y-2 border-accent py-1 tracking-wide text-ink {{ focusRing }}"
     >
-      Accueil
+      Loca<span class="text-accent">van</span>
     </a>
-  </li>
-  @if(!auth.isAuthenticated)
-    <li>
+    <button
+      type="button"
+      x-ref="burgerClose"
+      class="w-11 h-11 rounded-lg bg-line/40 active:bg-line/70 flex items-center justify-center text-ink text-lg cursor-pointer {{ focusRing }}"
+      aria-label="Fermer le menu"
+      @click="close()"
+    >
+      <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+    </button>
+  </div>
+  @if(auth.isAuthenticated)
+    <div class="flex items-center gap-3 p-4 bg-white border-b border-line">
+      <img
+        class="w-10 h-10 rounded-full object-cover"
+        src="{{ await driveUrl(auth.user.avatarPath) }}"
+        alt=""
+      />
+      <div class="flex flex-col">
+        <span class="text-[15px] font-semibold text-ink">{{ auth.user.fullName }}</span>
+        @if(auth.user.isAdmin)
+          <span class="text-xs text-muted">Administrateur</span>
+        @end
+      </div>
+    </div>
+  @end
+
+  <div class="flex-1 overflow-y-auto px-4 pt-4 pb-4">
+    <p class="{{ sectionTitle }}">Navigation</p>
+    <ul>
+      <li>
+        <a
+          href="{{ urlFor('home.index') }}"
+          class="{{ isHomeActive ? linkActive : linkIdle }}"
+          aria-current="{{ isHomeActive ? 'page' : 'false' }}"
+        >
+          @if(isHomeActive)
+            <span class="w-0.75 h-5 rounded-full bg-accent" aria-hidden="true"></span>
+          @end
+
+          <span>Accueil</span>
+        </a>
+      </li>
+      <li>
+        <a
+          href="{{ urlFor('vehicles.index') }}"
+          class="{{ isVehiclesActive ? linkActive : linkIdle }}"
+          aria-current="{{ isVehiclesActive ? 'page' : 'false' }}"
+        >
+          @if(isVehiclesActive)
+            <span class="w-0.75 h-5 rounded-full bg-accent" aria-hidden="true"></span>
+          @end
+
+          <span>Nos véhicules</span>
+        </a>
+      </li>
+      @if(!auth.isAuthenticated)
+        {{-- Page à venir (DSN-001) --}}
+        <li><a href="#" class="{{ linkIdle }}">Devenir loueur</a></li>
+      @end
+      {{-- Page à venir (DSN-001) --}}
+      <li><a href="#" class="{{ linkIdle }}">Aide</a></li>
+    </ul>
+    @if(auth.isAuthenticated)
       <a
-        class="text-amber-500 text-lg block text-center p-2 transition duration-300 active:bg-amber-50"
-        href="#"
+        href="{{ urlFor('vehicles.create') }}"
+        class="h-12 mt-3.5 mb-5 rounded-lg bg-accent text-ink font-semibold flex items-center justify-center gap-2 hover:bg-accent/80 transition-colors {{ focusRing }}"
       >
-        Connexion
-      </a>
-    </li>
-    <li>
-      <a
-        class="text-amber-500 text-lg block text-center p-2 transition duration-300 active:bg-amber-50"
-        href="#"
-      >
+        <i class="fa-solid fa-plus text-sm" aria-hidden="true"></i>
         Déposer une annonce
       </a>
-    </li>
+
+      <p class="{{ sectionTitle }}">Mon compte</p>
+      <ul>
+        <li>
+          <a href="{{ urlFor('bookings.bookings') }}" class="{{ linkIdle }}">
+            <i class="{{ iconClass }} fa-caravan" aria-hidden="true"></i>
+            Mes réservations
+          </a>
+        </li>
+        <li>
+          <a href="{{ urlFor('vehicles.listing') }}" class="{{ linkIdle }}">
+            <i class="{{ iconClass }} fa-book-open" aria-hidden="true"></i>
+            Mes annonces
+          </a>
+        </li>
+        <li>
+          <a href="{{ urlFor('bookings.received') }}" class="{{ linkIdle }}">
+            <i class="{{ iconClass }} fa-inbox" aria-hidden="true"></i>
+            
+            
+            
+            
+            
+            Réservations reçues
+
+
+
+
+
+            @if(pendingBookingsCount > 0)
+              <span
+                class="ml-auto bg-accent text-ink text-xs font-semibold rounded-full min-w-5 h-5 px-1.5 flex items-center justify-center"
+              >
+                {{ pendingBookingsCount }}<span class="sr-only">&nbsp;en attente</span>
+              </span>
+            @end
+          </a>
+        </li>
+        <li>
+          <a href="{{ urlFor('profile') }}" class="{{ linkIdle }}">
+            <i class="{{ iconClass }} fa-user" aria-hidden="true"></i>
+            Modifier profil
+          </a>
+        </li>
+        @if(auth.user.isAdmin)
+          <li>
+            <a href="{{ urlFor('admin.index') }}" class="{{ linkIdle }}">
+              <i class="{{ iconClass }} fa-key" aria-hidden="true"></i>
+              Admin
+            </a>
+          </li>
+        @end
+      </ul>
+    @else
+      <div class="flex flex-col gap-2.5 mt-4 pt-4 border-t border-line">
+        <a
+          href="{{ urlFor('new_account.create') }}"
+          class="h-12 rounded-lg bg-accent text-ink font-semibold flex items-center justify-center hover:bg-accent/80 transition-colors {{ focusRing }}"
+        >
+          Inscription
+        </a>
+        <a
+          href="{{ urlFor('session.create') }}"
+          class="h-12 rounded-lg border border-ink text-ink font-semibold flex items-center justify-center active:bg-line/70 {{ focusRing }}"
+        >
+          Connexion
+        </a>
+      </div>
+    @end
+  </div>
+  @if(auth.isAuthenticated)
+    <div class="border-t border-line px-4 pt-3 pb-5">
+      @form({ route: 'session.destroy', method: 'POST' })
+        @button({
+          type: 'submit',
+          class:
+            'flex items-center gap-3.5 w-full h-11 px-3 rounded-lg text-[15px] font-medium text-muted active:bg-line/70 cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent-dark',
+        })
+          <i class="fa-solid fa-arrow-right-from-bracket w-5 text-center" aria-hidden="true"></i>
+          <span>Déconnexion</span>
+        @end
+      @end
+    </div>
   @end
-</ul>
+</div>

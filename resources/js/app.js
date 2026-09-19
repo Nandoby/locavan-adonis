@@ -26,8 +26,17 @@ Alpine.data('burger', function () {
   return {
     isVisible: false,
 
-    toggle() {
-      this.isVisible = !this.isVisible
+    open() {
+      this.isVisible = true
+      document.body.classList.add('overflow-hidden')
+      this.$nextTick(() => this.$refs.burgerClose.focus())
+    },
+
+    close() {
+      if (!this.isVisible) return
+      this.isVisible = false
+      document.body.classList.remove('overflow-hidden')
+      this.$refs.burgerToggle.focus()
     },
   }
 })
