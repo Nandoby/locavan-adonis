@@ -204,7 +204,7 @@
         <div>
           @field.root({ name: 'pictures[]' })
             @!field.label({ text: 'Ajouter des photos (optionnel)', class: 'label' })
-            @!input.control({ type: 'file', class: 'input-file', multiple: true })
+            @!file.control({ multiple: true })
             @!field.error({ class: 'text-sm text-red-500 mt-3' })
           @end
           @if(vehicle.pictures && vehicle.pictures.length)

@@ -31,7 +31,9 @@
           class:
             'flex bg-white mt-[24px] rounded-[14px] justify-between divide-x divide-gray-200',
         })
-          <div class="px-4.5 py-3 flex flex-col w-1/4">
+          <div
+            class="px-4.5 py-3 flex flex-col w-1/4 rounded-[14px] focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
+          >
             @field.root({ name: 'city' })
               @!field.label({
                 text: 'Où',
@@ -44,7 +46,9 @@
               })
             @end
           </div>
-          <div class="px-4.5 py-3 flex flex-col w-1/4">
+          <div
+            class="px-4.5 py-3 flex flex-col w-1/4 rounded-[14px] focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
+          >
             @field.root({ name: 'date' })
               @!field.label({
                 text: 'Dates',
@@ -57,7 +61,9 @@
               })
             @end
           </div>
-          <div class="px-4.5 py-3 flex flex-col w-1/4">
+          <div
+            class="px-4.5 py-3 flex flex-col w-1/4 rounded-[14px] focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
+          >
             @field.root({ name: 'voyageur' })
               @!field.label({
                 text: 'Voyageurs',

@@ -22,11 +22,13 @@
         class:
           'flex flex-col sm:flex-row bg-white border border-line rounded-2xl overflow-hidden sm:divide-x divide-line shadow-sm',
       })
-        <div class="flex-[1.2] px-4.5 py-3">
+        <div
+          class="flex-[1.2] px-4.5 py-3 rounded-2xl focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
+        >
           @field.root({ name: 'city' })
             @!field.label({
               text: 'Où',
-              class: 'mt-[2px] focus:outline-none text-[15px] w-full',
+              class: 'text-[#666D7D] text-[11px] font-semibold uppercase',
             })
             @!input.control({
               type: 'text',
@@ -36,7 +38,9 @@
             })
           @end
         </div>
-        <div class="flex-[1.4] px-4.5 py-3 grid grid-cols-2 gap-2">
+        <div
+          class="flex-[0.7] px-4.5 py-3 rounded-2xl focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
+        >
           @field.root({ name: 'startDate' })
             @!field.label({
               text: 'Départ',
@@ -50,6 +54,10 @@
               class: 'mt-[2px] focus:outline-none text-[15px] w-full',
             })
           @end
+        </div>
+        <div
+          class="flex-[0.7] px-4.5 py-3 rounded-2xl focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
+        >
           @field.root({ name: 'endDate' })
             @!field.label({
               text: 'Retour',
@@ -64,7 +72,9 @@
             })
           @end
         </div>
-        <div class="flex-1 px-4.5 py-3">
+        <div
+          class="flex-1 px-4.5 py-3 rounded-2xl focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-accent-dark"
+        >
           @field.root({ name: 'minSeats' })
             @!field.label({
               text: 'Voyageurs',

@@ -66,6 +66,19 @@ Alpine.data('preview', function () {
   }
 })
 
+Alpine.data('filePicker', function () {
+  return {
+    summary: 'Aucun fichier choisi',
+
+    update(event) {
+      const { files } = event.target
+      if (files.length === 0) this.summary = 'Aucun fichier choisi'
+      else if (files.length === 1) this.summary = files[0].name
+      else this.summary = `${files.length} fichiers choisis`
+    },
+  }
+})
+
 Alpine.start()
 
 document.querySelectorAll('.splide').forEach((el) => {
