@@ -6,14 +6,19 @@
   <section class="header relative min-h-140 pt-9">
     <div class="container mx-auto mt-13.5">
       <div class="max-w-180">
-        <span class="py-1.5 px-3 bg-amber-500 rounded-full font-poppins text-[13px] font-medium">
-          128 vans disponibles ce week-end
-        </span>
+        @if(vehiclesTotal > 0)
+          <span class="py-1.5 px-3 bg-amber-500 rounded-full font-poppins text-[13px] font-medium">
+            {{ vehiclesTotal }}
+            véhicule{{ vehiclesTotal > 1 ? 's' : '' }}
+            à louer
+          </span>
+        @end
+
         <h1 class="font-bold text-white text-[52px] tracking-wide mt-4.5 leading-[1.10]">
           Louez le van d'un particulier, près de chez vous
         </h1>
         <p class="mt-2 text-white/90 text-[18px] max-w-[52ch]">
-          Vans, fourgons aménagés et intégraux à partir de 58 € la nuit. Assurance et assistance incluses, annulation gratuite jusqu'à 48 h.
+          Vans, fourgons aménagés et intégraux{{ minPrice ? ` à partir de ${minPrice} € la nuit` : '' }}. Réservez en ligne, le propriétaire vous répond par e-mail.
         </p>
         {{--
           Seule "Où" filtre réellement pour l'instant (route vehicles.search) ;
@@ -104,20 +109,22 @@
       class="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 py-6 lg:py-0 lg:divide-x lg:divide-line"
     >
       <div class="lg:p-6 lg:first:pl-0">
-        <h3 class="font-semibold text-ink">Assurance incluse</h3>
-        <p class="text-muted text-sm">Tous risques pendant toute la durée du séjour</p>
+        <h3 class="font-semibold text-ink">Disponibilités en direct</h3>
+        <p class="text-muted text-sm">Les dates déjà réservées sont bloquées dans le calendrier</p>
       </div>
       <div class="lg:p-6">
-        <h3 class="font-semibold text-ink">Annulation 48 h</h3>
-        <p class="text-muted text-sm">Remboursement intégral sans justificatif</p>
+        <h3 class="font-semibold text-ink">Annulation en ligne</h3>
+        <p class="text-muted text-sm">Jusqu'au jour du départ, en un clic</p>
       </div>
       <div class="lg:p-6">
-        <h3 class="font-semibold text-ink">Assistance 24/7</h3>
-        <p class="text-muted text-sm">Dépannage partout en Belgique et en Europe</p>
+        <h3 class="font-semibold text-ink">Le propriétaire confirme</h3>
+        <p class="text-muted text-sm">Vous êtes prévenu par e-mail de sa réponse</p>
       </div>
       <div class="lg:p-6">
-        <h3 class="font-semibold text-ink">Profils vérifiés</h3>
-        <p class="text-muted text-sm">Identité et permis contrôlés des deux côtés</p>
+        <h3 class="font-semibold text-ink">Avis de vrais voyageurs</h3>
+        <p class="text-muted text-sm">
+          Seuls les locataires ayant terminé leur séjour peuvent noter
+        </p>
       </div>
     </div>
   </div>
