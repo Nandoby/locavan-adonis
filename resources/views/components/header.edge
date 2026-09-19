@@ -5,6 +5,14 @@
 @let(isVehiclesActive = currentPath.startsWith('/vehicles') || currentPath === '/search')
 @let(navTextClass = isTransparent ? 'text-white' : 'text-muted-dark')
 @let(activeExtra = isTransparent ? 'font-bold' : 'font-semibold text-ink')
+@let(pendingCount = auth.isAuthenticated ? pendingBookingsCount : 0)
+@let(burgerLabel =
+  pendingCount > 0
+    ? 'Ouvrir le menu (' +
+      pendingCount +
+      (pendingCount > 1 ? ' demandes' : ' demande') +
+      ' en attente)'
+    : 'Ouvrir le menu')
 
 <header
   class="{{
@@ -116,7 +124,23 @@
                 <a href="{{ urlFor('bookings.received') }}" class="dropdown-item">
                   <i class="fa-solid fa-inbox w-6"></i>
                   
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
                   Réservations reçues
+
+
+
+
+
+
+
+
 
                   @if(pendingBookingsCount > 0)
                     <span
@@ -151,18 +175,32 @@
         </div>
       @end
 
-      <span class="sm:hidden cursor-pointer" @click="toggle()">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-7 w-7 stroke-accent"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </span>
+      <button
+        type="button"
+        x-ref="burgerToggle"
+        class="sm:hidden relative w-11 h-11 rounded-lg flex flex-col items-center justify-center gap-1 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-dark {{
+          isTransparent
+            ? 'bg-white/15 border border-white/35 active:bg-white/25'
+            : 'active:bg-line/70'
+        }}"
+        aria-controls="mobile-menu"
+        :aria-expanded="isVisible"
+        aria-label="{{ burgerLabel }}"
+        @click="open()"
+      >
+        <span class="w-5 h-0.5 rounded-full {{ isTransparent ? 'bg-white' : 'bg-ink' }}"></span>
+        <span class="w-5 h-0.5 rounded-full {{ isTransparent ? 'bg-white' : 'bg-ink' }}"></span>
+        <span class="w-5 h-0.5 rounded-full {{ isTransparent ? 'bg-white' : 'bg-ink' }}"></span>
+        @if(pendingCount > 0)
+          <span
+            class="absolute -top-1.5 -right-1.5 bg-accent text-ink text-xs font-semibold rounded-full min-w-5 h-5 px-1 flex items-center justify-center border-2 border-white"
+            aria-hidden="true"
+          >
+            {{ pendingCount }}
+          </span>
+        @end
+      </button>
     </div>
-    @!burger()
+    @!burger({ isHomeActive: isHomeActive, isVehiclesActive: isVehiclesActive })
   </nav>
 </header>
