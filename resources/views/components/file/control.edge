@@ -1,0 +1,35 @@
+@let(multiple = !!$props.get('multiple'))
+@let(hint =
+  $props.get('hint') ?? `JPG, PNG ou WebP, 2 Mo maximum${multiple ? ' par image' : ''}.`)
+
+<div x-data="filePicker" class="flex flex-wrap items-center gap-x-3 gap-y-2">
+  <input {{
+    $props
+      .except(['hint'])
+      .merge({
+        type: 'file',
+        name: $context.name,
+        id: $context.id,
+        class: ['peer', 'sr-only'],
+        accept: 'image/jpeg,image/png,image/webp',
+        multiple,
+        'x-on:change': 'update($event)',
+        'aria-invalid': $context.hasErrors ? 'true' : false,
+        'aria-describedby': $context.hasErrors
+          ? `${$context.id}-hint ${$context.id}-error`
+          : `${$context.id}-hint`,
+      })
+      .toAttrs()
+  }} />
+  <label
+    for="{{ $context.id }}"
+    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-line bg-white text-sm font-semibold text-ink cursor-pointer hover:bg-line/40 active:bg-line/70 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-accent-dark"
+  >
+    <i class="fa-solid fa-arrow-up-from-bracket text-muted" aria-hidden="true"></i>
+    {{ multiple ? 'Choisir des images' : 'Choisir une image' }}
+  </label>
+  <span class="text-sm text-muted truncate max-w-full" x-text="summary" aria-live="polite">
+    Aucun fichier choisi
+  </span>
+</div>
+<p id="{{ $context.id }}-hint" class="text-xs text-muted mt-2">{{ hint }}</p>

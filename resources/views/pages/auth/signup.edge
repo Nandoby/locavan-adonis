@@ -87,11 +87,7 @@
               text: 'Avatar',
               class: 'block mb-3 text-gray-500 text-sm',
             })
-            @!input.control({
-              type: 'file',
-              class:
-                'border border-gray-300 p-2 w-full text-gray-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-dark rounded shadow',
-            })
+            @!file.control()
             @!field.error({ class: 'text-sm text-red-500 mt-3' })
           @end
         </div>

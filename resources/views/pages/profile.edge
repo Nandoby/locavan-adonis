@@ -103,14 +103,14 @@
       </div>
 
       <div class="mb-3">
-        <p class="text-sm font-bold mb-2"><span class="text-red-500 font-bold">*</span> Avatar</p>
-        <img src="{{ await driveUrl(auth.user.avatarPath) }}" alt="profile" class="w-24 h-24" />
         @field.root({ name: 'avatar' })
-          @!input.control({
-            type: 'file',
-            class:
-              'mt-2 rounded bg-gray-50 text-gray-900 w-full text-sm border border-gray-300',
-          })
+          @!field.label({ text: 'Avatar', class: 'block text-sm font-bold mb-2' })
+          <img
+            src="{{ await driveUrl(auth.user.avatarPath) }}"
+            alt="Avatar actuel"
+            class="w-24 h-24 mb-3"
+          />
+          @!file.control()
           @!field.error({ class: 'text-red-500 text-sm' })
         @end
       </div>

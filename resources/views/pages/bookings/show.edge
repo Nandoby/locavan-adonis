@@ -123,12 +123,13 @@
               <h3 class="my-4 font-medium text-xl">Photos de votre séjour</h3>
               <div x-data="preview">
                 @field.root({ name: 'memories[]' })
-                  @!field.label({ text: 'Uploader un ou plusieurs fichiers' })
-                  @!input.control({
-                    class:
-                      'block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none',
-                    type: 'file',
+                  @!field.label({
+                    text: 'Ajouter des photos (facultatif)',
+                    class: 'block text-sm font-medium my-2 text-gray-900',
+                  })
+                  @!file.control({
                     multiple: true,
+                    hint: 'JPG, PNG ou WebP, 2 Mo maximum par image, 5 images au plus.',
                     '@change': 'handleFiles($event)',
                   })
                   @!field.error()
